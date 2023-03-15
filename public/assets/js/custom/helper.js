@@ -59,6 +59,18 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
 
+/***/ }),
+
+/***/ "./resources/assets/scss/front.scss":
+/*!******************************************!*\
+  !*** ./resources/assets/scss/front.scss ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
 /***/ })
 
 /******/ 	});
@@ -148,6 +160,7 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
 /******/ 			"/assets/js/custom/helper": 0,
+/******/ 			"assets/css/front": 0,
 /******/ 			"assets/css/pages": 0
 /******/ 		};
 /******/ 		
@@ -198,8 +211,9 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	__webpack_require__.O(undefined, ["assets/css/pages"], () => (__webpack_require__("./resources/assets/js/custom/helper.js")))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["assets/css/pages"], () => (__webpack_require__("./resources/assets/scss/pages.scss")))
+/******/ 	__webpack_require__.O(undefined, ["assets/css/front","assets/css/pages"], () => (__webpack_require__("./resources/assets/js/custom/helper.js")))
+/******/ 	__webpack_require__.O(undefined, ["assets/css/front","assets/css/pages"], () => (__webpack_require__("./resources/assets/scss/pages.scss")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["assets/css/front","assets/css/pages"], () => (__webpack_require__("./resources/assets/scss/front.scss")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

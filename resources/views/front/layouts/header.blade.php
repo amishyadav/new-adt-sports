@@ -11,80 +11,6 @@
             </div>
             <!-- Responsive Button -->
 
-            <!-- User Login Option -->
-            <ul class="user-login-option pull-right">
-                <li class="social-icon">
-                    <ul class="social-icons style-5">
-                        <li><a class="facebook" href="#"><i class="fa fa-facebook"></i></a></li>
-                        <li><a class="twitter" href="#"><i class="fa fa-twitter"></i></a></li>
-                        <li><a class="youtube" href="#"><i class="fa fa-youtube-play"></i></a></li>
-                        <li><a class="pinterest" href="#"><i class="fa fa-pinterest-p"></i></a></li>
-                    </ul>
-                </li>
-                <li class="login-modal">
-                    <a href="#" class="login" data-toggle="modal" data-target="#login-modal"><i class="fa fa-user"></i>member Login</a>
-                    <div class="modal fade" id="login-modal">
-                        <div class="login-form position-center-center">
-                            <h2>Login<button class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button></h2>
-                            <form>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" name="user" placeholder="domain@live.com">
-                                    <i class=" fa fa-envelope"></i>
-                                </div>
-                                <div class="form-group">
-                                    <input type="password" class="form-control" name="pass" placeholder="**********">
-                                    <i class=" fa fa-lock"></i>
-                                </div>
-                                <div class="form-group custom-checkbox">
-                                    <label>
-                                        <input type="checkbox"> Stay login
-                                    </label>
-                                    <a class="pull-right forgot-password" href="#"></a>
-                                    <a href="#" class="pull-right forgot-password" data-toggle="modal" data-target="#login-modal-2">Forgot password?</a>
-                                </div>
-                                <div class="form-group">
-                                    <button class="btn full-width red-btn">Login</button>
-                                </div>
-                            </form>
-                            <span class="or-reprater"></span>
-                            <ul class="others-login-way">
-                                <li><a class="facebook-bg" href="#"><i class="fa fa-facebook"></i>Facebook</a></li>
-                                <li><a class="tweet-bg" href="#"><i class="fa fa-twitter"></i>Tweet</a></li>
-                                <li><a class="linkedin-bg" href="#"><i class="fa fa-linkedin"></i>Linkedin</a></li>
-                                <li><a class="google-plus-bg" href="#"><i class="fa fa-google-plus"></i>Google+</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="modal fade" id="login-modal-2">
-                        <div class="login-form position-center-center">
-                            <h2>Forgot password<button class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button></h2>
-                            <form>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" name="user" placeholder="domain@live.com">
-                                    <i class=" fa fa-envelope"></i>
-                                </div>
-                                <div class="form-group">
-                                    <input type="password" class="form-control" name="pass" placeholder="**********">
-                                    <i class=" fa fa-lock"></i>
-                                </div>
-                                <div class="form-group">
-                                    <button class="btn full-width red-btn">Login</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </li>
-                <li class="language-dropdown">
-                    <a id="choses-lang" href="#"><i class="fa fa-globe"></i>Eng<i class="fa fa-caret-down"></i></a>
-                    <ul id="language-dropdown">
-                        <li><a href="#"><img src="{{asset('front/images/flags/img-02.jpg')}}" alt="">ger</a></li>
-                        <li><a href="#"><img src="{{asset('front/images/flags/img-03.jpg')}}" alt="">fra</a></li>
-                        <li><a href="#"><img src="{{asset('front/images/flags/img-04.jpg')}}" alt="">bra</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <!-- User Login Option -->
-
         </div>
     </div>
     <!-- Top bar -->
@@ -99,16 +25,61 @@
                     <a href="home-1.html"><img src="{{asset('front/images/logo-4.png')}}" alt=""></a>
                 </div>
                 <!-- Logo -->
-
-                <!-- Search Bar -->
-                <div class="search-bar-holder pull-right">
-                    <div class="search-bar">
-                        <input type="text" class="form-control" placeholder="search enter please...">
-                        <i class="fa fa-search"></i>
-                    </div>
-                </div>
-                <!-- Search Bar -->
-
+                <ul class="user-login-option pull-right">
+                    <li class="login-modal">
+                        <a href="#" class="login new-login" data-toggle="modal" data-target="#login-modal"><i class="fa fa-user"></i>member Login</a>
+                        <div class="modal fade" id="login-modal">
+                            <div class="login-form position-center-center">
+                                <h2>Login<button class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button></h2>
+                                <form>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" name="user" placeholder="domain@live.com">
+                                        <i class=" fa fa-envelope"></i>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" class="form-control" name="pass" placeholder="**********">
+                                        <i class=" fa fa-lock"></i>
+                                    </div>
+                                    <div class="form-group custom-checkbox">
+                                        <label>
+                                            <input type="checkbox"> Stay login
+                                        </label>
+                                        <a class="pull-right forgot-password" href="#"></a>
+                                        <a href="#" class="pull-right forgot-password" data-toggle="modal" data-target="#login-modal-2">Forgot password?</a>
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn full-width red-btn">Login</button>
+                                    </div>
+                                </form>
+                                <span class="or-reprater"></span>
+                                <ul class="others-login-way">
+                                    <li><a class="facebook-bg" href="#"><i class="fa fa-facebook"></i>Facebook</a></li>
+                                    <li><a class="tweet-bg" href="#"><i class="fa fa-twitter"></i>Tweet</a></li>
+                                    <li><a class="linkedin-bg" href="#"><i class="fa fa-linkedin"></i>Linkedin</a></li>
+                                    <li><a class="google-plus-bg" href="#"><i class="fa fa-google-plus"></i>Google+</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="login-modal-2">
+                            <div class="login-form position-center-center">
+                                <h2>Forgot password<button class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button></h2>
+                                <form>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" name="user" placeholder="domain@live.com">
+                                        <i class=" fa fa-envelope"></i>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" class="form-control" name="pass" placeholder="**********">
+                                        <i class=" fa fa-lock"></i>
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn full-width red-btn">Login</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
                 <!-- Nav List -->
                 <ul class="nav-list pull-right">
                     <li>
@@ -275,29 +246,29 @@
                             <li><a href="match-result.html">Match Result</a></li>
                         </ul>
                     </li>
-                    <li>
-                        <a href="#">shop</a>
-                        <ul>
-                            <li><a href="shop.html">shop</a></li>
-                            <li><a href="shop-detail.html">shop detail</a></li>
-                            <li><a href="cart.html">cart</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#">pages</a>
-                        <ul>
-                            <li><a href="gallery.html">gallery</a></li>
-                            <li><a href="blog.html">blog</a></li>
-                            <li><a href="blog-detail.html">blog detail</a></li>
-                            <li><a href="blog-grid-view.html">blog grid view</a></li>
-                            <li><a href="blog-grid-view-2.html">blog grid view-2</a></li>
-                            <li><a href="blog-larg-view.html">blog larg view</a></li>
-                            <li><a href="blog-list-view.html">blog list view</a></li>
-                            <li><a href="point-table.html">point table</a></li>
-                            <li><a href="404.html">404</a></li>
-                            <li><a href="underconstraction.html">underconstraction</a></li>
-                        </ul>
-                    </li>
+{{--                    <li>--}}
+{{--                        <a href="#">shop</a>--}}
+{{--                        <ul>--}}
+{{--                            <li><a href="shop.html">shop</a></li>--}}
+{{--                            <li><a href="shop-detail.html">shop detail</a></li>--}}
+{{--                            <li><a href="cart.html">cart</a></li>--}}
+{{--                        </ul>--}}
+{{--                    </li>--}}
+{{--                    <li>--}}
+{{--                        <a href="#">pages</a>--}}
+{{--                        <ul>--}}
+{{--                            <li><a href="gallery.html">gallery</a></li>--}}
+{{--                            <li><a href="blog.html">blog</a></li>--}}
+{{--                            <li><a href="blog-detail.html">blog detail</a></li>--}}
+{{--                            <li><a href="blog-grid-view.html">blog grid view</a></li>--}}
+{{--                            <li><a href="blog-grid-view-2.html">blog grid view-2</a></li>--}}
+{{--                            <li><a href="blog-larg-view.html">blog larg view</a></li>--}}
+{{--                            <li><a href="blog-list-view.html">blog list view</a></li>--}}
+{{--                            <li><a href="point-table.html">point table</a></li>--}}
+{{--                            <li><a href="404.html">404</a></li>--}}
+{{--                            <li><a href="underconstraction.html">underconstraction</a></li>--}}
+{{--                        </ul>--}}
+{{--                    </li>--}}
                     <li><a href="contact.html">contact</a></li>
                 </ul>
                 <!-- Nav List -->

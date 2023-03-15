@@ -13,9 +13,11 @@
 <link rel="stylesheet" href="{{asset('front/css/animate.css')}}">
 <link rel="stylesheet" href="{{asset('front/css/transition.css')}}">
 <link rel="stylesheet" href="{{asset('front/css/font-awesome.min.css')}}">
+<link href="{{ mix('assets/css/front.css') }}" rel="stylesheet">
 <link rel="stylesheet" href="{{asset('front/style.css')}}">
 <link rel="stylesheet" href="{{asset('front/css/color.css')}}">
 <link rel="stylesheet" href="{{asset('front/css/responsive.css')}}">
+
 <!-- FontsOnline -->
 <link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i,800|Open+Sans:400,400i,600,600i,700,700i,800,800i" rel="stylesheet">
 <!-- JavaScripts -->

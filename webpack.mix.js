@@ -65,8 +65,8 @@ mix.styles('resources/theme/css/plugins.dark.css',
 // mix.sass('resources/assets/scss/custom-pages-dark.scss', 'public/assets/css/custom-pages-dark.css').version()
 
 // page css
-mix.sass('resources/assets/scss/pages.scss', 'public/assets/css/pages.css').
-    version()
+mix.sass('resources/assets/scss/pages.scss', 'public/assets/css/pages.css').version()
+mix.sass('resources/assets/scss/front.scss', 'public/assets/css/front.css').version()
 
 
 // mix.copy('node_modules/datatables/media/images', 'public/assets/images');
