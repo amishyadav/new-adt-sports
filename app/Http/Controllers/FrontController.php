@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\PlayerRegistration;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
@@ -22,7 +23,8 @@ class FrontController extends Controller
 
     public function register()
     {
-        return view('front.pages.register');
+        $setting = Setting::all()->pluck('value','key')->toArray();
+        return view('front.pages.register',compact('setting'));
     }
 
     public function registration(PlayerRegistration $request): Application|RedirectResponse|Redirector
@@ -43,7 +45,7 @@ class FrontController extends Controller
             $user->addMedia($input['aadhar_card_image'])->toMediaCollection(User::AADHAR_CARD, config('app.media_disc'));
         }
 
-        Flash::success( __('messages.flash.user_create'));
+        Flash::success('Congrats, your are successfully registered to ADT Sports');
 
         return redirect(route('front.register'));
     }

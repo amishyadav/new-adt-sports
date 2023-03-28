@@ -10,13 +10,14 @@
                 <div class="col-lg-6 align-self-center pad-0 form-section">
                     <div class="form-inner">
                         <a href="login-1.html" class="logo">
-                            <img src="assets/img/logos/logo-2.png" alt="logo">
+                            <img src="{{$setting['logo']}}" alt="logo">
                         </a>
-                        <h3>Create an account</h3>
+                        <h3>Registration</h3>
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             <strong>Congrats,</strong> your account has been created!
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
+                        @include('flash::message')
                         @include('layouts.errors')
                         {{ Form::open(['route' => 'front.register.store' ,'files' => true,'id' => 'commonForm']) }}
                         <input type="hidden" name="type" value="player">
@@ -60,8 +61,8 @@
                             </div>
                         </div>
                         <div class="form-group position-relative float-start clearfix d-flex w-100 position-type d-none">
-                            <select name="player_type" class="form-control" required>
-                                <option value="Left Corner">Left Corner</option>
+                            <select name="position_type" class="form-control" required>
+                                <option value="Left Corner" selected>Left Corner</option>
                                 <option value="Right Corner">Right Corner</option>
                                 <option value="Left Cover">Left Cover</option>
                                 <option value="Right Cover">Right Cover</option>
