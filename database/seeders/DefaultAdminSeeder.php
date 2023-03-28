@@ -22,7 +22,7 @@ class DefaultAdminSeeder extends Seeder
         $input = [
             'first_name'        => 'ADT',
             'last_name'         => 'Sports',
-            'email'             => 'admin@adtsports.com',
+            'email'             => 'admin@adtsports.in',
             'email_verified_at' => Carbon::now(),
             'password'          => Hash::make('123456'),
         ];

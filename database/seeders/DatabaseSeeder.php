@@ -18,6 +18,5 @@ class DatabaseSeeder extends Seeder
         $this->call(DefaultSettingSeeder::class);
         $this->call(DefaultAdminSeeder::class);
         $this->call(DefaultRoleSeeder::class);
-        $this->call(DefaultPaymentGatewaySeeder::class);
     }
 }

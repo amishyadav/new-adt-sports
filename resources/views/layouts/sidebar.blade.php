@@ -54,7 +54,7 @@
             </li>
             @endcan
             @can('manage_matches')
-            <li class="nav-item {{ Request::is('admin/all-matches','admin/onesignal-send') ? 'show' : '' }}">
+            <li class="nav-item {{ Request::is('admin/all-matches') ? 'show' : '' }}">
                 <a class="nav-link aside-collapse-btn d-flex align-items-center py-3">
                     <span class="aside-menu-icon pe-3"><i class="fa-solid fa-gamepad"></i></span>
                     <span class="aside-menu-title">{{ __('messages.common.manage_matches') }}</span>

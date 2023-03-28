@@ -13,6 +13,7 @@ use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 use Lab404\Impersonate\Models\Impersonate;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Sanctum\PersonalAccessToken;
@@ -91,9 +92,12 @@ class User extends Authenticatable implements HasMedia
         'password',
         'contact',
         'status',
-        'region_code',
-        'language',
-        'theme_mode',
+        'unique_code',
+        'type',
+        'position',
+        'position_type',
+        'gender',
+        'dob',
     ];
 
 
@@ -145,6 +149,7 @@ class User extends Authenticatable implements HasMedia
     ];
 
     const PROFILE = 'profile';
+    const AADHAR_CARD = 'aadhar_card';
 
     protected $with = ['media', 'roles'];
 
@@ -153,14 +158,15 @@ class User extends Authenticatable implements HasMedia
         'last_name'   => 'required',
         'email'       => 'required|email|unique:users,email|regex:/(.*)@(.*)\.(.*)/',
         'contact'       => 'required|nullable|unique:users,contact',
-        'password'    => 'required|same:password_confirmation|min:6',
+        'password'    => 'required|same:password_confirmation|min:8',
+        'position'      => 'required',
+        'gender'      => 'required',
         'status'      => 'nullable',
-        'zip' => 'nullable',
-        'profile'     => 'nullable|mimes:jpeg,png,jpg|max:2000',
+        'profile'     => 'nullable|mimes:jpeg,png,jpg',
+        'aadhar_card_image'     => 'nullable|mimes:jpeg,png,jpg',
     ];
 
-    protected $appends = ['full_name', 'profile_image', 'role_name', 'role_display_name'];
-
+    protected $appends = ['full_name', 'profile_image', 'aadhar_image', 'role_name', 'role_display_name'];
 
     /**
      * @return string
@@ -169,6 +175,20 @@ class User extends Authenticatable implements HasMedia
     {
         /** @var Media $media */
         $media = $this->getMedia(self::PROFILE)->first();
+        if (!empty($media)) {
+            return $media->getFullUrl();
+        }
+
+        return asset('images/avatar.png');
+    }
+
+    /**
+     * @return string
+     */
+    public function getAadharImageAttribute(): string
+    {
+        /** @var Media $media */
+        $media = $this->getMedia(self::AADHAR_CARD)->first();
         if (!empty($media)) {
             return $media->getFullUrl();
         }
@@ -207,13 +227,20 @@ class User extends Authenticatable implements HasMedia
         return $this->hasOne(Address::class, 'user_id' );
     }
 
-    const STRIPE = 1;
-    const PAYPAL = 2;
-    const PAYMENT_METHOD = [
-        self::STRIPE => 'Stripe',
-        self::PAYPAL => 'PayPal',
-        ];
+    /**
+     * @return string
+     */
+    public static function generatePlayerUniqueCode(): string
+    {
+        $uniqueCode = mb_strtoupper('PLAYER'.Str::random(6));
+        while (true) {
+            $isExist = self::where('unique_code',$uniqueCode)->exists();
+            if ($isExist) {
+                self::generatePlayerUniqueCode();
+            }
+            break;
+        }
 
-
-
+        return $uniqueCode;
+    }
 }

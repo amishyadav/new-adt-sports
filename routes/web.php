@@ -31,10 +31,6 @@ use Rap2hpoutre\LaravelLogViewer\LogViewerController;
 
 Route::get('/',[FrontController::class,'home'])->name('front.index');
 
-Route::get('/login', function () {
-    return (!Auth::check()) ? view('auth.login') : Redirect::to(getDashboardURL());
-})->name('login');
-
 //Change Language
 Route::post('update-language', [UserController::class, 'updateLanguage'])->name('change-language');
 
@@ -91,5 +87,7 @@ Route::group([
 
     Route::view('scoreboard','scoreboard.scoreboard');
 });
+
+require __DIR__.'/home.php';
 require __DIR__.'/auth.php';
 //require __DIR__.'/user.php';

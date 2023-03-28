@@ -39,7 +39,7 @@ class DefaultRoleSeeder extends Seeder
 
         /** @var Role $adminRole */
         $adminRole = Role::whereName('admin')->first();
-        $user = User::whereEmail('admin@adtsports.com')->first();
+        $user = User::whereEmail('admin@adtsports.in')->first();
         /** @var User $user */
         $allPermission = Permission::pluck('name', 'id');
 

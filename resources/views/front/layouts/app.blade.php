@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="{{asset('front/css/animate.css')}}">
 <link rel="stylesheet" href="{{asset('front/css/transition.css')}}">
 <link rel="stylesheet" href="{{asset('front/css/font-awesome.min.css')}}">
+<link type="text/css"  href="{{asset('fonts/flaticon/font/flaticon.css')}}">
 <link href="{{ mix('assets/css/front.css') }}" rel="stylesheet">
 <link rel="stylesheet" href="{{asset('front/style.css')}}">
 <link rel="stylesheet" href="{{asset('front/css/color.css')}}">

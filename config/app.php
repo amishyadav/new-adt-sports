@@ -122,7 +122,7 @@ return [
     */
 
     'key' => env('APP_KEY'),
-
+    'media_disc' => env('MEDIA_DISK', 'public'),
     'cipher' => 'AES-256-CBC',
 
     /*
