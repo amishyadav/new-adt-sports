@@ -18,6 +18,7 @@ class FrontController extends Controller
 {
     public function home()
     {
+        return redirect(route('front.register'));
         return view('front.pages.home');
     }
 
