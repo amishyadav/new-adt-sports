@@ -13,10 +13,6 @@
                             <img src="{{$setting['logo']}}" alt="logo">
                         </a>
                         <h3>Registration</h3>
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <strong>Congrats,</strong> your account has been created!
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
                         @include('flash::message')
                         @include('layouts.errors')
                         {{ Form::open(['route' => 'front.register.store' ,'files' => true,'id' => 'commonForm']) }}
