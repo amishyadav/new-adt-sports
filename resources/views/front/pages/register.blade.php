@@ -9,7 +9,7 @@
             <div class="row login-box">
                 <div class="col-lg-6 align-self-center pad-0 form-section">
                     <div class="form-inner">
-                        <a href="login-1.html" class="logo">
+                        <a href="#" class="logo">
                             <img src="{{$setting['logo']}}" alt="logo">
                         </a>
                         <h3>Registration</h3>
