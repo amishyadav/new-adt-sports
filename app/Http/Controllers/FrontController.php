@@ -18,7 +18,7 @@ class FrontController extends Controller
 {
     public function home()
     {
-        return redirect(route('front.register'));
+//        return redirect(route('front.register'));
         return view('front.pages.home');
     }
 
@@ -49,5 +49,10 @@ class FrontController extends Controller
         Flash::success('Congrats, your are successfully registered to ADT Sports');
 
         return redirect(route('front.register'));
+    }
+
+    public function playerProfile()
+    {
+        return view('player.profile');
     }
 }

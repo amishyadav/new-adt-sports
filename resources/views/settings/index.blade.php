@@ -8,6 +8,7 @@
     </div>
 @endsection
 @section('content')
+    @php $styleCss = 'style'; @endphp
     <div class="container-fluid">
         @include('layouts.errors')
         @include('flash::message')
@@ -38,14 +39,6 @@
                         {{ Form::email('email', $setting['email'], ['class' => 'form-control','placeholder'=>__('messages.user.email'),'required']) }}
                     </div>
                 </div>
-                <div class="row mb-5">
-                    <div class="col-lg-4">
-                        {{ Form::label('copy_right_text',__('messages.setting.copy_right_text').':',['class'=>'form-label required ']) }}
-                    </div>
-                    <div class="col-lg-8">
-                        {{ Form::text('copy_right_text', $setting['copy_right_text']??null, ['class' => 'form-control','placeholder'=>__('messages.setting.copy_right_text'),'required']) }}
-                    </div>
-                </div>
                 <div class="row">
                     <div class="col-lg-4">
                         <label for="exampleInputImage" class="form-label">{{__('messages.setting.logo')}}: </label>
@@ -59,10 +52,17 @@
                         <div class="mb-3" io-image-input="true">
                             <div class="d-block">
                                 <div class="image-picker">
-
+{{ $setting['logo']  }}
                                     <div class="image previewImage" id="exampleInputImage"
-                                         style="background-image: url({{($setting['logo'])?asset($setting['logo']):asset('images/logo.png')}})">
+                                         {{$styleCss}}="background-image: url({{($setting['logo'])?$setting['logo']:asset('images/logo.png')}})">
                                     </div>
+
+                                <div class="image previewImage" id="appLogoPreview"
+                                {{ $styleCss }}="
+                                        background-image: url({{ ($setting['logo'] !=null) ? asset($setting['logo']) : asset('images/logo.png') }}
+                                )">
+                            </div>
+
                                     <span class="picker-edit rounded-circle text-gray-500 fs-small"
                                           data-bs-toggle="tooltip"
                                           data-placement="top"
@@ -109,97 +109,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mb-5">
-                    <div class="col-lg-4">
-                        {{ Form::label('clear_cache',__('messages.setting.clear_cache').':',['class'=>'form-label']) }}
-                    </div>
-                    <div class="form-group col-sm-2 mb-5">
-                        <a class="btn btn-primary" data-turbo="false" aria-current="page"
-                           href="{{ route('clear-cache') }}">
-                            <span>{{ __('messages.setting.clear_cache') }}</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="card-header px-0 border-1">
-                    <div class="d-flex align-items-center justify-content-center">
-                        <h3 class="m-0">{{__('messages.payment.payment_method')}}
-                        </h3>
-                    </div>
-                </div>
-
-                <div class="card-body">
-                    <div class="row mb-6">
-                        <div class="table-responsive px-0">
-                            <table>
-                                <tbody class="d-flex flex-wrap">
-                                @foreach($paymentGateways as $key => $paymentGateway)
-                                    <tr class="w-100 d-flex justify-content-between">
-                                        <td class="p-2">
-                                            <div class="form-check form-check-custom">
-                                                <input class="form-check-input" type="checkbox" value="{{$key}}"
-                                                       name="payment_gateway[]"
-                                                       id="{{$key}}" {{in_array($paymentGateway, $selectedPaymentGateways) ?'checked':''}} />
-                                                <label class="form-label" for="{{$key}}">
-                                                    {{$paymentGateway}}
-                                                </label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
                 <div class="d-flex pt-0 justify-content-start">
                     {{ Form::submit(__('messages.common.save'),['class' => 'btn btn-primary']) }}
                 </div>
                 {{Form::close()}}
-                <div class="card-header px-0 border-1">
-                    <div class="d-flex align-items-center justify-content-center">
-                        <h3 class="m-0">{{__('Google Captcha')}}</h3>
-                    </div>
-                </div>
-                {{ Form::open(['route' => 'settings.update', 'files' => true, 'id'=>'google_captcha_form','class'=>'form']) }}
-                {{--            {{ Form::hidden('sectionName', $sectionName.'_1') }}--}}
-                    <div class="row my-5">
-                        <div class="col-lg-4">
-                            {{ Form::label('show_captcha',__('Show Captcha').':',
-                                         ['class'=>'form-label fs-6']) }}
-                        </div>
-                        <div class="col-lg-8">
-                            <div class="form-check form-switch form-check-custom form-check-solid">
-                                <input class="form-check-input w-30px h-20px is-active"
-                                       name="show_captcha" id="show_captcha"
-                                       type="checkbox" value="1"
-                                        {{ $setting['show_captcha'] ? 'checked' : ''}} >
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mt-5 mb-5 captchaOptions {{$setting['show_captcha'] ? '' : 'd-none'}}">
-                        <div class="col-lg-4">
-                            {{ Form::label('site_key',__('Site Key').':',
-                                     ['class'=>'form-label required fs-6']) }}
-                        </div>
-                        <div class="col-lg-8">
-                            {{ Form::text('site_key', $setting['site_key']??null, ['class' => 'form-control','placeholder'=>__('Site Key')]) }}
-                        </div>
-                    </div>
-                    <div class="row mb-5 captchaOptions {{$setting['show_captcha'] ? '' : 'd-none'}}">
-                        <div class="col-lg-4">
-                            {{ Form::label('secret_key',__('Secret Key').':',
-                                    ['class'=>'col-lg-4 form-label required fs-6']) }}
-                        </div>
-                        <div class="col-lg-8">
-                            {{ Form::text('secret_key', $setting['secret_key']??null, ['class' => 'form-control','placeholder'=>__('Secret Key')]) }}
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-start mt-5">
-                        {{ Form::submit(__('Save Changes'),['class' => 'btn btn-primary']) }}
-                    </div>
-                </div>
-                {{ Form::close() }}
             </div>
         </div>
+    </div>
 @endsection
 

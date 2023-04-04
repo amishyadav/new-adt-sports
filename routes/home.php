@@ -12,3 +12,4 @@ Route::get('/login', function () {
 Route::get('/',[FrontController::class,'home'])->name('front.index');
 Route::get('/registration',[FrontController::class,'register'])->name('front.register');
 Route::post('/registration',[FrontController::class,'registration'])->name('front.register.store');
+Route::get('/player/profile',[FrontController::class,'playerProfile'])->name('front.player.profile');

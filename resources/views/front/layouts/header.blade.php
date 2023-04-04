@@ -22,7 +22,7 @@
 
                 <!-- Logo -->
                 <div class="logo">
-                    <a href="home-1.html"><img src="{{asset('front/images/logo-4.png')}}" alt=""></a>
+                    <a href="/"><img class="logo-image" src="{{asset(getAppLogo())}}" alt=""></a>
                 </div>
                 <!-- Logo -->
                 <ul class="user-login-option pull-right">
