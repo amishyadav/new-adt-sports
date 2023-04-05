@@ -35,7 +35,7 @@ Route::get('/',[FrontController::class,'home'])->name('front.index');
 Route::post('update-language', [UserController::class, 'updateLanguage'])->name('change-language');
 
 Route::group([
-    'prefix' => 'admin', 'middleware' => ['auth', 'xss', 'setLanguage'],
+    'prefix' => 'admin', 'middleware' => ['auth', 'xss', 'setLanguage','role:admin'],
 ], function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::resource('categories', CategoryController::class);

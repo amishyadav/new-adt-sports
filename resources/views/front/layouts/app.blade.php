@@ -6,6 +6,7 @@
 <meta name="author" content=""/>
 <!-- Document Title -->
 <title>@yield('title') | {{ getAppName() }}</title>
+
 <!-- StyleSheets -->
 <link rel="stylesheet" href="{{asset('front/css/bootstrap/bootstrap.min.css')}}">
 <link rel="stylesheet" href="{{asset('front/css/main.css')}}">
@@ -18,7 +19,7 @@
 <link rel="stylesheet" href="{{asset('front/style.css')}}">
 <link rel="stylesheet" href="{{asset('front/css/color.css')}}">
 <link rel="stylesheet" href="{{asset('front/css/responsive.css')}}">
-
+    @yield('page_css')
 <!-- FontsOnline -->
 <link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i,800|Open+Sans:400,400i,600,600i,700,700i,800,800i" rel="stylesheet">
 <!-- JavaScripts -->
@@ -36,7 +37,7 @@
     @yield('content')
 
 	<!-- Footer -->
-    @include('front.layouts.footer')
+{{--    @include('front.layouts.footer')--}}
 	<!-- Footer -->
 
 </div>
@@ -66,5 +67,6 @@
 <script src="{{asset('front/js/prettyPhoto.js')}}"></script>
 <script src="{{asset('front/js/wow-min.js')}}"></script>
 <script src="{{asset('front/js/main.js')}}"></script>
+@yield('page_js')
 </body>
 </html>

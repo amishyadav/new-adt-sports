@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\PlayerRegistration;
 use App\Models\Setting;
+use App\Models\TeamPlayer;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
@@ -53,6 +54,9 @@ class FrontController extends Controller
 
     public function playerProfile()
     {
-        return view('player.profile');
+        $user = getLogInUser();
+        $players = TeamPlayer::with('user')->where('team_id', $user->team->id)->get();
+
+        return view('player.profile',compact('user','players'));
     }
 }

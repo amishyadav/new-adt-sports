@@ -38,14 +38,14 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
-        
+
         if (getLogInUser()->google2fa_secret) {
             $request->session()->put('2fa:user:id', getLogInUser()->id);
             Auth::logout();
 
            return $this->getValidateToken();
         }
-        
+
         return redirect()->intended(getDashboardURL());
     }
 
@@ -87,9 +87,9 @@ class AuthenticatedSessionController extends Controller
     {
         $userId = $request->session()->pull('2fa:user:id');
         $key    = $userId . ':' . $request->totp;
-        
+
         Cache::add($key, true, 4);
-        
+
         Auth::loginUsingId($userId);
 
         return redirect()->intended(getDashboardURL());

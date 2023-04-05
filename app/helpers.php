@@ -96,8 +96,8 @@ function getDashboardURL()
 
     if(Auth::user()->hasRole('admin')){
         return 'admin/dashboard';
-    }elseif(Auth::user()->hasRole('member')){
-        return  'user/dashboard';
+    }elseif(Auth::user()->hasRole('player')){
+        return 'player/profile/';
     }
 
     return RouteServiceProvider::HOME;

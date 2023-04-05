@@ -1,62 +1,86 @@
-@extends('layouts.auth')
+@extends('auth.layouts.app')
 @section('title')
-    {{__('messages.login')}}
+    Login
 @endsection
 @section('content')
-    <div class="d-flex flex-column flex-column-fluid align-items-center justify-content-center p-4">
-        <div class="col-12 text-center">
-            <a href="{{ route('login') }}" class="image mb-7 mb-sm-10">
-                <img alt="Logo" src="{{asset(getAppLogo())}}" class="img-fluid loginImg">
-            </a>
-        </div>
-        <div class="width-540">
-            @include('flash::message')
-            @include('layouts.errors')
-        </div>
-        <div class="bg-white rounded-15 shadow-md width-540 px-5 px-sm-7 py-10 mx-auto">
-            <h1 class="text-center mb-7">{{__('auth.sign_in')}}</h1>
-            <form method="POST" action="{{ route('login') }}">
-                @csrf
-                <div class="mb-sm-7 mb-4">
-                    <label for="email" class="form-label">
-                        {{ __('messages.user.email').':' }}<span class="required"></span>
-                    </label>
-                    <input name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" required placeholder="Enter Email">
-                </div>
+    <style>
+        .float-right {
+            float: right !important;
+        }
 
-                <div class="mb-sm-7 mb-4">
-                    <div class="d-flex justify-content-between">
-                        <label for="password" class="form-label">{{ __('messages.user.password') .':' }}<span
-                                    class="required"></span></label>
-                        @if (Route::has('password.request'))
-                            <a href="{{ route('password.request') }}" class="link-info fs-6 text-decoration-none">
-                                {{ __('messages.common.forgot_your_password').'?' }}
-                            </a>
-                        @endif
-                    </div>
-                    <input name="password" type="password" class="form-control" id="password" required placeholder="Enter Password">
-                </div>
-                @if(getSettingValue()['show_captcha'] == 1)
-                    <div class="mb-sm-7 mb-4">
-                        {!! NoCaptcha::renderJs() !!}
-                        {!! NoCaptcha::display() !!}
-                    </div>
-                @endif
-                <div class="mb-sm-7 mb-4 form-check">
-                    <input type="checkbox" class="form-check-input" id="remember_me">
-                    <label class="form-check-label" for="remember_me">{{ __('messages.common.remember_me') }}</label>
-                </div>
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-primary">{{ __('messages.login') }}</button>
-                </div>
+        .login-box .password-indicator {
+            top: 39px !important;
+        }
+    </style>
+    <!-- Login 1 start -->
+    <div class="login-1">
+        <div class="container-fluid">
+            <div class="row login-box">
+                <div class="col-lg-6 align-self-center pad-0 form-section">
+                    <div class="form-inner">
+                        <a href="#" class="logo">
+                            <img src="{{asset(getAppLogo())}}" alt="logo">
+                        </a>
+                        <h2>Sign In</h2>
+                        @include('flash::message')
+                        @include('layouts.errors')
+                        <form method="POST" action="{{ route('login') }}">
+                            @csrf
 
-                <div class="d-flex align-items-center mb-10 mt-4">
-                    <span class="text-gray-700 me-2">{{__('messages.new_here').'?'}}</span>
-                    <a href="{{ route('register') }}" class="link-info fs-6 text-decoration-none">
-                        {{__('messages.create_an_account')}}
-                    </a>
+                            <div class="form-group position-relative clearfix">
+                                <input name="email" type="email" class="form-control" placeholder="Email Address" aria-label="Email Address" required>
+                            </div>
+
+                            <div class="form-group clearfix position-relative password-wrapper">
+                                @if (Route::has('password.request'))
+                                    <a href="{{ route('password.request') }}" class="link-info fs-6 text-decoration-none float-right">
+                                        {{ __('messages.common.forgot_your_password').'?' }}
+                                    </a>
+                                @endif
+                                <input name="password" type="password" class="form-control" autocomplete="off" placeholder="Password" aria-label="Password" required>
+                                <i class="fa fa-eye password-indicator"></i>
+                            </div>
+                            @if(getSettingValue()['show_captcha'] == 1)
+                                <div class="mb-sm-7 mb-4">
+                                    {!! NoCaptcha::renderJs() !!}
+                                    {!! NoCaptcha::display() !!}
+                                </div>
+                            @endif
+                            <div class="form-group clearfix">
+                                <button type="submit" class="btn btn-primary btn-lg btn-theme">Login</button>
+                            </div>
+
+                            <div class="d-flex align-items-center mb-10 mt-4">
+                                <span class="text-gray-700 me-2">{{__('messages.new_here').'?'}}</span>
+                                <a href="{{ route('front.register') }}" class="link-info fs-6 text-decoration-none">
+                                    {{__('messages.create_an_account')}}
+                                </a>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </form>
+                <div class="col-lg-6 pad-0 none-992 bg-img">
+                    <div class="lines">
+                        <div class="line"></div>
+                        <div class="line"></div>
+                        <div class="line"></div>
+                        <div class="line"></div>
+                        <div class="line"></div>
+                        <div class="line"></div>
+                    </div>
+                    <div class="info">
+                        <div class="animated-text">
+                            <h1>Welcome <span>to ADT SPORTS</span></h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+    <!-- Login 1 end -->
 @endsection
+@section('page_js')
+    <script>
+    </script>
+@endsection
+

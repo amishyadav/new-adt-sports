@@ -91,16 +91,6 @@
                             <label for="profile" class="form-label float-start">Profile Image:</label>
                             <input class="form-control" type="file" id="profile" name="profile" required>
                         </div>
-{{--                        <div class="form-group checkbox clearfix">--}}
-{{--                            <div class="clearfix float-start">--}}
-{{--                                <div class="form-check">--}}
-{{--                                    <input class="form-check-input" type="checkbox" id="rememberme">--}}
-{{--                                    <label class="form-check-label" for="rememberme">--}}
-{{--                                        I agree to the terms of service--}}
-{{--                                    </label>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
                         <div class="form-group clearfix">
                             <button type="submit" class="btn btn-primary btn-lg btn-theme">Register</button>
                         </div>
@@ -108,6 +98,12 @@
                         <!--                            <span>Or Login With</span>-->
                         <!--                        </div>-->
                         {{ Form::close() }}
+                        <div class="d-flex align-items-center mt-4">
+                            <span class="text-gray-700 me-2">{{__('messages.already_have_an_account').'?'}}</span>
+                            <a href="{{ route('login') }}" class="link-info fs-6 text-decoration-none">
+                                {{__('messages.sign_in_here')}}
+                            </a>
+                        </div>
                         <!--                    <div class="clearfix"></div>-->
                         <!--                    <div class="social-list clearfix">-->
                         <!--                        <div class="icon facebook">-->

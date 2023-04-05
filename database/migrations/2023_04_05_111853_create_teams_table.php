@@ -8,20 +8,16 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('questions', function (Blueprint $table) {
+        Schema::create('teams', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('match_id');
-            $table->string('question');
-            $table->boolean('status');
-
-            $table->foreign('match_id')
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->string('name');
+            $table->foreign('user_id')
                 ->references('id')
-                ->on('all_matches')
+                ->on('users')
                 ->onUpdate('cascade');
             $table->timestamps();
         });
@@ -29,11 +25,9 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
-        Schema::dropIfExists('questions');
+        Schema::dropIfExists('teams');
     }
 };
