@@ -55,7 +55,6 @@
                                     <div class="image previewImage" id="exampleInputImage"
                                          {{$styleCss}}="background-image: url({{($setting['logo'])?$setting['logo']:asset('images/logo.png')}})">
                                     </div>
-                            </div>
 
                                     <span class="picker-edit rounded-circle text-gray-500 fs-small"
                                           data-bs-toggle="tooltip"
