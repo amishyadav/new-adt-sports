@@ -26,6 +26,7 @@
         </tr>
         </thead>
         <tbody>
+        @if(!empty($players))
         @foreach($players as $player)
         <tr>
             <th>
@@ -42,6 +43,7 @@
 
         </tr>
         @endforeach
+        @endif
         </tbody>
     </table>
 </div>
