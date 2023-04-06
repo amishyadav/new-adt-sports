@@ -37,9 +37,8 @@ class SettingController extends AppBaseController
     public function index(): Application|Factory|View
     {
         $setting = Setting::all()->pluck('value', 'key');
-        $paymentGateways = PaymentGateway::PAYMENT_METHOD;
-        $selectedPaymentGateways = PaymentGateway::pluck('payment_gateway')->toArray();
-        return view('settings.index', compact('setting','paymentGateways','selectedPaymentGateways'));
+
+        return view('settings.index', compact('setting'));
     }
 
     public function update(Request $request): Application|RedirectResponse|Redirector
