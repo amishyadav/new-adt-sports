@@ -54,8 +54,11 @@ class FrontController extends Controller
 
     public function playerProfile()
     {
+        $players = null;
         $user = getLogInUser();
-        $players = TeamPlayer::with('user')->where('team_id', $user->team->id)->get();
+        if (!empty($user->team)){
+            $players = TeamPlayer::with('user')->where('team_id', $user->team->id)->get();
+        }
 
         return view('player.profile',compact('user','players'));
     }
