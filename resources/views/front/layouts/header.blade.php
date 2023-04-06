@@ -102,7 +102,7 @@
                     </li>
                     @else
                         <li>
-                            <a href="{{ route('front.player.profile') }}">My Account</a>
+                            <a href="{{ route(getDashboardURL()) }}">My Account</a>
                             <ul>
                                 <li>
                                     <a class="" href="{{ route('logout') }}"
