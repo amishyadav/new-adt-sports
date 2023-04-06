@@ -52,15 +52,9 @@
                         <div class="mb-3" io-image-input="true">
                             <div class="d-block">
                                 <div class="image-picker">
-{{ $setting['logo']  }}
                                     <div class="image previewImage" id="exampleInputImage"
                                          {{$styleCss}}="background-image: url({{($setting['logo'])?$setting['logo']:asset('images/logo.png')}})">
                                     </div>
-
-                                <div class="image previewImage" id="appLogoPreview"
-                                {{ $styleCss }}="
-                                        background-image: url({{ ($setting['logo'] !=null) ? asset($setting['logo']) : asset('images/logo.png') }}
-                                )">
                             </div>
 
                                     <span class="picker-edit rounded-circle text-gray-500 fs-small"
