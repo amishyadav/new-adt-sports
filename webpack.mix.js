@@ -87,6 +87,8 @@ mix.scripts([
 
 mix.js('resources/assets/js/custom/helper.js',
     'public/assets/js/custom/helper.js')
+mix.js('resources/assets/js/custom/front-custom.js',
+        'public/assets/js/custom/front-custom.js')
 
 mix.js([
     'resources/assets/js/turbo.js',
@@ -101,6 +103,7 @@ mix.js([
     'resources/assets/js/custom/custom.js',
     'resources/assets/js/custom/delete.js',
     'resources/assets/js/categories/category.js',
+    'resources/assets/js/registered_player/registered_player.js',
     'resources/assets/js/all_matches/all_matches.js',
     'resources/assets/js/questions/questions.js',
     'resources/assets/js/options/options.js',

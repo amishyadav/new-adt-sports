@@ -33,8 +33,6 @@
 .profile-header-img {
     float: left;
     width: 120px;
-    height: 120px;
-    overflow: hidden;
     position: relative;
     z-index: 10;
     margin: 0 0 -20px;

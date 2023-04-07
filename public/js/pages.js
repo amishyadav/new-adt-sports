@@ -8195,6 +8195,116 @@ listenClick('.category-delete-btn', function (event) {
 
 // This entry need to be wrapped in an IIFE because it need to be isolated against other entry modules.
 (() => {
+/*!********************************************************************!*\
+  !*** ./resources/assets/js/registered_player/registered_player.js ***!
+  \********************************************************************/
+document.addEventListener('turbo:load', loadRegisteredPlayer);
+
+function loadRegisteredPlayer() {
+  if (!$('#addRegisteredPlayerModalBtn').length && !$('#editRegisteredPlayerForm').length) {
+    return;
+  }
+}
+
+listenHiddenBsModal('#addRegisteredPlayerModal', function (e) {
+  $('#addRegisteredPlayerForm')[0].reset();
+  livewire.emit('refresh');
+});
+listenClick('#addRegisteredPlayerModalBtn', function () {
+  $('#addRegisteredPlayerModal').modal('show').appendTo('body');
+});
+listenSubmit('#addRegisteredPlayerForm', function (e) {
+  e.preventDefault();
+  $('#RegisteredPlayerAddBtn').prop('disabled', true);
+  $.ajax({
+    url: route('registered-players.store'),
+    type: 'POST',
+    data: new FormData(this),
+    processData: false,
+    contentType: false,
+    success: function success(result) {
+      if (result.success) {
+        displaySuccessMessage(result.message);
+        livewire.emit('refresh');
+        $('#addRegisteredPlayerModal').modal('hide');
+        $('#RegisteredPlayerAddBtn').prop('disabled', false);
+      }
+    },
+    error: function error(result) {
+      displayErrorMessage(result.responseJSON.message);
+      $('#RegisteredPlayerAddBtn').prop('disabled', false);
+    }
+  });
+});
+listenClick('.registered-player-edit-btn', function (event) {
+  var editRegisteredPlayerId = $(event.currentTarget).attr('data-id');
+  console.log(editRegisteredPlayerId);
+  renderData(editRegisteredPlayerId);
+});
+
+function renderData(id) {
+  $.ajax({
+    url: route('registered-players.edit', id),
+    type: 'GET',
+    success: function success(result) {
+      var RegisteredPlayer = result.data;
+      $('#RegisteredPlayerId').val(RegisteredPlayer.id);
+      $('#editRegisteredPlayerName').val(RegisteredPlayer.user.unique_code);
+
+      if (RegisteredPlayer.status == 1) {
+        $('#editRegisteredPlayerStatus').prop('checked', true);
+      } else {
+        $('#editRegisteredPlayerStatus').prop('checked', false);
+      }
+
+      $('#editRegisteredPlayerModal').modal('show');
+    }
+  });
+}
+
+listenSubmit('#editRegisteredPlayerForm', function (event) {
+  event.preventDefault();
+  $('#editRegisteredPlayerFormBtn').prop('disabled', true);
+  var RegisteredPlayerId = $('#RegisteredPlayerId').val();
+  $.ajax({
+    url: route('registered-players.update', RegisteredPlayerId),
+    type: 'POST',
+    data: new FormData(this),
+    contentType: false,
+    processData: false,
+    success: function success(result) {
+      if (result.success) {
+        displaySuccessMessage(result.message);
+        $('#editRegisteredPlayerModal').modal('hide');
+        Livewire.emit('refresh');
+        $('#editRegisteredPlayerFormBtn').prop('disabled', false);
+      }
+    },
+    error: function error(result) {
+      displayErrorMessage(result.responseJSON.message);
+      $('#editRegisteredPlayerFormBtn').prop('disabled', false);
+    }
+  });
+});
+listenClick('.registered-player-change-status', function (event) {
+  var RegisteredPlayerID = $(event.currentTarget).attr('data-id');
+  $.ajax({
+    type: 'PUT',
+    url: route('registered-players.change.status', RegisteredPlayerID),
+    success: function success(result) {
+      livewire.emit('refresh');
+      displaySuccessMessage(result.message);
+    }
+  });
+});
+listenClick('.registered-player-delete-btn', function (event) {
+  var recordId = $(event.currentTarget).attr('data-id');
+  deleteItem(route('registered-players.destroy', recordId), 'RegisteredPlayer');
+});
+})();
+
+// This entry need to be wrapped in an IIFE because it need to be isolated against other entry modules.
+(() => {
 /*!********************************************************!*\
   !*** ./resources/assets/js/all_matches/all_matches.js ***!
   \********************************************************/

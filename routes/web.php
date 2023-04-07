@@ -9,6 +9,7 @@ use App\Http\Controllers\FaqsController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\LeagueController;
 use App\Http\Controllers\PartnerController;
+use App\Http\Controllers\RegisteredPlayerController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SocialIconController;
 use App\Http\Controllers\UserController;
@@ -41,6 +42,9 @@ Route::group([
     Route::resource('categories', CategoryController::class);
     Route::put('categories/{category}/status',
         [CategoryController::class, 'changeStatus'])->name('categories.change.status');
+    Route::resource('registered-players', RegisteredPlayerController::class);
+    Route::put('registered-players/{registeredPlayer}/status',
+        [RegisteredPlayerController::class, 'changeStatus'])->name('registered-players.change.status');
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
     Route::Post('settings', [SettingController::class, 'update'])->name('settings.update');
 

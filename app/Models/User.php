@@ -151,7 +151,7 @@ class User extends Authenticatable implements HasMedia
     const PROFILE = 'profile';
     const AADHAR_CARD = 'aadhar_card';
 
-    protected $with = ['media', 'roles','team'];
+    protected $with = ['media', 'roles','team','registeredPlayer'];
 
     public static $rules = [
         'first_name'  => 'required',
@@ -229,12 +229,17 @@ class User extends Authenticatable implements HasMedia
 
     public function team()
     {
-        return $this->hasOne(team::class, 'user_id' );
+        return $this->hasOne(Team::class, 'user_id' );
     }
 
     public function teamPlayer()
     {
         return $this->hasOne(TeamPlayer::class, 'user_id' );
+    }
+
+    public function registeredPlayer()
+    {
+        return $this->hasOne(RegisteredPlayer::class, 'user_id' );
     }
 
     /**

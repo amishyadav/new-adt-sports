@@ -5,17 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class team extends Model
+class RegisteredPlayer extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'user_id',
-        'name',
+        'status',
     ];
+
+    protected $with = ['user'];
+
+    const ACTIVE = 1;
+    const INACTIVE = 0;
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'id' ,  'user_id');
+        return $this->belongsTo(User::class, 'user_id' ,  'id');
     }
 }

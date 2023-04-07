@@ -18,13 +18,23 @@ class TeamController extends Controller
         $input = $request->all();
         $input['user_id'] = $userID;
 
-        $teamExists = team::where('user_id',$userID)->first();
+        $teamExists = Team::where('user_id',$userID)->first();
 
         if ($teamExists){
             $teamExists->update(['name' => $input['name']]);
+
+            if (isset($input['team_logo']) && ! empty('team_logo')) {
+                $teamExists->clearMediaCollection(Team::TEAM_LOGO);
+                $teamExists->media()->delete();
+                $teamExists->addMedia($input['team_logo'])->toMediaCollection(Team::TEAM_LOGO, config('app.media_disc'));
+            }
         }
         else {
-            team::create($input);
+           $team = Team::create($input);
+
+            if (isset($input['team_logo']) && !empty('team_logo')) {
+                $team->addMedia($input['team_logo'])->toMediaCollection(Team::TEAM_LOGO, config('app.media_disc'));
+            }
         }
 
         Flash::success('Team successfully registered to ADT Sports');
@@ -34,28 +44,34 @@ class TeamController extends Controller
 
     public function addPlayer(CreateAddPlayerRequest $request)
     {
-        $playerID = strtoupper($request->get('unique_code'));
-
-        $user = User::where('unique_code',$playerID)->first();
-
         if (empty(getLogInUser()->team)){
             Flash::error('Team Not Found.');
 
             return redirect(route('front.player.profile'));
         }
 
+        $playerID = strtoupper($request->get('unique_code'));
+
+        $user = User::where('unique_code',$playerID)->first();
+
         if ($user){
+            $playerExists = TeamPlayer::where('user_id',$user->id)->exists();
+            if ($playerExists){
+                Flash::error('Player already exists.');
+                return redirect(route('front.player.profile'));
+            }
+
             TeamPlayer::create([
                 'team_id' => getLogInUser()->team->id,
                 'user_id' => $user->id,
                 'add_by_user_id' => getLogInUserId(),
             ]);
+
+            Flash::success('Player successfully added to your team.');
         }
         else {
             Flash::error('Player not found, Please check Player ID');
         }
-
-        Flash::success('Player successfully added to your team.');
 
         return redirect(route('front.player.profile'));
     }

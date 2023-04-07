@@ -67,6 +67,7 @@
 <script src="{{asset('front/js/prettyPhoto.js')}}"></script>
 <script src="{{asset('front/js/wow-min.js')}}"></script>
 <script src="{{asset('front/js/main.js')}}"></script>
+<script src="{{ mix('assets/js/custom/front-custom.js') }}"></script>
 @yield('page_js')
 </body>
 </html>
