@@ -46,8 +46,10 @@
                                 @include('flash::message')
                                 @include('layouts.errors')
                                 @include('player.profile-page')
+                                @if($user->registeredPlayer && $user->registeredPlayer->status === \App\Models\RegisteredPlayer::ACTIVE)
                                 @include('player.team-page')
                                 @include('player.player-page')
+                                @endif
                             </div>
                         </div>
                     </div>

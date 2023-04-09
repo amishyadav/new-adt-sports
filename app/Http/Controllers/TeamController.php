@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateAddPlayerRequest;
 use App\Http\Requests\CreateTeamRequest;
+use App\Models\RegisteredPlayer;
 use App\Models\team;
 use App\Models\TeamPlayer;
 use App\Models\User;
@@ -19,6 +20,15 @@ class TeamController extends Controller
         $input['user_id'] = $userID;
 
         $teamExists = Team::where('user_id',$userID)->first();
+
+        $player = RegisteredPlayer::where('user_id',$userID)->first();
+
+        if (empty($player)){
+            RegisteredPlayer::create([
+                'user_id' => $userID,
+                'status'  => RegisteredPlayer::ACTIVE
+            ]);
+        }
 
         if ($teamExists){
             $teamExists->update(['name' => $input['name']]);

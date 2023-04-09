@@ -17,12 +17,14 @@ class RegisteredPlayerController extends AppBaseController
 
     public function index(): View|Factory|Application
     {
+        ini_set('max_execution_time', 0);
         return view('registered_players.index');
     }
 
 
     public function store(CreateRegisteredPlayerRequest $request): JsonResponse
     {
+        ini_set('max_execution_time', 0);
         $input = $request->all();
         $status = isset($input['status']) ? 1 : 0;
 
