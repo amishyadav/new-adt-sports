@@ -36,6 +36,7 @@ class FrontController extends Controller
         $input['email'] = setEmailLowerCase($input['email']);
         $input['password'] = Hash::make($input['password']);
         $input['unique_code'] = User::generatePlayerUniqueCode();
+        $input['position_type'] = ($input['position'] === 'Defender') ? $input['position_type'] : null;
         $user = User::create($input);
         $user->assignRole('player');
 
@@ -47,7 +48,7 @@ class FrontController extends Controller
             $user->addMedia($input['aadhar_card_image'])->toMediaCollection(User::AADHAR_CARD, config('app.media_disc'));
         }
 
-        Flash::success('Congrats, your are successfully registered to ADT Sports');
+        Flash::success('Congrats, you are successfully registered to ADT Sports');
 
         return redirect(route('front.register'));
     }
