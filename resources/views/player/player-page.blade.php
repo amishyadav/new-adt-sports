@@ -1,4 +1,5 @@
 <div class="players-section profile-content d-none">
+    @if(getRegisteredPlayerPermission())
     <form class="form-card" method="post" action="{{ route('front.team.player') }}">
         @csrf
         <div class="row justify-content-between text-left d-flex">
@@ -15,7 +16,12 @@
             </div>
         </div>
     </form>
+    @endif
+    @if(!empty($teamPlayer))
+        <h5>Team Captain: {{ $captain->user->full_name }}</h5>
+    @endif
     <h1>Players</h1>
+    <div class="table-responsive">
     <table class="table table-striped">
         <thead>
         <tr>
@@ -26,8 +32,8 @@
         </tr>
         </thead>
         <tbody>
-        @if(!empty($players))
-        @foreach($players as $player)
+        @if(!empty($teamPlayer))
+        @foreach($teamPlayer as $player)
         <tr>
             <th>
                 <img src="{{ $player->user->profile_image }}" alt="" height="50px" width="50px">
@@ -40,10 +46,10 @@
                     ({{$player->user->position_type}})
                 @endif
             </td>
-
         </tr>
         @endforeach
         @endif
         </tbody>
     </table>
+    </div>
 </div>
