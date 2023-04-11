@@ -23,10 +23,12 @@
                 </div>
             </div>
         </div>
+        @if(getRegisteredPlayerPermission())
         <div class="row justify-content-end">
             <div class="form-group col-sm-6">
                 <button type="submit" class="btn btn-primary">Add Team</button>
             </div>
         </div>
+        @endif
     </form>
 </div>

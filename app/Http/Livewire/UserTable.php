@@ -51,6 +51,6 @@ class UserTable extends LivewireTableComponent
     }
     public function builder(): Builder
     {
-        return User::with('address')->orderByDesc('id');
+        return User::with('team','teamPlayer','registeredPlayer')->orderByDesc('id');
     }
 }

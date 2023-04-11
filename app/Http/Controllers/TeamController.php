@@ -21,15 +21,6 @@ class TeamController extends Controller
 
         $teamExists = Team::where('user_id',$userID)->first();
 
-        $player = RegisteredPlayer::where('user_id',$userID)->first();
-
-        if (empty($player)){
-            RegisteredPlayer::create([
-                'user_id' => $userID,
-                'status'  => RegisteredPlayer::ACTIVE
-            ]);
-        }
-
         if ($teamExists){
             $teamExists->update(['name' => $input['name']]);
 
@@ -44,6 +35,16 @@ class TeamController extends Controller
 
             if (isset($input['team_logo']) && !empty('team_logo')) {
                 $team->addMedia($input['team_logo'])->toMediaCollection(Team::TEAM_LOGO, config('app.media_disc'));
+            }
+
+            $player = TeamPlayer::where('user_id',$userID)->first();
+
+            if (empty($player)){
+                TeamPlayer::create([
+                    'team_id' => $team->id,
+                    'user_id' => getLogInUserId(),
+                    'add_by_user_id' => getLogInUserId(),
+                ]);
             }
         }
 

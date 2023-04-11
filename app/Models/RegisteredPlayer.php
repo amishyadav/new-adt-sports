@@ -14,8 +14,6 @@ class RegisteredPlayer extends Model
         'status',
     ];
 
-    protected $with = ['user'];
-
     const ACTIVE = 1;
     const INACTIVE = 0;
 
