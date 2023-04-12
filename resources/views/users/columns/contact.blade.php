@@ -1,1 +1,1 @@
-{{ isset($row->contact)? '+'.$row->region_code." ".$row->contact: null}}
+{{ isset($row->contact)? '+91'." ".$row->contact: null}}

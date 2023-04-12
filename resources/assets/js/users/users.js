@@ -1,6 +1,6 @@
 listenClick('.user-delete-btn', function (event) {
     let roleRecordId = $(event.currentTarget).data('id')
-    deleteItem(route('users.destroy', roleRecordId),  Lang.get('messages.user.user'))
+    deleteItem(route('users.destroy', roleRecordId),  'User')
 })
 listenClick('#changePassword', function () {
     $('#changePasswordForm')[0].reset()
@@ -49,7 +49,7 @@ listenClick('.twoauth-disable', function () {
 
 listenSubmit('#disable2faForm',function (e) {
    e.preventDefault();
-   
+
     $.ajax({
         url: route('user.twofactor.auth.disable'),
         type: 'POST',

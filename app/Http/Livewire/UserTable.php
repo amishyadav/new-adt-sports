@@ -35,11 +35,11 @@ class UserTable extends LivewireTableComponent
             Column::make("Email", "email")
                 ->hideIf('email')
                 ->sortable(),
+            Column::make("Player ID", "unique_code")
+                ->view('users.columns.player_id')
+                ->sortable(),
             Column::make("contact", "contact")
                 ->view('users.columns.contact')
-                ->sortable(),
-            Column::make("IMPERSONATE", "contact")
-                ->view('users.columns.inpersonate')
                 ->sortable(),
             Column::make("status", "status")
                 ->view('users.columns.status')

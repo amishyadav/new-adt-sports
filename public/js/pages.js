@@ -7281,7 +7281,7 @@ listenClick('.permission', function () {
   \********************************************/
 listenClick('.user-delete-btn', function (event) {
   var roleRecordId = $(event.currentTarget).data('id');
-  deleteItem(route('users.destroy', roleRecordId), Lang.get('messages.user.user'));
+  deleteItem(route('users.destroy', roleRecordId), 'User');
 });
 listenClick('#changePassword', function () {
   $('#changePasswordForm')[0].reset();

@@ -114,6 +114,13 @@ class User extends Authenticatable implements HasMedia
         'it' => 'Italian',
     ];
 
+    const POSITION_TYPE = [
+         'Left Corner' => ' Left Corner',
+         'Right Corner' => 'Right Corner',
+         'Left Cover' => 'Left Cover',
+         'Right Cover' => 'Right Cover',
+        ];
+
     const LANGUAGES_IMAGE = [
         'en' => 'web/media/flags/united-states.svg',
         'es' => 'web/media/flags/spain.svg',
