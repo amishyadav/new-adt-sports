@@ -7,6 +7,7 @@ use App\Http\Requests\PlayerRegistration;
 use App\Models\Setting;
 use App\Models\TeamPlayer;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -47,7 +48,7 @@ class FrontController extends Controller
         if (isset($input['aadhar_card_image']) && !empty('aadhar_card_image')) {
             $user->addMedia($input['aadhar_card_image'])->toMediaCollection(User::AADHAR_CARD, config('app.media_disc'));
         }
-
+        event(new Registered($user));
         Flash::success('Congrats, you are successfully registered to ADT Sports');
 
         return redirect(route('front.register'));
