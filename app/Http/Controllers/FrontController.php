@@ -51,7 +51,7 @@ class FrontController extends Controller
         if (isset($input['aadhar_card_image']) && !empty('aadhar_card_image')) {
             $user->addMedia($input['aadhar_card_image'])->toMediaCollection(User::AADHAR_CARD, config('app.media_disc'));
         }
-
+        event(new Registered($user));
         Flash::success('Congrats, you are successfully registered to ADT Sports');
 
         return redirect(route('front.register'));
