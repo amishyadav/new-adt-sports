@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\PlayerRegistration;
+use App\Models\Blog;
 use App\Models\Setting;
 use App\Models\TeamPlayer;
 use App\Models\User;
@@ -62,5 +63,17 @@ class FrontController extends Controller
         }
 
         return view('player.profile',compact('user','players'));
+    }
+
+    public function blogs()
+    {
+        $blogs = Blog::paginate(8);
+
+        return view('front.pages.blog',compact('blogs'));
+    }
+
+    public function blogDetail($slug,Blog $blog)
+    {
+        return view('front.pages.blog_detail',compact('blog'));
     }
 }

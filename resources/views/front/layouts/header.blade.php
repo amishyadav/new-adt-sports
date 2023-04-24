@@ -90,7 +90,7 @@
                         <a href="#">team</a>
                     </li>
                     <li class="mega-dropdown">
-                        <a href="#">Blogs</a>
+                        <a href="{{ route('front.blogs') }}">Blogs</a>
                     </li>
                     <li><a href="#">contact</a></li>
                     @if(!getLogInUser())

@@ -13,6 +13,8 @@ Route::get('/login', function () {
 Route::get('/',[FrontController::class,'home'])->name('front.index');
 Route::get('/registration',[FrontController::class,'register'])->name('front.register');
 Route::post('/registration',[FrontController::class,'registration'])->name('front.register.store');
+Route::get('/blogs',[FrontController::class,'blogs'])->name('front.blogs');
+Route::get('/blogs/{slug}/{blog}',[FrontController::class,'blogDetail'])->name('front.blog.detail');
 
 Route::group([
     'prefix' => 'player', 'middleware' => ['auth', 'xss','role:player'],
