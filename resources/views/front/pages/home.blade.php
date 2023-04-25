@@ -292,10 +292,11 @@
 {{--                                </div>--}}
                                 <!-- Upcoming Fixture -->
 
+                                @if(!empty($latestBlog))
                                 <!-- Latest News -->
                                 <div class="col-xs-12">
                                     <div class="latest-news-holder">
-                                        <h3><span>Latest News</span></h3>
+                                        <h3><span>Latest Blogs</span></h3>
 
                                         <!-- latest-news Slider -->
                                         <div class="row no-gutters white-bg">
@@ -304,32 +305,8 @@
                                             <div class="col-sm-9">
                                                 <ul id="latest-news-slider" class="latest-news-slider">
                                                     <li>
-                                                        <img src="{{asset('front/images/latest-news/img-01.jpg')}}" alt="">
-                                                        <p>Chelsea captain John Terry is not ready to start against Stoke on Saturday and is struggling to prove his fitness for next week's crunch...<a href="#">Read more</a></p>
-                                                    </li>
-                                                    <li>
-                                                        <img src="{{asset('front/images/latest-news/img-02.jpg')}}" alt="">
-                                                        <p>Chelsea captain John Terry is not ready to start against Stoke on Saturday and is struggling to prove his fitness for next week's crunch...<a href="#">Read more</a></p>
-                                                    </li>
-                                                    <li>
-                                                        <img src="{{asset('front/images/latest-news/img-03.jpg')}}" alt="">
-                                                        <p>Chelsea captain John Terry is not ready to start against Stoke on Saturday and is struggling to prove his fitness for next week's crunch...<a href="#">Read more</a></p>
-                                                    </li>
-                                                    <li>
-                                                        <img src="{{asset('front/images/latest-news/img-04.jpg')}}" alt="">
-                                                        <p>Chelsea captain John Terry is not ready to start against Stoke on Saturday and is struggling to prove his fitness for next week's crunch...<a href="#">Read more</a></p>
-                                                    </li>
-                                                    <li>
-                                                        <img src="{{asset('front/images/latest-news/img-01.jpg')}}" alt="">
-                                                        <p>Chelsea captain John Terry is not ready to start against Stoke on Saturday and is struggling to prove his fitness for next week's crunch...<a href="#">Read more</a></p>
-                                                    </li>
-                                                    <li>
-                                                        <img src="{{asset('front/images/latest-news/img-02.jpg')}}" alt="">
-                                                        <p>Chelsea captain John Terry is not ready to start against Stoke on Saturday and is struggling to prove his fitness for next week's crunch...<a href="#">Read more</a></p>
-                                                    </li>
-                                                    <li>
-                                                        <img src="{{asset('front/images/latest-news/img-03.jpg')}}" alt="">
-                                                        <p>Chelsea captain John Terry is not ready to start against Stoke on Saturday and is struggling to prove his fitness for next week's crunch...<a href="#">Read more</a></p>
+                                                        <img src="{{$latestBlog->blog_image}}" alt="">
+                                                        <p>{{ $latestBlog->title }}<a href="{{ route('front.blog.detail',[$latestBlog->slug,$latestBlog->id]) }}">Read more</a></p>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -338,34 +315,12 @@
                                             <!-- Thumnail -->
                                             <div class="col-sm-3">
                                                 <ul id="latest-news-thumb" class="latest-news-thumb">
+                                                    @foreach($blogs as $blog)
                                                     <li>
-                                                        <p>Fancy footwork by Brito in build up to Atromitos</p>
-                                                        <span>February 11, 2016</span>
+                                                        <p>{{ $blog->title }}</p>
+                                                        <span>{{ $blog->created_at->format('M d, Y') }}</span>
                                                     </li>
-                                                    <li>
-                                                        <p>Fancy footwork by Brito in build up to Atromitos</p>
-                                                        <span>February 11, 2016</span>
-                                                    </li>
-                                                    <li>
-                                                        <p>Fancy footwork by Brito in build up to Atromitos</p>
-                                                        <span>February 11, 2016</span>
-                                                    </li>
-                                                    <li>
-                                                        <p>Fancy footwork by Brito in build up to Atromitos</p>
-                                                        <span>February 11, 2016</span>
-                                                    </li>
-                                                    <li>
-                                                        <p>Fancy footwork by Brito in build up to Atromitos</p>
-                                                        <span>February 11, 2016</span>
-                                                    </li>
-                                                    <li>
-                                                        <p>Fancy footwork by Brito in build up to Atromitos</p>
-                                                        <span>February 11, 2016</span>
-                                                    </li>
-                                                    <li>
-                                                        <p>Fancy footwork by Brito in build up to Atromitos</p>
-                                                        <span>February 11, 2016</span>
-                                                    </li>
+                                                    @endforeach
                                                 </ul>
                                                 <ul class="news-thumb-arrows">
                                                     <li class="prev"><span class="fa fa-angle-up"></span></li>
@@ -380,6 +335,7 @@
                                     </div>
                                 </div>
                                 <!-- Latest News -->
+                                @endif
 
                             </div>
                         </div>

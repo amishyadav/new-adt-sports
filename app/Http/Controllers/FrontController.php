@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\PlayerRegistration;
 use App\Models\Blog;
 use App\Models\RegisteredPlayer;
@@ -10,13 +9,9 @@ use App\Models\Setting;
 use App\Models\Team;
 use App\Models\TeamPlayer;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Laracasts\Flash\Flash;
 
@@ -24,8 +19,14 @@ class FrontController extends Controller
 {
     public function home()
     {
-//        return redirect(route('front.register'));
-        return view('front.pages.home');
+        $blogs = '';
+
+        $latestBlog = Blog::latest()->first();
+        if (!empty($latestBlog)){
+            $blogs = Blog::all()->except($latestBlog->id);
+        }
+
+        return view('front.pages.home',compact('latestBlog','blogs'));
     }
 
     public function register()
@@ -78,7 +79,7 @@ class FrontController extends Controller
 
     public function blogs()
     {
-        $blogs = Blog::paginate(8);
+        $blogs = Blog::orderByDesc('id')->paginate(8);
 
         return view('front.pages.blog',compact('blogs'));
     }
