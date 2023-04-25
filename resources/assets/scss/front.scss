@@ -121,3 +121,10 @@
     background-repeat: no-repeat;
     background-position: center;
 }
+
+.blog-user-image {
+    height: 50px;
+    width: 50px;
+    border-radius: 28px !important;
+    object-fit: cover !important;
+}

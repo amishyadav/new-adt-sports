@@ -77,7 +77,7 @@ Route::group([
     Route::get('impersonate-leave',[UserController::class, 'impersonateLeave'])->name('impersonate.leave');
 
 
-    Route::resource('blog', BlogController::class);
+    Route::resource('blog', BlogController::class)->withoutMiddleware('xss');
 
     Route::resource('faqs', FaqsController::class);
     Route::put('faqs/{faq}/status', [FaqsController::class, 'changeStatus'])->name('faqs.change-status');
