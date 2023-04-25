@@ -1,0 +1,2 @@
+{{ $row->unique_code }}
+

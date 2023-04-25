@@ -114,6 +114,13 @@ class User extends Authenticatable implements HasMedia
         'it' => 'Italian',
     ];
 
+    const POSITION_TYPE = [
+         'Left Corner' => ' Left Corner',
+         'Right Corner' => 'Right Corner',
+         'Left Cover' => 'Left Cover',
+         'Right Cover' => 'Right Cover',
+        ];
+
     const LANGUAGES_IMAGE = [
         'en' => 'web/media/flags/united-states.svg',
         'es' => 'web/media/flags/spain.svg',
@@ -151,7 +158,7 @@ class User extends Authenticatable implements HasMedia
     const PROFILE = 'profile';
     const AADHAR_CARD = 'aadhar_card';
 
-    protected $with = ['media', 'roles','team','registeredPlayer'];
+    protected $with = ['media', 'roles'];
 
     public static $rules = [
         'first_name'  => 'required',
@@ -239,7 +246,7 @@ class User extends Authenticatable implements HasMedia
 
     public function registeredPlayer()
     {
-        return $this->hasOne(RegisteredPlayer::class, 'user_id' );
+        return $this->hasMany(RegisteredPlayer::class, 'user_id' );
     }
 
     /**

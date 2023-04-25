@@ -215,3 +215,29 @@ function getSettingValue()
 
     return $settingValues;
 }
+
+function getRegisteredPlayerPermission()
+{
+    $value = false;
+    $auth = Auth::user();
+
+    $user = $auth->load('registeredPlayer');
+
+    if ($user->registeredPlayer->isNotEmpty()){
+        if($user->registeredPlayer[0]->status === \App\Models\RegisteredPlayer::ACTIVE)
+        {
+            $value = true;
+        }
+    }
+
+    return $value;
+}
+
+function getTeamPlayerPermission()
+{
+    $auth = Auth::user();
+
+    $user = $auth->load('teamPlayer');
+
+    return !empty($user->teamPlayer) ? true : false;
+}

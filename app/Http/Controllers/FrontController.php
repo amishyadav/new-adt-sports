@@ -5,13 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\PlayerRegistration;
 use App\Models\Blog;
+use App\Models\RegisteredPlayer;
 use App\Models\Setting;
+use App\Models\Team;
 use App\Models\TeamPlayer;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Laracasts\Flash\Flash;
@@ -56,13 +60,20 @@ class FrontController extends Controller
 
     public function playerProfile()
     {
-        $players = null;
-        $user = getLogInUser();
-        if (!empty($user->team)){
-            $players = TeamPlayer::with('user')->where('team_id', $user->team->id)->get();
+        $team = null;
+        $teamPlayer = null;
+        $captain = null;
+
+        $user = User::with('teamPlayer')->where('id','=',getLogInUserId())
+            ->first();
+
+        if (!empty($user->teamPlayer)) {
+            $team = Team::where('id', '=', $user->teamPlayer->team_id)->first();
+            $teamPlayer = TeamPlayer::with('user')->where('team_id', '=', $user->teamPlayer->team_id)->get();
+            $captain = RegisteredPlayer::with('user')->where('user_id',$teamPlayer[0]->add_by_user_id)->first();
         }
 
-        return view('player.profile',compact('user','players'));
+        return view('player.profile',compact('user','team','teamPlayer','captain'));
     }
 
     public function blogs()

@@ -1,6 +1,6 @@
 <div class="aside-menu-container" id="sidebar">
     <div class="aside-menu-container__aside-logo flex-column-auto">
-        <a href="/" class="text-decoration-none sidebar-logo d-flex align-items-center">
+        <a href="/" class="text-decoration-none sidebar-logo d-flex align-items-center" data-turbolinks="false">
             <div class="image image-mini me-3">
                 <img src="{{ asset(getAppLogo()) }}"
                      class="img-fluid" alt="profile image">
@@ -29,8 +29,8 @@
                 </a>
             </li>
             <li class="nav-item {{ Request::is('admin/users') ? 'active' : '' }}">
-                <a class="nav-link d-flex align-items-center py-3" aria-current="page"
-                   href="{{route('users.index')}}">
+                <a class="nav-link d-flex align-items-center py-3" aria-current="page" data-turbo-frame="_top"
+                   href="{{route('users.index')}}" data-turbolinks-track="reload">
                     <span class="aside-menu-icon pe-3"><i class="fas fa-users"></i></span>
                     <span class="aside-menu-title">{{__('messages.user.user')}}</span>
                 </a>

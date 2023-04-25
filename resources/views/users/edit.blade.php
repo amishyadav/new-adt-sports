@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-    {{__('messages.doctor.edit')}}
+    Edit User
 @endsection
 @section('content')
     <div class="container-fluid">
@@ -13,15 +13,11 @@
         <div class="col-12">
             @include('layouts.errors')
         </div>
-       
         <div class="card">
-            
             <div class="card-body">
                 {{ Form::open(['route' => ['users.update',$user->id], 'method' => 'Patch', 'files' => true,'id'=> 'editUserForm']) }}
-                
                 @include('users.edit-fields')
                 {{ Form::close() }}
-                
             </div>
         </div>
     </div>

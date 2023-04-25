@@ -32,21 +32,21 @@
                                             <li class="nav-item">
                                                 <a href="#"
                                                    class="nav-link_ active show" id="menuProfile">PROFILE</a></li>
-                                            @if($user->registeredPlayer && $user->registeredPlayer->status === \App\Models\RegisteredPlayer::ACTIVE)
-                                            <li class="nav-item"><a
-                                                    href="#"
-                                                    class="nav-link_" id="menuTeam">TEAM</a></li>
-                                            <li class="nav-item"><a
-                                                    href="#"
-                                                    class="nav-link_" id="menuPlayer">PLAYERS</a></li>
-                                            @endif
-                                        </ul>
-                                    </div>
-                                </div>
-                                @include('flash::message')
-                                @include('layouts.errors')
+                                            @if(getRegisteredPlayerPermission() || getTeamPlayerPermission())
+                                           <li class="nav-item"><a
+                                                   href="#"
+                                                   class="nav-link_" id="menuTeam">TEAM</a></li>
+                                           <li class="nav-item"><a
+                                                   href="#"
+                                                   class="nav-link_" id="menuPlayer">PLAYERS</a></li>
+                                               @endif
+                                       </ul>
+                                   </div>
+                               </div>
+                               @include('flash::message')
+                               @include('layouts.errors')
                                 @include('player.profile-page')
-                                @if($user->registeredPlayer && $user->registeredPlayer->status === \App\Models\RegisteredPlayer::ACTIVE)
+                                @if(getRegisteredPlayerPermission() || getTeamPlayerPermission())
                                 @include('player.team-page')
                                 @include('player.player-page')
                                 @endif
