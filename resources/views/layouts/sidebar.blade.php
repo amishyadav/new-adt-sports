@@ -98,7 +98,7 @@
                     </a>
                 </li>
             @endcan
-            <li class="nav-item {{ Request::is('admin/blog','admin/faqs','admin/partner','admin/social-icon') ? 'show' : '' }}">
+            <li class="nav-item {{ Request::is('admin/blog','admin/faqs','admin/partner','admin/social-icon','admin/home-slider') ? 'show' : '' }}">
                 <a class="nav-link aside-collapse-btn d-flex align-items-center py-3">
                     <span class="aside-menu-icon pe-3"><i class="fa-solid fa-mobile"></i></span>
                     <span class="aside-menu-title">CMS</span>
@@ -119,6 +119,13 @@
                            href="{{ route('faqs.index') }}">
                             <span class="aside-menu-icon pe-3"><i class="fa-sharp fa-solid fa-question"></i></span>
                             <span class="aside-menu-title">FAQs</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ Request::is('admin/home-slider') ? 'active' : '' }}">
+                        <a class="nav-link d-flex align-items-center py-3"
+                           href="{{ route('home-slider.index') }}">
+                            <span class="aside-menu-icon pe-3"><i class="fa-sharp fa-solid fa-question"></i></span>
+                            <span class="aside-menu-title">Home Slider</span>
                         </a>
                     </li>
                     <li class="nav-item {{ Request::is('admin/partner') ? 'active' : '' }}">

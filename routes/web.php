@@ -7,6 +7,7 @@ use App\Http\Controllers\CookieController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FaqsController;
 use App\Http\Controllers\FrontController;
+use App\Http\Controllers\HomeSliderController;
 use App\Http\Controllers\LeagueController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\RegisteredPlayerController;
@@ -78,6 +79,7 @@ Route::group([
 
 
     Route::resource('blog', BlogController::class)->withoutMiddleware('xss');
+    Route::resource('home-slider', HomeSliderController::class);
 
     Route::resource('faqs', FaqsController::class);
     Route::put('faqs/{faq}/status', [FaqsController::class, 'changeStatus'])->name('faqs.change-status');
