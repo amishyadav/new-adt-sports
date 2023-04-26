@@ -66,7 +66,7 @@
                                             </div>
                                             <h2><a href="{{ route('front.blog.detail',[$blog->slug,$blog->id]) }}">{{ $blog->title }}</a></h2>
                                             <p>{!! \Illuminate\Support\Str::limit($blog->description, $limit = 350, $end = '...') !!}</p>
-                                            <a class="btn gary-btn" href="#"><i>+</i>read more</a>
+                                            <a class="btn gary-btn" href="{{ route('front.blog.detail',[$blog->slug,$blog->id]) }}"><i>+</i>read more</a>
                                         </div>
                                     </div>
                                     <!-- Post Detail -->

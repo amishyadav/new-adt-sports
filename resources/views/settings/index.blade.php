@@ -39,6 +39,14 @@
                         {{ Form::email('email', $setting['email'], ['class' => 'form-control','placeholder'=>__('messages.user.email'),'required']) }}
                     </div>
                 </div>
+                <div class="row mb-5">
+                    <div class="col-lg-4">
+                        {{ Form::label('address','Address:',['class'=>'form-label']) }}
+                    </div>
+                    <div class="col-lg-8">
+                        {{ Form::text('address', $setting['address'], ['class' => 'form-control','placeholder'=> 'Enter Address']) }}
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-lg-4">
                         <label for="exampleInputImage" class="form-label">{{__('messages.setting.logo')}}: </label>

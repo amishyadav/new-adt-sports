@@ -22,17 +22,10 @@ class DefaultSettingSeeder extends Seeder
         $settingData = [
             'app_name'           => 'ADT-Sports',
             'contact_no'         => '+91 9979269732',
-            'email'              => 'admin@adtsports.com',
-            'copy_right_text'    => 'All Rights Reserved (C)',
+            'email'              => 'contact@adtsports.in',
+            'address'            => 'address',
             'logo'               => $logo,
             'favicon'            => $favicon,
-            'cookie_description' => 'Your experience on this site will be improved by allowing cookies.',
-            'cookie_is'          => 1,
-            'policy_link'        => '',
-            'currency'           => 1,
-            'show_captcha'       => 0,
-            'site_key'           => '',
-            'secret_key'         => '',
         ];
 
         foreach ($settingData as $key => $value) {

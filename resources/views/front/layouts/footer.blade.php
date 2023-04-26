@@ -11,7 +11,7 @@
                 <div class="col-sm-4 col-xs-6 r-full-width-2 r-full-width">
                     <div class="column-widget h-white">
                         <div class="logo-column p-white">
-                            <img class="footer-logo" src="{{asset('front/images/footer-logo.png')}}" alt="">
+                            <img class="footer-logo" src="{{asset(getAppLogo())}}" alt="">
                             <ul class="address-list style-2">
                                 <li><span>Address:</span>1782 Harrison Street  Sun Prairie</li>
                                 <li><span>Phone Number:</span>49 30 47373795</li>
@@ -31,35 +31,16 @@
                 <!-- Footer Column -->
 
                 <!-- Footer Column -->
-                <div class="col-sm-4 col-xs-6 r-full-width-2 r-full-width">
+                <div class="col-lg-3 col-xs-6 r-full-width">
                     <div class="column-widget h-white">
-                        <h5>Advertisment</h5>
-                        <a href="#"><img src="{{asset('front/images/footer-add.jpg')}}" alt=""></a>
-                    </div>
-                </div>
-                <!-- Footer Column -->
-
-                <!-- Footer Column -->
-                <div class="col-sm-4 col-xs-6 r-full-width-2 r-full-width">
-                    <div class="column-widget h-white">
-                        <h5>Sponcer</h5>
-                        <ul id="brand-icons-slider-2" class="brand-icons-slider-2">
-                            <li>
-                                <a href="#"><img src="{{asset('front/images/brand-icons/img-1-1.png')}}" alt=""></a>
-                                <a href="#"><img src="{{asset('front/images/brand-icons/img-1-2.png')}}" alt=""></a>
-                                <a href="#"><img src="{{asset('front/images/brand-icons/img-1-3.png')}}" alt=""></a>
-                                <a href="#"><img src="{{asset('front/images/brand-icons/img-1-4.png')}}" alt=""></a>
-                                <a href="#"><img src="{{asset('front/images/brand-icons/img-1-5.png')}}" alt=""></a>
-                                <a href="#"><img src="{{asset('front/images/brand-icons/img-1-6.png')}}" alt=""></a>
-                            </li>
-                            <li>
-                                <a href="#"><img src="{{asset('front/images/brand-icons/img-1-1.png')}}" alt=""></a>
-                                <a href="#"><img src="{{asset('front/images/brand-icons/img-1-2.png')}}" alt=""></a>
-                                <a href="#"><img src="{{asset('front/images/brand-icons/img-1-3.png')}}" alt=""></a>
-                                <a href="#"><img src="{{asset('front/images/brand-icons/img-1-4.png')}}" alt=""></a>
-                                <a href="#"><img src="{{asset('front/images/brand-icons/img-1-5.png')}}" alt=""></a>
-                                <a href="#"><img src="{{asset('front/images/brand-icons/img-1-6.png')}}" alt=""></a>
-                            </li>
+                        <h5>INFORMATION</h5>
+                        <ul class="footer-links">
+                            <li><a href="{{ route('front.index') }}">Home</a></li>
+                            <li><a href="#">About</a></li>
+                            <li><a href="#">team</a></li>
+                            <li><a href="{{ route('front.blogs') }}">Blogs</a></li>
+                            <li><a href="#">FAQS</a></li>
+                            <li><a href="#">Contact</a></li>
                         </ul>
                     </div>
                 </div>
@@ -75,7 +56,7 @@
     <!-- Copy Rights -->
     <div class="copy-rights">
         <div class="container">
-            <p>© Copyright by <i class="red-color">FineLayers</i> All rights reserved.</p>
+            <p>© Copyright by <i class="red-color">{{ getAppName() }}</i> All rights reserved.</p>
             <a class="back-to-top scrollup" href="#"><i class="fa fa-angle-up"></i></a>
         </div>
     </div>
