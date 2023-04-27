@@ -134,13 +134,13 @@
                 <div class="add-banners">
                     <ul id="add-banners-slider" class="add-banners-slider">
                         <li>
-                            <a href="#"><img src="{{asset('front/images/add-banners/img-01.jpg')}}" alt=""></a>
+                            <a href="#"><img src="{{asset('images/gallery/DSC01688.jpg')}}" alt=""></a>
                         </li>
                         <li>
-                            <a href="#"><img src="{{asset('front/images/add-banners/img-02.jpg')}}" alt=""></a>
+                            <a href="#"><img src="{{asset('images/gallery/DSC01733.jpg')}}" alt=""></a>
                         </li>
                         <li>
-                            <a href="#"><img src="{{asset('front/images/add-banners/img-03.jpg')}}" alt=""></a>
+                            <a href="#"><img src="{{asset('images/gallery/DSC02034.jpg')}}" alt=""></a>
                         </li>
                     </ul>
                 </div>
@@ -223,41 +223,41 @@
                             <div class="row">
                                 <div class="col-sm-12 col-xs-12 r-full-width p-0">
                                     <figure class="gallery-figure">
-                                        <img src="{{asset('front/images/gallery-v3/img-01.jpg')}}" alt="">
-                                        <figcaption class="overlay">
-                                            <div class="position-center-center">
-                                                <ul class="btn-list">
-                                                    <li><a href="{{asset('front/images/gallery-v3/img-1-1.jpg')}}" data-rel="prettyPhoto[gallery-v3]"><i class="fa fa-search"></i></a></li>
-                                                    <li><a class="fa fa-eye" href="#"></a></li>
-                                                </ul>
-                                            </div>
-                                        </figcaption>
+                                        <img src="{{asset('images/gallery/DSC01728.jpg')}}" alt="">
+{{--                                        <figcaption class="overlay">--}}
+{{--                                            <div class="position-center-center">--}}
+{{--                                                <ul class="btn-list">--}}
+{{--                                                    <li><a href="{{asset('images/gallery/DSC01688.jpg')}}" data-rel="prettyPhoto[gallery-v3]"><i class="fa fa-search"></i></a></li>--}}
+{{--                                                    <li><a class="fa fa-eye" href="#"></a></li>--}}
+{{--                                                </ul>--}}
+{{--                                            </div>--}}
+{{--                                        </figcaption>--}}
                                     </figure>
                                 </div>
                                 <div class="col-sm-6 col-xs-6 r-full-width p-0">
                                     <figure class="gallery-figure">
-                                        <img src="{{asset('front/images/gallery-v3/img-02.jpg')}}" alt="">
-                                        <figcaption class="overlay">
-                                            <div class="position-center-center">
-                                                <ul class="btn-list">
-                                                    <li><a href="{{asset('front/images/gallery-v3/img-1-2.jpg')}}" data-rel="prettyPhoto[gallery-v3]"><i class="fa fa-search"></i></a></li>
-                                                    <li><a class="fa fa-eye" href="#"></a></li>
-                                                </ul>
-                                            </div>
-                                        </figcaption>
+                                        <img src="{{asset('images/gallery/DSC01742.jpg')}}" alt="">
+{{--                                        <figcaption class="overlay">--}}
+{{--                                            <div class="position-center-center">--}}
+{{--                                                <ul class="btn-list">--}}
+{{--                                                    <li><a href="{{asset('front/images/gallery-v3/img-1-2.jpg')}}" data-rel="prettyPhoto[gallery-v3]"><i class="fa fa-search"></i></a></li>--}}
+{{--                                                    <li><a class="fa fa-eye" href="#"></a></li>--}}
+{{--                                                </ul>--}}
+{{--                                            </div>--}}
+{{--                                        </figcaption>--}}
                                     </figure>
                                 </div>
                                 <div class="col-sm-6 col-xs-6 r-full-width p-0">
                                     <figure class="gallery-figure">
-                                        <img src="{{asset('front/images/gallery-v3/img-03.jpg')}}" alt="">
-                                        <figcaption class="overlay">
-                                            <div class="position-center-center">
-                                                <ul class="btn-list">
-                                                    <li><a href="{{asset('front/images/gallery-v3/img-1-3.jpg')}}" data-rel="prettyPhoto[gallery-v3]"><i class="fa fa-search"></i></a></li>
-                                                    <li><a class="fa fa-eye" href="#"></a></li>
-                                                </ul>
-                                            </div>
-                                        </figcaption>
+                                        <img src="{{asset('images/gallery/DSC01751.jpg')}}" alt="">
+{{--                                        <figcaption class="overlay">--}}
+{{--                                            <div class="position-center-center">--}}
+{{--                                                <ul class="btn-list">--}}
+{{--                                                    <li><a href="{{asset('front/images/gallery-v3/img-1-3.jpg')}}" data-rel="prettyPhoto[gallery-v3]"><i class="fa fa-search"></i></a></li>--}}
+{{--                                                    <li><a class="fa fa-eye" href="#"></a></li>--}}
+{{--                                                </ul>--}}
+{{--                                            </div>--}}
+{{--                                        </figcaption>--}}
                                     </figure>
                                 </div>
                             </div>
@@ -266,41 +266,41 @@
                             <div class="row">
                                 <div class="col-sm-6 col-xs-6 r-full-width p-0">
                                     <figure class="gallery-figure">
-                                        <img src="{{asset('front/images/gallery-v3/img-04.jpg')}}" alt="">
-                                        <figcaption class="overlay">
-                                            <div class="position-center-center">
-                                                <ul class="btn-list">
-                                                    <li><a href="{{asset('front/images/gallery-v3/img-1-4.jpg')}}" data-rel="prettyPhoto[gallery-v3]"><i class="fa fa-search"></i></a></li>
-                                                    <li><a class="fa fa-eye" href="#"></a></li>
-                                                </ul>
-                                            </div>
-                                        </figcaption>
+                                        <img src="{{asset('images/gallery/DSC01767.jpg')}}" alt="">
+{{--                                        <figcaption class="overlay">--}}
+{{--                                            <div class="position-center-center">--}}
+{{--                                                <ul class="btn-list">--}}
+{{--                                                    <li><a href="{{asset('front/images/gallery-v3/img-1-4.jpg')}}" data-rel="prettyPhoto[gallery-v3]"><i class="fa fa-search"></i></a></li>--}}
+{{--                                                    <li><a class="fa fa-eye" href="#"></a></li>--}}
+{{--                                                </ul>--}}
+{{--                                            </div>--}}
+{{--                                        </figcaption>--}}
                                     </figure>
                                 </div>
                                 <div class="col-sm-6 col-xs-6 r-full-width p-0">
                                     <figure class="gallery-figure">
-                                        <img src="{{asset('front/images/gallery-v3/img-05.jpg')}}" alt="">
-                                        <figcaption class="overlay">
-                                            <div class="position-center-center">
-                                                <ul class="btn-list">
-                                                    <li><a href="{{asset('front/images/gallery-v3/img-1-5.jpg')}}" data-rel="prettyPhoto[gallery-v3]"><i class="fa fa-search"></i></a></li>
-                                                    <li><a class="fa fa-eye" href="#"></a></li>
-                                                </ul>
-                                            </div>
-                                        </figcaption>
+                                        <img src="{{asset('images/gallery/DSC02742.jpg')}}" alt="">
+{{--                                        <figcaption class="overlay">--}}
+{{--                                            <div class="position-center-center">--}}
+{{--                                                <ul class="btn-list">--}}
+{{--                                                    <li><a href="{{asset('front/images/gallery-v3/img-1-5.jpg')}}" data-rel="prettyPhoto[gallery-v3]"><i class="fa fa-search"></i></a></li>--}}
+{{--                                                    <li><a class="fa fa-eye" href="#"></a></li>--}}
+{{--                                                </ul>--}}
+{{--                                            </div>--}}
+{{--                                        </figcaption>--}}
                                     </figure>
                                 </div>
                                 <div class="col-sm-12 col-xs-12 r-full-width p-0">
                                     <figure class="gallery-figure">
-                                        <img src="{{asset('front/images/gallery-v3/img-06.jpg')}}" alt="">
-                                        <figcaption class="overlay">
-                                            <div class="position-center-center">
-                                                <ul class="btn-list">
-                                                    <li><a href="{{asset('front/images/gallery-v3/img-1-6.jpg')}}" data-rel="prettyPhoto[gallery-v3]"><i class="fa fa-search"></i></a></li>
-                                                    <li><a class="fa fa-link" href="#"></a></li>
-                                                </ul>
-                                            </div>
-                                        </figcaption>
+                                        <img src="{{asset('images/gallery/DSC02212.jpg')}}" alt="">
+{{--                                        <figcaption class="overlay">--}}
+{{--                                            <div class="position-center-center">--}}
+{{--                                                <ul class="btn-list">--}}
+{{--                                                    <li><a href="{{asset('front/images/gallery-v3/img-1-6.jpg')}}" data-rel="prettyPhoto[gallery-v3]"><i class="fa fa-search"></i></a></li>--}}
+{{--                                                    <li><a class="fa fa-link" href="#"></a></li>--}}
+{{--                                                </ul>--}}
+{{--                                            </div>--}}
+{{--                                        </figcaption>--}}
                                     </figure>
                                 </div>
                             </div>
