@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PlayerRegistration;
 use App\Models\Blog;
+use App\Models\Contact;
+use App\Models\HomeSlider;
 use App\Models\RegisteredPlayer;
 use App\Models\Setting;
 use App\Models\Team;
@@ -11,6 +13,7 @@ use App\Models\TeamPlayer;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Hash;
 use Laracasts\Flash\Flash;
@@ -26,7 +29,9 @@ class FrontController extends Controller
             $blogs = Blog::all()->except($latestBlog->id);
         }
 
-        return view('front.pages.home',compact('latestBlog','blogs'));
+        $homeSliders = HomeSlider::all();
+
+        return view('front.pages.home',compact('latestBlog','blogs','homeSliders'));
     }
 
     public function register()
@@ -87,5 +92,18 @@ class FrontController extends Controller
     public function blogDetail($slug,Blog $blog)
     {
         return view('front.pages.blog_detail',compact('blog'));
+    }
+
+    public function contactUs()
+    {
+        return view('front.pages.contact');
+    }
+
+    public function contactUsStore(Request $request)
+    {
+        Contact::create($request->all());
+        Flash::success('Contact/Queries send successfully.');
+
+        return redirect(route('front.contact'));
     }
 }

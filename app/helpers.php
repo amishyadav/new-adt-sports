@@ -67,19 +67,6 @@ function getFaviconLogo()
 }
 
 /**
- * @return mixed
- */
-//function getFloatingButtonLogo()
-//{
-//    static $setting;
-//    if (empty($setting)) {
-//        $setting = AppConfiguration::all()->keyBy('key');
-//    }
-//
-//    return $setting['floating_buttton_logo']->value;
-//}
-
-/**
  *
  * @return int
  */
@@ -122,20 +109,6 @@ function version()
     return 'v'.$currentVersion;
     }
 }
-function checkCurrency($code)
-{
-    $composerFile = file_get_contents(public_path('currencymap.json'));
-
-    $array = (array) json_decode($composerFile);
-
-
-    if (isset($array[$code])) {
-        return true;
-    }
-
-    return false;
-//    $composerData = json_decode($composerFile, true);
-}
 
 function getBadgeColor($index): string
 {
@@ -177,33 +150,6 @@ function checkLanguageSession()
 
     return 'en';
 }
-function getAllPaymentStatus()
-{
-//    $paymentMethodToReturn = Cache::get('payment_method', null);
-
-//    if (empty($paymentMethodToReturn)) {
-    $paymentGateway = \App\Models\PaymentGateway::PAYMENT_METHOD;
-
-    $selectedPaymentGateway = PaymentGateway::pluck('payment_gateway', 'payment_gateway_id',)->toArray();
-
-    $paymentMethodToReturn = array_intersect($paymentGateway, $selectedPaymentGateway);
-
-//        Cache::put('payment_method', $paymentMethodToReturn);
-//    }
-    return $paymentMethodToReturn;
-
-}
-function setStripeApiKey()
-{
-    Stripe::setApiKey(config('services.stripe.secret_key'));
-}
-
-function zeroDecimalCurrencies(): array
-{
-    return [
-        'BIF', 'CLP', 'DJF', 'GNF', 'JPY', 'KMF', 'KRW', 'MGA', 'PYG', 'RWF', 'UGX', 'VND', 'VUV', 'XAF', 'XOF', 'XPF',
-    ];
-}
 
 function getSettingValue()
 {
@@ -214,6 +160,13 @@ function getSettingValue()
     }
 
     return $settingValues;
+}
+
+function getSettingValueByKey($key)
+{
+    $settingValues = Setting::where('key',$key)->first();
+
+    return $settingValues->value;
 }
 
 function getRegisteredPlayerPermission()

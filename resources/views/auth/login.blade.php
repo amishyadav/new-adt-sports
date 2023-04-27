@@ -40,12 +40,6 @@
                                 <input name="password" type="password" class="form-control" autocomplete="off" placeholder="Password" aria-label="Password" required>
                                 <i class="fa fa-eye password-indicator"></i>
                             </div>
-                            @if(getSettingValue()['show_captcha'] == 1)
-                                <div class="mb-sm-7 mb-4">
-                                    {!! NoCaptcha::renderJs() !!}
-                                    {!! NoCaptcha::display() !!}
-                                </div>
-                            @endif
                             <div class="form-group clearfix">
                                 <button type="submit" class="btn btn-primary btn-lg btn-theme">Login</button>
                             </div>
