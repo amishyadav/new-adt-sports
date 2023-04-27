@@ -16,7 +16,7 @@ class HomeSliderTable extends LivewireTableComponent
     public function configure(): void
     {
         $this->setPrimaryKey('id')
-            ->setDefaultSort('home_slider.created_at', 'desc')
+            ->setDefaultSort('home_sliders.created_at', 'desc')
             ->setQueryStringStatus(false);
     }
 

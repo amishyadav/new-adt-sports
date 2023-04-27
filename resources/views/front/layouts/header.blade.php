@@ -92,7 +92,7 @@
                     <li class="mega-dropdown">
                         <a href="{{ route('front.blogs') }}">Blogs</a>
                     </li>
-                    <li><a href="#">contact</a></li>
+                    <li><a href="{{ route('front.contact') }}">contact</a></li>
                     @if(!getLogInUser())
                     <li>
                         <a href="{{route('login')}}">Login</a>

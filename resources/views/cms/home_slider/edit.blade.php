@@ -1,13 +1,13 @@
 @extends('layouts.app')
 @section('title')
-    {{ __('Edit Blog') }}
+    Edit Home Slider
 @endsection
 @section('header_toolbar')
     <div class="container-fluid">
         <div class="d-md-flex align-items-center justify-content-between mb-5">
             <h1 class="mb-0">@yield('title')</h1>
             <div class="text-end mt-4 mt-md-0">
-                <a href="{{ route('blog.index') }}" class="btn btn-outline-primary">{{ __('messages.common.back') }}</a>
+                <a href="{{ route('home-slider.index') }}" class="btn btn-outline-primary">{{ __('messages.common.back') }}</a>
             </div>
         </div>
     </div>
@@ -20,44 +20,39 @@
                     @include('flash::message')
                     @include('layouts.errors')
                 </div>
-                {{ Form::model($blog, ['route' => ['blog.update', $blog->id], 'method' => 'put', 'id' => 'editBlogForm', 'files' => 'true']) }}
+                {{ Form::model($homeSlider, ['route' => ['home-slider.update', $homeSlider->id], 'method' => 'put', 'id' => 'editHomeSliderForm', 'files' => 'true']) }}
                 <div class="section-body">
                     <div class="card mt-2">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-sm-8">
                                     <div class="col-sm-12 mb-5">
+                                        {{ Form::label('main_title',__('Main Title').(':'), ['class' => 'form-label']) }}
+                                        <span class="required"></span>
+                                        {{ Form::text('main_title', $homeSlider['main_title'] ?? null, ['id'=>'editSliderMainTitle','class' => 'form-control']) }}
+                                    </div>
+                                    <div class="col-sm-12 mb-5">
                                         {{ Form::label('title',__('Title').(':'), ['class' => 'form-label']) }}
                                         <span class="required"></span>
-                                        {{ Form::text('title', $blog['title'] ?? null, ['id'=>'blogTitle','class' => 'form-control']) }}
-                                    </div>
-                                    <div class="col-sm-12 mb-5">
-                                        {{ Form::label('slug',__('messages.blog.slug').' :', ['class' => 'form-label required']) }}
-                                        {{ Form::text('slug', isset($blog) ? $blog->slug : null, ['class' => 'form-control','required', 'id'=>'blogSlug']) }}
-                                        <input type="hidden" name="slug" id="slugHidden"  value="{{  isset($blog) ? $blog->slug : null }}">
-                                    </div>
-                                    <div class="col-sm-12 mb-5">
-                                        {{ Form::label('tag',__('Tag').(':'), ['class' => 'form-label']) }}
-                                        <span class="required"></span>
-                                        {{ Form::text('tag', $blog['tag'] ?? null, ['id'=>'editBlogTag','class' => 'form-control']) }}
+                                        {{ Form::text('title', $homeSlider['title'] ?? null, ['id'=>'editSliderTitle','class' => 'form-control']) }}
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-12">
                                     <div class="mb-3" io-image-input="true">
                                         <label for="exampleInputImage" class="form-label">{{__('Image')}}
                                             :</label>
                                         <div class="d-block">
                                             <div class="image-picker">
                                                 <div class="image previewImage" id="exampleInputImage"
-                                                     style="width: 320px; height: 235px; background-image: url({{ !empty($blog->blog_image) ? $blog->blog_image : asset('web/media/avatars/male.png') }})">
+                                                     style="width: 320px; height: 235px; background-image: url({{ !empty($homeSlider->slider_image) ? $homeSlider->slider_image : asset('web/media/avatars/male.png') }})">
                                                 </div>
                                                 <span class="picker-edit rounded-circle text-gray-500 fs-small"
                                                       data-bs-toggle="tooltip"
                                                       data-placement="top"
-                                                      data-bs-original-title="{{ __('Blog Image') }}">
+                                                      data-bs-original-title="{{ __('Slider Image') }}">
                                                 <label>
                                                     <i class="fa-solid fa-pen" id="profileImageIcon"></i>
-                                                    <input type="file" name="image" id="blogImage"
+                                                    <input type="file" name="slider_image" id="editSliderImage"
                                                            class="image-upload d-none"
                                                            accept="image/*"/>
                                                 </label>
@@ -65,12 +60,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-sm-12 mb-20">
-                                    {{ Form::label('description', __('Description').(':'),['class' => 'form-label']) }}
-                                    <span class="required"></span>
-                                    {{ Form::hidden('description', null, ['id' => 'editBlogDescription']) }}
-                                    <div id="editBlogQuillData">{!! $blog['description'] ?? null !!}</div>
                                 </div>
                             </div>
                             <div class="mt-10">

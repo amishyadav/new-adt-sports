@@ -15,6 +15,8 @@ Route::get('/registration',[FrontController::class,'register'])->name('front.reg
 Route::post('/registration',[FrontController::class,'registration'])->name('front.register.store');
 Route::get('/blogs',[FrontController::class,'blogs'])->name('front.blogs');
 Route::get('/blogs/{slug}/{blog}',[FrontController::class,'blogDetail'])->name('front.blog.detail');
+Route::get('/contact-us',[FrontController::class,'contactUs'])->name('front.contact');
+Route::post('/contact-us',[FrontController::class,'contactUsStore'])->name('front.contact.store');
 
 Route::group([
     'prefix' => 'player', 'middleware' => ['auth', 'xss','role:player'],

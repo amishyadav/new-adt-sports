@@ -40,7 +40,7 @@
                             <li><a href="#">team</a></li>
                             <li><a href="{{ route('front.blogs') }}">Blogs</a></li>
                             <li><a href="#">FAQS</a></li>
-                            <li><a href="#">Contact</a></li>
+                            <li><a href="{{ route('front.contact') }}">Contact</a></li>
                         </ul>
                     </div>
                 </div>

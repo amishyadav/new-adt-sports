@@ -57,10 +57,10 @@
                             <a class="nav-link p-0 {{ Request::is('admin/faqs*') ? 'active' : '' }}"
                                href="{{ route('faqs.index') }}">{{__('messages.faqs.faq')}}</a>
                         </li>
-                    @elseif(Request::is('admin/partner*'))
+                    @elseif(Request::is('admin/home-slider*'))
                         <li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0">
-                            <a class="nav-link p-0 {{ Request::is('admin/partner*') ? 'active' : '' }}"
-                               href="{{ route('partner.index') }}">{{__('messages.common.partner')}}</a>
+                            <a class="nav-link p-0 {{ Request::is('admin/home-slider*') ? 'active' : '' }}"
+                               href="{{ route('home-slider.index') }}">home slider</a>
                         </li>
                     @endif
                 </ul>

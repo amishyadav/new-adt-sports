@@ -7,7 +7,7 @@ use App\Repositories\HomeSliderRepository;
 use Illuminate\Http\Request;
 use Laracasts\Flash\Flash;
 
-class HomeSliderController extends Controller
+class HomeSliderController extends AppBaseController
 {
     /**
      * @param HomeSliderRepository $homeSliderRepository

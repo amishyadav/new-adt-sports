@@ -35,10 +35,10 @@ class HomeSliderRepository extends BaseRepository
     public function store($input)
     {
         try {
-            $blog = HomeSlider::create($input);
+            $homeSlider = HomeSlider::create($input);
 
             if (!empty($input['slider_image'])) {
-                $blog->addMedia($input['image'])->toMediaCollection(HomeSlider::SLIDER_IMAGE,
+                $homeSlider->addMedia($input['slider_image'])->toMediaCollection(HomeSlider::SLIDER_IMAGE,
                     config('app.media_disc'));
             }
 
