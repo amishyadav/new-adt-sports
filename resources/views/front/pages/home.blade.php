@@ -134,13 +134,13 @@
                 <div class="add-banners">
                     <ul id="add-banners-slider" class="add-banners-slider">
                         <li>
-                            <a href="#"><img src="{{asset('images/gallery/DSC01688.jpg')}}" alt=""></a>
+                            <a href="#"><img src="{{asset('images/gallery/DSC01688.JPG')}}" alt=""></a>
                         </li>
                         <li>
-                            <a href="#"><img src="{{asset('images/gallery/DSC01733.jpg')}}" alt=""></a>
+                            <a href="#"><img src="{{asset('images/gallery/DSC01733.JPG')}}" alt=""></a>
                         </li>
                         <li>
-                            <a href="#"><img src="{{asset('images/gallery/DSC02034.jpg')}}" alt=""></a>
+                            <a href="#"><img src="{{asset('images/gallery/DSC02034.JPG')}}" alt=""></a>
                         </li>
                     </ul>
                 </div>
@@ -223,7 +223,7 @@
                             <div class="row">
                                 <div class="col-sm-12 col-xs-12 r-full-width p-0">
                                     <figure class="gallery-figure">
-                                        <img src="{{asset('images/gallery/DSC01728.jpg')}}" alt="">
+                                        <img src="{{asset('images/gallery/DSC01728.JPG')}}" alt="">
 {{--                                        <figcaption class="overlay">--}}
 {{--                                            <div class="position-center-center">--}}
 {{--                                                <ul class="btn-list">--}}
@@ -236,7 +236,7 @@
                                 </div>
                                 <div class="col-sm-6 col-xs-6 r-full-width p-0">
                                     <figure class="gallery-figure">
-                                        <img src="{{asset('images/gallery/DSC01742.jpg')}}" alt="">
+                                        <img src="{{asset('images/gallery/DSC01742.JPG')}}" alt="">
 {{--                                        <figcaption class="overlay">--}}
 {{--                                            <div class="position-center-center">--}}
 {{--                                                <ul class="btn-list">--}}
@@ -249,7 +249,7 @@
                                 </div>
                                 <div class="col-sm-6 col-xs-6 r-full-width p-0">
                                     <figure class="gallery-figure">
-                                        <img src="{{asset('images/gallery/DSC01751.jpg')}}" alt="">
+                                        <img src="{{asset('images/gallery/DSC01751.JPG')}}" alt="">
 {{--                                        <figcaption class="overlay">--}}
 {{--                                            <div class="position-center-center">--}}
 {{--                                                <ul class="btn-list">--}}
@@ -266,7 +266,7 @@
                             <div class="row">
                                 <div class="col-sm-6 col-xs-6 r-full-width p-0">
                                     <figure class="gallery-figure">
-                                        <img src="{{asset('images/gallery/DSC01767.jpg')}}" alt="">
+                                        <img src="{{asset('images/gallery/DSC01767.JPG')}}" alt="">
 {{--                                        <figcaption class="overlay">--}}
 {{--                                            <div class="position-center-center">--}}
 {{--                                                <ul class="btn-list">--}}
@@ -279,7 +279,7 @@
                                 </div>
                                 <div class="col-sm-6 col-xs-6 r-full-width p-0">
                                     <figure class="gallery-figure">
-                                        <img src="{{asset('images/gallery/DSC02742.jpg')}}" alt="">
+                                        <img src="{{asset('images/gallery/DSC02742.JPG')}}" alt="">
 {{--                                        <figcaption class="overlay">--}}
 {{--                                            <div class="position-center-center">--}}
 {{--                                                <ul class="btn-list">--}}
@@ -292,7 +292,7 @@
                                 </div>
                                 <div class="col-sm-12 col-xs-12 r-full-width p-0">
                                     <figure class="gallery-figure">
-                                        <img src="{{asset('images/gallery/DSC02212.jpg')}}" alt="">
+                                        <img src="{{asset('images/gallery/DSC02212.JPG')}}" alt="">
 {{--                                        <figcaption class="overlay">--}}
 {{--                                            <div class="position-center-center">--}}
 {{--                                                <ul class="btn-list">--}}
