@@ -77,69 +77,68 @@
 </head>
 <body>
 <section id="matchs">
+    <form action="{{ route('adt-score.update',$adtScore->id) }}" method="post">
+        @csrf
+        @method('put')
     <div class="container mt-5">
         <div class="col-lg-12 d-flex">
             <div class="col-lg-6" style="border-right: 1px solid;">
-                <h1 class="team-a-name text-outline" style="text-align: center;">Team A</h1>
-                <h1 class="left-score-board left-points text-outline" data-team1="00" style="text-align: center">00</h1>
-                <div class="d-flex btn-group">
-                    <button class="btn btn-primary leftScoreBtn leftScoreMinus mt-3 point-btn" id="" data-symbol="-" data-point="1" disabled>-1</button>
-                    <button class="btn btn-primary leftScoreBtn mt-3 point-btn" id="leftScorePlus" data-point="1"
-                            data-symbol="+">+1
-                    </button>
-                </div>
+                @if($adtScore->round == 1)
+                    @include('scoreboard.team-a-score')
+                @else
+                    @include('scoreboard.team-b-score')
+                @endif
             </div>
 
             <div class="col-lg-6">
-                <h1 class="team-b-name text-outline" style="text-align: center;">Team B</h1>
-                <h1 class="right-score-board left-points text-outline" style="text-align: center">00</h1>
-                <div class="d-flex btn-group">
-                    <button class="btn btn-primary rightScoreBtn rightScoreMinus mt-3 point-btn" id="" data-symbol="-" data-point="1" disabled>-1</button>
-                    <button class="btn btn-primary rightScoreBtn mt-3 point-btn" data-point="1"
-                            data-symbol="+">+1</button>
-                </div>
+                @if($adtScore->round == 2)
+                    @include('scoreboard.team-a-score')
+                @else
+                    @include('scoreboard.team-b-score')
+                @endif
             </div>
         </div>
-        <h4 class="half-first mt-5" style="text-align: center;font-weight: 800;">1st Half</h4>
-        <h4 class="half-second d-none mt-5" style="text-align: center;font-weight: 800;">2nd Half</h4>
+
+        @if($adtScore->round == 1)
+            <h4 class="half-first mt-5" style="text-align: center;font-weight: 800;">{{$adtScore->round}}st Half</h4>
+        @else
+            <h4 class="half-second mt-5" style="text-align: center;font-weight: 800;">{{$adtScore->round}}nd Half</h4>
+        @endif
 
         <div class="time-buttons mt-5" style="text-align: center">
-            <button class="btn btn-lg btn-success first-half" data-action="start">
+            <button class="btn btn-lg btn-success first-half" name="round" value="1" data-action="start">
                 1st Half
             </button>
-            <button class="btn btn-lg btn-danger second-half" data-action="stop">
+            <button class="btn btn-lg btn-danger second-half" name="round" value="2" data-action="stop">
                 2nd Half
             </button>
         </div>
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a href="{{ route('adt-score.index') }}" class="btn btn-warning"> Reset</a>
+            <a class="btn btn-danger" href="{{ route('adt-score.live',$adtScore->id) }}">Live</a>
+        </div>
 
     </div>
+
+    </form>
 
 </section>
 
 <script>
     $(document).ready(function (){
-        $("#teamA").keypress(function(){
-            $(".team-a-name").text(this.value);
-        });
-        $("#teamB").keypress(function(){
-            $(".team-b-name").text(this.value);
-        });
-
         let leftTotal = 0;
         let rightTotal = 0;
         $('.leftScoreBtn').on('click', function(){
             let symbol = $(this).attr('data-symbol');
             let point = $(this).attr('data-point');
-            let score = $('.left-score-board').text();
-            console.log(point)
-            console.log(symbol)
+            let leftTotal = $('.left-score-board').attr('data-team1');
             if(symbol == '+'){
-                leftTotal += parseInt(point);
+                leftTotal = parseInt(leftTotal) + parseInt(point);
             }
             else{
                 leftTotal -= parseInt(point);
             }
-            console.log(leftTotal)
             if(leftTotal < 0)
             {
                 $('.leftScoreMinus').prop('disabled', true);
@@ -158,17 +157,17 @@
                 totalScore = leftTotal
             }
 
-            $('.left-score-board').text(totalScore)
-
+            $('.left-score-board').text(totalScore).attr('data-team1',totalScore);
+            $('#teamAScore').attr('value',totalScore);
         });
 
 
         $('.rightScoreBtn').on('click', function(){
             let symbol = $(this).attr('data-symbol');
             let point = $(this).attr('data-point');
-            let score = $('.right-score-board').text();
+            let rightTotal = $('.right-score-board').attr('data-team2');
             if(symbol == '+'){
-                rightTotal += parseInt(point);
+                rightTotal = parseInt(rightTotal) + parseInt(point);
             }
             else{
                 rightTotal -= parseInt(point);
@@ -193,8 +192,8 @@
                 totalScore = rightTotal
             }
 
-            $('.right-score-board').text(totalScore)
-
+            $('.right-score-board').text(totalScore).attr('data-team2',totalScore);
+            $('#teamBScore').attr('value',totalScore);
         });
 
 // Stopwatch time code
@@ -254,15 +253,6 @@
 //             $('.stop-timer').prop('disabled',false)
 //             reset();
 //         });
-
-        $('.first-half').on('click', function (){
-            $('.half-first').removeClass('d-none')
-            $('.half-second').addClass('d-none')
-        })
-        $('.second-half').on('click', function (){
-            $('.half-second').removeClass('d-none')
-            $('.half-first').addClass('d-none')
-        })
     });
 </script>
 

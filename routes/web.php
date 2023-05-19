@@ -31,11 +31,6 @@ use Rap2hpoutre\LaravelLogViewer\LogViewerController;
 |
 */
 
-Route::get('/',[FrontController::class,'home'])->name('front.index');
-
-//Change Language
-Route::post('update-language', [UserController::class, 'updateLanguage'])->name('change-language');
-
 Route::group([
     'prefix' => 'admin', 'middleware' => ['auth', 'xss','setLanguage','role:admin'],
 ], function () {
