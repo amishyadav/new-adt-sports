@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADT</title>
+    <title>Document</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -77,6 +77,47 @@
 </head>
 <body>
 <section id="matchs">
+    <div class="container px-lg-0">
+        <div class="row m-auto d-flex justify-content-center mt-5">
+            {{--            <img src="{{ asset('score.jpg') }}" alt="">--}}
+            {{--            <div data-wow-duration="1s" class="wow flipInX col-lg-12 mt-5" style="visibility: visible; animation-duration: 1s; animation-name: flipInX;">--}}
+            {{--                <div class="team_view d-flex flex-wrap justify-content-center">--}}
+            {{--                    <div class="team_one d-flex  flex-wrap justify-content-center">--}}
+            {{--                        <h4 class="m-auto text-white">Istanbul Sports</h6>--}}
+            {{--                    </div>--}}
+            {{--                    <div class=" m-auto d-flex">--}}
+            {{--                        <div class="vs">--}}
+            {{--                            <div class="card text-center" style="width: 3rem; border-right: 0px;">--}}
+            {{--                                <h1 class="left-score-board" data-team1="00">00</h1>--}}
+            {{--                            </div>--}}
+            {{--                        </div>--}}
+            {{--                        <div class="vs">--}}
+            {{--                            <div class="card text-center" style="width: 1rem; border-right: 0px; border-left: 0px;">--}}
+            {{--                                <h1 class="">:</h1>--}}
+            {{--                            </div>--}}
+            {{--                        </div>--}}
+            {{--                        <div class="vs">--}}
+            {{--                            <div class="card text-center" style="width: 3rem; border-left: 0px;">--}}
+            {{--                                <h1 class="right-score-board">00</h1>--}}
+            {{--                            </div>--}}
+            {{--                        </div>--}}
+            {{--                    </div>--}}
+            {{--                    <div class="team_one d-flex flex-wrap justify-content-center">--}}
+            {{--                        <h4 class="m-auto text-white">United Fs Club</h6>--}}
+            {{--                    </div>--}}
+            {{--                </div>--}}
+            {{--                <div class="match_time d-flex flex-wrap text-center justify-content-center ">--}}
+            {{--                    <h6 id="current-time"><i class="fa-solid fa-calendar-days"></i> May 21, 2022 - 16:00</h6>--}}
+
+            {{--                </div>--}}
+
+            {{--            </div>--}}
+        </div>
+    </div>
+
+
+
+
     <div class="container mt-5">
         <div class="col-lg-12 d-flex">
             <div class="col-lg-6" style="border-right: 1px solid;">
@@ -87,6 +128,34 @@
                     <button class="btn btn-primary leftScoreBtn mt-3 point-btn" id="leftScorePlus" data-point="1"
                             data-symbol="+">+1
                     </button>
+
+                    <button class="btn btn-primary leftScoreBtn leftScoreMinus mt-3 point-btn ml-5" id="" data-symbol="-" data-point="2" disabled>-2</button>
+                    <button class="btn btn-primary leftScoreBtn mt-3 point-btn" id="leftScorePlus" data-point="2"
+                            data-symbol="+">+2
+                    </button>
+
+                    <button class="btn btn-primary leftScoreBtn leftScoreMinus mt-3 point-btn ml-5" id="" data-symbol="-" data-point="3" disabled>-3</button>
+                    <button class="btn btn-primary leftScoreBtn mt-3 point-btn" id="leftScorePlus" data-point="3"
+                            data-symbol="+">+3
+                    </button>
+
+                </div>
+                <div class="d-flex btn-group">
+                    <button class="btn btn-primary leftScoreBtn leftScoreMinus mt-3 point-btn" id="" data-symbol="-" data-point="4" disabled>-4</button>
+                    <button class="btn btn-primary leftScoreBtn mt-3 point-btn" id="leftScorePlus" data-point="4"
+                            data-symbol="+">+4
+                    </button>
+
+                    <button class="btn btn-primary leftScoreBtn leftScoreMinus mt-3 point-btn ml-5" id="" data-symbol="-" data-point="5" disabled>-5</button>
+                    <button class="btn btn-primary leftScoreBtn mt-3 point-btn" id="leftScorePlus" data-point="5"
+                            data-symbol="+">+5
+                    </button>
+
+                    <button class="btn btn-primary leftScoreBtn leftScoreMinus mt-3 point-btn ml-5" id="" data-symbol="-" data-point="6" disabled>-6</button>
+                    <button class="btn btn-primary leftScoreBtn mt-3 point-btn" id="leftScorePlus" data-point="6"
+                            data-symbol="+">+6
+                    </button>
+
                 </div>
             </div>
 
@@ -97,9 +166,58 @@
                     <button class="btn btn-primary rightScoreBtn rightScoreMinus mt-3 point-btn" id="" data-symbol="-" data-point="1" disabled>-1</button>
                     <button class="btn btn-primary rightScoreBtn mt-3 point-btn" data-point="1"
                             data-symbol="+">+1</button>
+
+                    <button class="btn btn-primary rightScoreBtn rightScoreMinus mt-3 point-btn ml-5" id="" data-symbol="-" data-point="2" disabled>-2</button>
+                    <button class="btn btn-primary rightScoreBtn mt-3 point-btn" data-point="2"
+                            data-symbol="+">+2</button>
+
+                    <button class="btn btn-primary rightScoreBtn rightScoreMinus mt-3 point-btn ml-5" id="" data-symbol="-" data-point="3" disabled>-3</button>
+                    <button class="btn btn-primary rightScoreBtn mt-3 point-btn" data-point="3"
+                            data-symbol="+">+3</button>
+
+                </div>
+                <div class="d-flex btn-group">
+                    <button class="btn btn-primary rightScoreBtn rightScoreMinus mt-3 point-btn" id="" data-symbol="-" data-point="4" disabled>-4</button>
+                    <button class="btn btn-primary rightScoreBtn mt-3 point-btn" data-point="4"
+                            data-symbol="+">+4</button>
+
+                    <button class="btn btn-primary rightScoreBtn rightScoreMinus mt-3 point-btn ml-5" id="" data-symbol="-" data-point="5" disabled>-5</button>
+                    <button class="btn btn-primary rightScoreBtn mt-3 point-btn" data-point="5"
+                            data-symbol="+">+5</button>
+
+                    <button class="btn btn-primary rightScoreBtn rightScoreMinus mt-3 point-btn ml-5" id="" data-symbol="-" data-point="6" disabled>-6</button>
+                    <button class="btn btn-primary rightScoreBtn mt-3 point-btn" data-point="6"
+                            data-symbol="+">+6</button>
+
                 </div>
             </div>
         </div>
+
+
+        {{--        <div>--}}
+        {{--            <div class="text-center">--}}
+        {{--                <div class="timer">--}}
+        {{--    <span class="minutes d-none">--}}
+        {{--      00--}}
+        {{--    </span>--}}
+        {{--                    <h3 class="seconds countdown-time">--}}
+        {{--                        00--}}
+        {{--                    </h3>--}}
+        {{--                </div>--}}
+        {{--                <div class="time-buttons mt-5">--}}
+        {{--                    <button class="btn btn-lg btn-success start-timer" data-action="start">--}}
+        {{--                        Start--}}
+        {{--                    </button>--}}
+        {{--                    <button class="btn btn-lg btn-danger stop-timer" data-action="stop">--}}
+        {{--                        Stop--}}
+        {{--                    </button>--}}
+        {{--                    <button class="btn btn-lg btn-link btn-block reset-timer" data-action="reset">--}}
+        {{--                        Reset--}}
+        {{--                    </button>--}}
+        {{--                </div>--}}
+        {{--            </div>--}}
+        {{--        </div>--}}
+
         <h4 class="half-first mt-5" style="text-align: center;font-weight: 800;">1st Half</h4>
         <h4 class="half-second d-none mt-5" style="text-align: center;font-weight: 800;">2nd Half</h4>
 
@@ -111,6 +229,17 @@
                 2nd Half
             </button>
         </div>
+
+        <form class="mt-5">
+            <div class="form-row">
+                <div class="col">
+                    <input type="text" class="form-control" id="teamA" placeholder="Enter Team A">
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" id="teamB" placeholder="Enter Team B">
+                </div>
+            </div>
+        </form>
 
     </div>
 
