@@ -45,9 +45,6 @@
 
     <script src="{{ mix('js/pages.js') }}"></script> @yield('page_js')
     <script data-turbo-eval="false">
-        let updateLanguageURL = "{{ route('change-language')}}";
-        let checkLanguageSession = '{{checkLanguageSession()}}';
-        Lang.setLocale(checkLanguageSession);
         let options = {
             'key': "{{ config('services.razorpay.key') }}",
             'amount': 0, //  100 refers to 1
@@ -81,7 +78,7 @@
             },
         }
     </script>
-    
+
     @livewireStyles
 </head>
 <body>
