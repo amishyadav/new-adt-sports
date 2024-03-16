@@ -56,4 +56,8 @@ class AdtScoreController extends Controller
         return redirect(route('adt-score.index'));
     }
 
+    public function scoreBoard()
+    {
+        return view('scoreboard.adt_scorebaord');
+    }
 }

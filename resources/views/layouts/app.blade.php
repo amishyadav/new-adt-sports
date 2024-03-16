@@ -21,7 +21,7 @@
 {{--    @if(session()->get('theme_mode', 'light') === 'light')--}}
 {{--    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">--}}
 {{--    <link rel="stylesheet" type="text/css" href="{{ asset('css/plugins.css') }}">--}}
-    
+
 {{--    <link href="{{ mix('assets/css/custom.css') }}" rel="stylesheet">--}}
     {{--    @if(session()->get('theme_mode', 'light') === 'light')--}}
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
@@ -53,7 +53,7 @@
         let defaultImage = "{{asset('images/avatar.png')}}"
         let defaultCountryCodeValue = "IN";
     </script>
-    
+
     <script src="{{ mix('js/third-party.js') }}"></script>
     <script src="{{ asset('js/vendor.js') }}"></script>
     <script src="{{ asset('messages.js') }}"></script>
@@ -62,11 +62,6 @@
     <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('assets/js/bootstrap-iconpicker.bundle.min.js') }}"></script>
     <script src="{{ mix('js/pages.js') }}"></script> @yield('page_js')
-    <script data-turbo-eval="false">
-        let updateLanguageURL = "{{ route('change-language')}}";
-        let checkLanguageSession = '{{checkLanguageSession()}}';
-        Lang.setLocale(checkLanguageSession);
-    </script>
 </head>
 <body>
 <div class="d-flex flex-column flex-root">
@@ -77,7 +72,7 @@
                 @include('layouts.header')
             </div>
             <div class='content d-flex flex-column flex-column-fluid pt-7'>
-               
+
                 @yield('header_toolbar')
                 <div class='d-flex flex-column-fluid'>
                     @yield('content')
@@ -102,4 +97,4 @@
 
 @include('profile.change_language')
 </body>
-</html> 
+</html>

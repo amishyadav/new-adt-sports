@@ -8658,29 +8658,7 @@ listenClick('.option-change-status', function (event) {
 /*!***************************************************!*\
   !*** ./resources/assets/js/users/user-profile.js ***!
   \***************************************************/
-listenClick('#changeLanguage', function () {
-  $('#changeLanguageModal').modal('show').appendTo('body');
-});
-listenClick('#languageChangeBtn', function () {
-  var language = $('#selectLanguage').val();
-  $.ajax({
-    url: route('change-language'),
-    type: 'POST',
-    data: {
-      'language': language
-    },
-    success: function success(result) {
-      $('#changeLanguageModal').modal('hide');
-      displaySuccessMessage(result.message);
-      setTimeout($.proxy(function () {
-        Turbo.visit(window.location.href);
-      }, this), 3000);
-    },
-    error: function error(result) {
-      displayErrorMessage(result.responseJSON.message);
-    }
-  });
-});
+
 })();
 
 // This entry need to be wrapped in an IIFE because it need to be isolated against other entry modules.

@@ -36,3 +36,5 @@ Route::get('score-form/{adtScore}',[AdtScoreController::class,'show'])->name('ad
 Route::get('score-form/{adtScore}/live',[AdtScoreController::class,'live'])->name('adt-score.live');
 Route::get('score-form/{adtScore}/liveScore',[AdtScoreController::class,'liveScore'])->name('adt-score.liveScore');
 Route::get('score-form/{adtScore}/delete',[AdtScoreController::class,'destroy'])->name('adt-score.destroy');
+
+Route::get('adt-scoreboard',[AdtScoreController::class,'scoreBoard'])->name('adt.score-board');
