@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\AdtScore;
+use App\Models\MatchBetweenTeams;
+use App\Models\MatchScores;
 use Illuminate\Http\Request;
 
 class AdtScoreController extends Controller
 {
     public function index()
     {
-        $scores = AdtScore::orderBy('id','desc')->get();
+        $scores = MatchBetweenTeams::orderBy('id','desc')->get();
 
         return view('scoreboard.adt-form',compact('scores'));
     }
@@ -18,46 +20,48 @@ class AdtScoreController extends Controller
     {
         $data = $request->all();
 
-        $score = AdtScore::create($data);
+        $score = MatchBetweenTeams::create($data);
 
-       return redirect(route('adt-score.show',$score->id));
+        MatchScores::create(['match_between_team_id' => $score->id]);
+
+       return redirect(route('adt-score.index'));
     }
 
-    public function update(Request $request ,AdtScore $adtScore)
+    public function update(Request $request ,MatchBetweenTeams $matchBetweenTeams)
     {
         $data = $request->all();
 
-        $score = $adtScore->update($data);
+        $score = $matchBetweenTeams->update($data);
 
-        return redirect(route('adt-score.show',$adtScore->id));
+        return redirect(route('adt-score.show',$matchBetweenTeams->id));
     }
 
-    public function show(AdtScore $adtScore)
+    public function show(MatchBetweenTeams $matchBetweenTeams)
     {
 
-        return view('scoreboard.score-controller',compact('adtScore'));
+        return view('scoreboard.score-controller',compact('matchBetweenTeams'));
     }
 
-    public function live(AdtScore $adtScore)
+    public function live(MatchBetweenTeams $matchBetweenTeams)
     {
 
-        return view('scoreboard.score-live',compact('adtScore'));
+        return view('scoreboard.score-live',compact('matchBetweenTeams'));
     }
 
-    public function liveScore(AdtScore $adtScore)
+    public function liveScore(MatchBetweenTeams $matchBetweenTeams)
     {
-        return response()->json($adtScore);
+        return response()->json($matchBetweenTeams);
     }
 
-    public function destroy(AdtScore $adtScore)
+    public function destroy(MatchBetweenTeams $matchBetweenTeams)
     {
-        $adtScore->delete();
+        $matchBetweenTeams->delete();
 
         return redirect(route('adt-score.index'));
     }
 
-    public function scoreBoard()
+    public function scoreBoard(MatchScores $matchScores)
     {
-        return view('scoreboard.adt_scorebaord');
+        return view('scoreboard.adt_scorebaord',compact('matchScores'));
     }
 }

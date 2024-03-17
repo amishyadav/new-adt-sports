@@ -67,7 +67,6 @@
         /* Layouts */
 
         .rows-score {
-            width: 1430px;
             display: flex;
             margin: auto;
             text-align: center;
@@ -89,9 +88,6 @@
             text-align: center;
             margin-top: 10px;
         }
-
-
-
         .counters {
             margin: 100px 20px;
 
@@ -129,16 +125,13 @@
         .light-green {
             background-color: #72e1ae;
         }
-
         .timer-thirty {
             margin-top: 10px;
         }
-
         .timer-thirty > svg {
             width: 200px;
             height: 200px;
         }
-
         .timer-thirty > svg > circle {
             fill: none;
             stroke-opacity: 0.3;
@@ -147,27 +140,28 @@
             transform-origin: center center;
             transform: rotate(-90deg);
         }
-
         .timer-thirty > svg > circle + circle {
             stroke-dasharray: 1;
             stroke-dashoffset: 1;
             stroke-linecap: round;
             stroke-opacity: 1;
         }
-
         .timer-thirty.animatable > svg > circle + circle {
             transition: stroke-dashoffset 0.3s ease;
         }
-
         .timer-thirty > svg > text {
             font-size: 2rem;
         }
-
         .timer-thirty > svg > text + text {
             font-size: 1rem;
         }
         .pointer-cursor {
             cursor: pointer;
+        }
+        .remain-player {
+            border-radius: 50%;
+            height: 50px;
+            width: 50px;
         }
     </style>
 </head>
@@ -176,10 +170,10 @@
     <div class="rows-score">
         <!-- left board -->
         <div class="right-score">
-            <h1 class="team">HOME</h1>
+            <h1 class="team">{{ $matchScores->matchBetweenTeams->team_a }}</h1>
             <div class="d-flex align-items-center">
                 <div class="score-box">
-                    <div id="score-left">0</div>
+                    <div id="score-left">{{ $matchScores->score_a }}</div>
                 </div>
                 <button class="winner-btn">Winner</button>
             </div>
@@ -188,6 +182,16 @@
                 <button class="plus-score" onclick="add2ScoreLeft()">+ 2</button>
                 <button class="plus-score" onclick="add3ScoreLeft()">+ 3</button>
                 <button class="plus-score" onclick="add4ScoreLeft()">+ 4</button>
+            </div>
+            <div class="score-buttons align-items-center">
+                <button class="plus-score" onclick="add1ScoreLeft()">-</button>
+                <button class="remain-player" onclick="add2ScoreLeft()">1</button>
+                <button class="remain-player" onclick="add2ScoreLeft()">2</button>
+                <button class="remain-player" onclick="add3ScoreLeft()">3</button>
+                <button class="remain-player" onclick="add4ScoreLeft()">4</button>
+                <button class="remain-player" onclick="add4ScoreLeft()">5</button>
+                <button class="remain-player" onclick="add4ScoreLeft()">6</button>
+                <button class="remain-player" onclick="add4ScoreLeft()">7</button>
             </div>
         </div>
         <!-- left board -->
@@ -202,18 +206,19 @@
                         <text x="100" y="100" text-anchor="middle"><tspan id="timeLeft">30</tspan></text>
                         <text x="100" y="120" text-anchor="middle">seconds</text>
                     </svg>
+                    <button class="btn btn-dark" onclick="resetThirtyTimerLeft()">Clear</button>
                 </div>
 
-                <div class="right-timer-thirty timer-thirty animatable cursor-pointer d-flex">
+                <div class="right-timer-thirty timer-thirty animatable cursor-pointer">
                     <svg class="pointer-cursor" id="startStopTimer" onclick="startStopRightTimer()">
                         <circle cx="50%" cy="50%" r="90"/>
                         <circle cx="50%" cy="50%" r="90" pathLength="1" />
                         <text x="100" y="100" text-anchor="middle"><tspan id="timeRight">30</tspan></text>
                         <text x="100" y="120" text-anchor="middle">seconds</text>
                     </svg>
+                    <button class="btn btn-dark" onclick="resetThirtyTimerRight()">Clear</button>
                 </div>
             </div>
-
 
             <div class="d-flex">
                 <select class="light-green form-control" name="" id="">
@@ -240,11 +245,11 @@
 
         <!-- right board -->
         <div class="left-score">
-            <h1 class="team">GUESS</h1>
+            <h1 class="team">{{ $matchScores->matchBetweenTeams->team_b }}</h1>
             <div class="d-flex align-items-center">
                 <button class="winner-btn">Winner</button>
                 <div class="score-box">
-                    <div id="score-right">0</div>
+                    <div id="score-right">{{ $matchScores->score_b }}</div>
                 </div>
 
             </div>
@@ -253,6 +258,16 @@
                 <button class="plus-score" onclick="add2ScoreRight()">+ 2</button>
                 <button class="plus-score" onclick="add3ScoreRight()">+ 3</button>
                 <button class="plus-score" onclick="add4ScoreRight()">+ 4</button>
+            </div>
+            <div class="score-buttons align-items-center">
+                <button class="plus-score" onclick="add1ScoreLeft()">-</button>
+                <button class="remain-player" onclick="add2ScoreLeft()">1</button>
+                <button class="remain-player" onclick="add2ScoreLeft()">2</button>
+                <button class="remain-player" onclick="add3ScoreLeft()">3</button>
+                <button class="remain-player" onclick="add4ScoreLeft()">4</button>
+                <button class="remain-player" onclick="add4ScoreLeft()">5</button>
+                <button class="remain-player" onclick="add4ScoreLeft()">6</button>
+                <button class="remain-player" onclick="add4ScoreLeft()">7</button>
             </div>
         </div>
         <!-- right board -->
@@ -272,19 +287,11 @@
 {{--    </div>--}}
 </main>
 <script>
-    let periodElementDisplay = document.getElementById('period-el');
     let scoreLeftElementDisplay = document.getElementById('score-left');
     let scoreRightElementDisplay = document.getElementById('score-right');
 
-    let period = 0;
-    let scoreLeft = 0;
-    let scoreRight = 0;
-
-
-    // adding game periods
-    function add1Period() {
-        periodElementDisplay.textContent = period += 1;
-    }
+    let scoreLeft = {{ $matchScores->score_a }};
+    let scoreRight = {{ $matchScores->score_b }};
 
     // adding score to left
     function add1ScoreLeft() {
@@ -356,7 +363,6 @@
 
     // new game refresh
     function newGame() {
-        period = 0;
         scoreLeft = 0;
         scoreRight = 0;
 
@@ -390,7 +396,7 @@
                 const timeRemaining = leftTime--;
                 const normalizedTime = (30 - timeRemaining) / 30;
                 timerCircle.style.strokeDashoffset = normalizedTime;
-            leftTimerThirty.innerHTML = timeRemaining;
+                leftTimerThirty.innerHTML = timeRemaining;
 
                 if(timeRemaining == 0) {
                     clearInterval(leftCountdownTimer);
@@ -445,6 +451,27 @@
         }
 
         runTimerRight(document.querySelector('.right-timer-thirty'));
+    }
+
+    function resetThirtyTimerLeft() {
+        let timerReset = document.getElementById('timeLeft');
+        timerReset.textContent = '30';
+        leftTime = 30;
+        document.querySelector('.left-timer-thirty').classList.remove('animatable');
+        const timerCircle = document.querySelector('.left-timer-thirty').querySelector('svg > circle + circle');
+        timerCircle.style.strokeDashoffset = 0;
+        leftTimerRunning = false;
+        clearInterval(leftCountdownTimer);
+    }
+    function resetThirtyTimerRight() {
+        let timerReset = document.getElementById('timeRight');
+        timerReset.textContent = '30';
+        rightTime = 30;
+        document.querySelector('.right-timer-thirty').classList.remove('animatable');
+        const timerCircle = document.querySelector('.right-timer-thirty').querySelector('svg > circle + circle');
+        timerCircle.style.strokeDashoffset = 0;
+        rightTimerRunning = false;
+        clearInterval(rightCountdownTimer);
     }
 </script>
 </body>

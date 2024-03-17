@@ -31,10 +31,10 @@ Route::post('/add-player',[TeamController::class,'addPlayer'])->name('front.team
 Route::view('scoreboard','scoreboard.scoreboard')->name('scoreboard');
 Route::get('score-form',[AdtScoreController::class,'index'])->name('adt-score.index');
 Route::post('score-form',[AdtScoreController::class,'store'])->name('adt-score.store');
-Route::put('score-form/{adtScore}',[AdtScoreController::class,'update'])->name('adt-score.update');
-Route::get('score-form/{adtScore}',[AdtScoreController::class,'show'])->name('adt-score.show');
-Route::get('score-form/{adtScore}/live',[AdtScoreController::class,'live'])->name('adt-score.live');
-Route::get('score-form/{adtScore}/liveScore',[AdtScoreController::class,'liveScore'])->name('adt-score.liveScore');
-Route::get('score-form/{adtScore}/delete',[AdtScoreController::class,'destroy'])->name('adt-score.destroy');
+Route::put('score-form/{matchBetweenTeams}',[AdtScoreController::class,'update'])->name('adt-score.update');
+Route::get('score-form/{matchBetweenTeams}',[AdtScoreController::class,'show'])->name('adt-score.show');
+Route::get('score-form/{matchBetweenTeams}/live',[AdtScoreController::class,'live'])->name('adt-score.live');
+Route::get('score-form/{matchBetweenTeams}/liveScore',[AdtScoreController::class,'liveScore'])->name('adt-score.liveScore');
+Route::get('score-form/{matchBetweenTeams}/delete',[AdtScoreController::class,'destroy'])->name('adt-score.destroy');
 
-Route::get('adt-scoreboard',[AdtScoreController::class,'scoreBoard'])->name('adt.score-board');
+Route::get('adt-scoreboard/{matchScores}/{teamA}-VS-{teamB}',[AdtScoreController::class,'scoreBoard'])->name('adt.score-board');

@@ -47,7 +47,7 @@
             <td>{{ $score->team_a }}</td>
             <td>{{ $score->team_b }}</td>
             <td>
-                <a class="btn btn-primary" href="{{ route('adt-score.show',$score->id) }}">Controller</a>
+                <a class="btn btn-primary" href="{{ route('adt.score-board',[$score->id,$score->team_a,$score->team_b]) }}">Controller</a>
                 <a class="btn btn-warning" href="{{ route('adt-score.live',$score->id) }}">Live</a>
                 <a class="btn btn-danger" href="{{ route('adt-score.destroy',$score->id) }}">Delete</a>
             </td>
