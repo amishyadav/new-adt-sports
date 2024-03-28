@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -184,14 +185,10 @@
                 <button class="plus-score" onclick="add4ScoreLeft()">+ 4</button>
             </div>
             <div class="score-buttons align-items-center">
-                <button class="plus-score" onclick="add1ScoreLeft()">-</button>
-                <button class="remain-player" onclick="add2ScoreLeft()">1</button>
-                <button class="remain-player" onclick="add2ScoreLeft()">2</button>
-                <button class="remain-player" onclick="add3ScoreLeft()">3</button>
-                <button class="remain-player" onclick="add4ScoreLeft()">4</button>
-                <button class="remain-player" onclick="add4ScoreLeft()">5</button>
-                <button class="remain-player" onclick="add4ScoreLeft()">6</button>
-                <button class="remain-player" onclick="add4ScoreLeft()">7</button>
+                <button class="plus-score" onclick="sub1ScoreLeft()">-</button>
+                @for($i = 1; $i<=7;$i++)
+                    <button class="remain-player" onclick="player{{$i}}RemainLeft()">{{$i}}</button>
+                @endfor
             </div>
         </div>
         <!-- left board -->
@@ -221,9 +218,9 @@
             </div>
 
             <div class="d-flex">
-                <select class="light-green form-control" name="" id="">
-                    <option value="">First Half</option>
-                    <option value="">Second Half</option>
+                <select class="light-green form-control" id="matchPart">
+                    <option value="first_half" {{ $matchScores->match_part == 'first_half' ?? 'selected' }} >First Half</option>
+                    <option value="second_half" {{ $matchScores->match_part == 'second_half' ?? 'selected' }}>Second Half</option>
                 </select>
                 <select class="light-green form-control" name="" id="">
                     <option value="">20:00</option>
@@ -260,14 +257,10 @@
                 <button class="plus-score" onclick="add4ScoreRight()">+ 4</button>
             </div>
             <div class="score-buttons align-items-center">
-                <button class="plus-score" onclick="add1ScoreLeft()">-</button>
-                <button class="remain-player" onclick="add2ScoreLeft()">1</button>
-                <button class="remain-player" onclick="add2ScoreLeft()">2</button>
-                <button class="remain-player" onclick="add3ScoreLeft()">3</button>
-                <button class="remain-player" onclick="add4ScoreLeft()">4</button>
-                <button class="remain-player" onclick="add4ScoreLeft()">5</button>
-                <button class="remain-player" onclick="add4ScoreLeft()">6</button>
-                <button class="remain-player" onclick="add4ScoreLeft()">7</button>
+                <button class="plus-score" onclick="sub1ScoreRight()">-</button>
+                @for($i = 1; $i<=7;$i++)
+                    <button class="remain-player" onclick="player{{$i}}RemainRight()">{{$i}}</button>
+                @endfor
             </div>
         </div>
         <!-- right board -->
@@ -287,6 +280,7 @@
 {{--    </div>--}}
 </main>
 <script>
+    // $(document).ready(function(){
     let scoreLeftElementDisplay = document.getElementById('score-left');
     let scoreRightElementDisplay = document.getElementById('score-right');
 
@@ -295,37 +289,125 @@
 
     // adding score to left
     function add1ScoreLeft() {
-        scoreLeftElementDisplay.textContent = scoreLeft += 1;
+        let score = scoreLeft += 1;
+        scoreLeftElementDisplay.textContent = score;
+        submitData(score,'left');
     }
 
     function add2ScoreLeft() {
-        scoreLeftElementDisplay.textContent = scoreLeft += 2;
+        let score = scoreLeft += 2;
+        scoreLeftElementDisplay.textContent = score;
+        submitData(score,'left');
     }
 
     function add3ScoreLeft() {
-        scoreLeftElementDisplay.textContent = scoreLeft += 3;
+        let score = scoreLeft += 3;
+        scoreLeftElementDisplay.textContent = score;
+        submitData(score,'left');
     }
 
     function add4ScoreLeft() {
-        scoreLeftElementDisplay.textContent = scoreLeft += 4;
+        let score = scoreLeft += 4;
+        scoreLeftElementDisplay.textContent = score;
+        submitData(score,'left');
     }
 
     // adding score right
     function add1ScoreRight() {
-        scoreRightElementDisplay.textContent = scoreRight += 1;
+        let score = scoreRight += 1;
+        scoreRightElementDisplay.textContent = score;
+        submitData(score,'right');
     }
 
     function add2ScoreRight() {
-        scoreRightElementDisplay.textContent = scoreRight += 2;
+        let score = scoreRight += 2;
+        scoreRightElementDisplay.textContent = score;
+        submitData(score,'right');
     }
 
     function add3ScoreRight() {
-        scoreRightElementDisplay.textContent = scoreRight += 3;
+        let score = scoreRight += 3;
+        scoreRightElementDisplay.textContent = score;
+        submitData(score,'right');
     }
 
     function add4ScoreRight() {
-        scoreRightElementDisplay.textContent = scoreRight += 4;
+        let score = scoreRight += 4;
+        scoreRightElementDisplay.textContent = score;
+        submitData(score,'right');
     }
+
+    function player1RemainLeft() {
+        submitData(1,'playerRemainLeft');
+    }
+
+    function player2RemainLeft() {
+        submitData(2,'playerRemainLeft');
+    }
+
+    function player3RemainLeft() {
+        submitData(3,'playerRemainLeft');
+    }
+
+    function player4RemainLeft() {
+        submitData(4,'playerRemainLeft');
+    }
+
+    function player5RemainLeft() {
+        submitData(5,'playerRemainLeft');
+    }
+
+    function player6RemainLeft() {
+        submitData(6,'playerRemainLeft');
+    }
+
+    function player7RemainLeft() {
+        submitData(7,'playerRemainLeft');
+    }
+
+    function player1RemainRight() {
+        submitData(1,'playerRemainRight');
+    }
+
+    function player2RemainRight() {
+        submitData(2,'playerRemainRight');
+    }
+
+    function player3RemainRight() {
+        submitData(3,'playerRemainRight');
+    }
+
+    function player4RemainRight() {
+        submitData(4,'playerRemainRight');
+    }
+
+    function player5RemainRight() {
+        submitData(5,'playerRemainRight');
+    }
+
+    function player6RemainRight() {
+        submitData(6,'playerRemainRight');
+    }
+
+    function player7RemainRight() {
+        submitData(7,'playerRemainRight');
+    }
+
+    function sub1ScoreLeft() {
+        let score = scoreLeft -= 1;
+        scoreLeftElementDisplay.textContent = score;
+        submitData(score,'left');
+    }
+
+    function sub1ScoreRight() {
+        let score = scoreRight -= 1;
+        scoreRightElementDisplay.textContent = score;
+        submitData(score,'right');
+    }
+
+    $('#matchPart').on('change', function() {
+        submitData(this.value,'match_part');
+    });
 
     // Function for countdown timer
     let countdownTimerElementDisplay = document.getElementById('timer_count');
@@ -473,6 +555,76 @@
         rightTimerRunning = false;
         clearInterval(rightCountdownTimer);
     }
+
+
+    function submitData(data,type) {
+        let csrfToken = $('meta[name="csrf-token"]').attr('content');
+        let formData;
+        if(type == 'left') {
+            formData = {
+                score_a: data,
+            };
+        }
+        if(type == 'right') {
+            formData = {
+                score_b: data,
+            };
+        }
+
+        if(type == 'playerRemainLeft') {
+            formData = {
+                player_left_a: data,
+            };
+        }
+
+        if(type == 'playerRemainRight') {
+            formData = {
+                player_left_b: data,
+            };
+        }
+
+        if(type == 'match_part') {
+            formData = {
+                match_part: data,
+            };
+        }
+
+        $.ajax({
+            url: "{{ route('adt.score-board.store',$matchScores->match_between_team_id) }}",
+            method: "POST",
+            data: formData,
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            success: function(response){
+                console.log(response);
+            },
+            error: function(xhr, status, error){
+
+                console.error(xhr.responseText);
+            }
+        });
+    }
+
+        {{--$('#your-form-id').on('submit', function(e){--}}
+        {{--    e.preventDefault();--}}
+        {{--    var formData = $(this).serialize();--}}
+        {{--    $.ajax({--}}
+        {{--        url: "{{ route('submit.form') }}",--}}
+        {{--        method: "POST",--}}
+        {{--        data: formData,--}}
+        {{--        success: function(response){--}}
+        {{--            // Handle success response--}}
+        {{--            console.log(response);--}}
+        {{--        },--}}
+        {{--        error: function(xhr, status, error){--}}
+        {{--            // Handle error response--}}
+        {{--            console.error(xhr.responseText);--}}
+        {{--        }--}}
+        {{--    });--}}
+        {{--});--}}
+
+    // });
 </script>
 </body>
 </html>

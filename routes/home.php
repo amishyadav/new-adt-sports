@@ -38,3 +38,4 @@ Route::get('score-form/{matchBetweenTeams}/liveScore',[AdtScoreController::class
 Route::get('score-form/{matchBetweenTeams}/delete',[AdtScoreController::class,'destroy'])->name('adt-score.destroy');
 
 Route::get('adt-scoreboard/{matchScores}/{teamA}-VS-{teamB}',[AdtScoreController::class,'scoreBoard'])->name('adt.score-board');
+Route::post('adt-scoreboard/{matchScores}',[AdtScoreController::class,'scoreBoardStore'])->name('adt.score-board.store');

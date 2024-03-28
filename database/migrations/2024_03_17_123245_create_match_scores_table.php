@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('score_b')->default(0);
             $table->string('player_left_a')->default(7);
             $table->string('player_left_b')->default(7);
+            $table->string('match_part')->default('first_half');
+            $table->string('total_match_time')->default(10);
             $table->softDeletes();
             $table->timestamps();
         });

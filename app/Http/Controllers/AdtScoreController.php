@@ -64,4 +64,12 @@ class AdtScoreController extends Controller
     {
         return view('scoreboard.adt_scorebaord',compact('matchScores'));
     }
+
+    public function scoreBoardStore(Request $request, MatchScores $matchScores)
+    {
+        dd(5445);
+        $input = $request->all();
+        $data = $matchScores->update($input);
+        return response()->json($data);
+    }
 }
