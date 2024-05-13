@@ -42,15 +42,15 @@ class AdtScoreController extends Controller
         return view('scoreboard.score-controller',compact('matchBetweenTeams'));
     }
 
-    public function live(MatchBetweenTeams $matchBetweenTeams)
+    public function live(MatchScores $matchScores)
     {
-
-        return view('scoreboard.score-live',compact('matchBetweenTeams'));
+//        return response()->json($matchScores);
+        return view('scoreboard.score-live',compact('matchScores'));
     }
 
-    public function liveScore(MatchBetweenTeams $matchBetweenTeams)
+    public function liveScore(MatchScores $matchScores)
     {
-        return response()->json($matchBetweenTeams);
+        return response()->json($matchScores);
     }
 
     public function destroy(MatchBetweenTeams $matchBetweenTeams)
@@ -67,9 +67,16 @@ class AdtScoreController extends Controller
 
     public function scoreBoardStore(Request $request, MatchScores $matchScores)
     {
-        dd(5445);
         $input = $request->all();
-        $data = $matchScores->update($input);
+
+        if (!empty($input['match_part'])) {
+            $data = MatchScores::where('id', $matchScores->id)
+                ->update(['match_part' => $input['match_part']]);
+        }
+        else {
+            $data = $matchScores->update($input);
+        }
+
         return response()->json($data);
     }
 }

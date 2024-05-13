@@ -33,8 +33,8 @@ Route::get('score-form',[AdtScoreController::class,'index'])->name('adt-score.in
 Route::post('score-form',[AdtScoreController::class,'store'])->name('adt-score.store');
 Route::put('score-form/{matchBetweenTeams}',[AdtScoreController::class,'update'])->name('adt-score.update');
 Route::get('score-form/{matchBetweenTeams}',[AdtScoreController::class,'show'])->name('adt-score.show');
-Route::get('score-form/{matchBetweenTeams}/live',[AdtScoreController::class,'live'])->name('adt-score.live');
-Route::get('score-form/{matchBetweenTeams}/liveScore',[AdtScoreController::class,'liveScore'])->name('adt-score.liveScore');
+Route::get('score-form/{matchScores}/live',[AdtScoreController::class,'live'])->name('adt-score.live');
+Route::get('score-form/{matchScores}/liveScore',[AdtScoreController::class,'liveScore'])->name('adt-score.liveScore');
 Route::get('score-form/{matchBetweenTeams}/delete',[AdtScoreController::class,'destroy'])->name('adt-score.destroy');
 
 Route::get('adt-scoreboard/{matchScores}/{teamA}-VS-{teamB}',[AdtScoreController::class,'scoreBoard'])->name('adt.score-board');

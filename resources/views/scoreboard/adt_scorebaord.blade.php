@@ -219,8 +219,8 @@
 
             <div class="d-flex">
                 <select class="light-green form-control" id="matchPart">
-                    <option value="first_half" {{ $matchScores->match_part == 'first_half' ?? 'selected' }} >First Half</option>
-                    <option value="second_half" {{ $matchScores->match_part == 'second_half' ?? 'selected' }}>Second Half</option>
+                    <option value="first_half" {{ $matchScores->match_part == 'first_half' ? 'selected' : '' }} >First Half</option>
+                    <option value="second_half" {{ $matchScores->match_part == 'second_half' ? 'selected' : '' }}>Second Half</option>
                 </select>
                 <select class="light-green form-control" name="" id="">
                     <option value="">20:00</option>
@@ -588,7 +588,7 @@
                 match_part: data,
             };
         }
-
+        console.log(formData,'formData')
         $.ajax({
             url: "{{ route('adt.score-board.store',$matchScores->match_between_team_id) }}",
             method: "POST",

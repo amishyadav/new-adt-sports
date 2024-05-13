@@ -175,7 +175,7 @@
             font-weight: 500;
             position: absolute;
             bottom: -15px;
-            left: 15%;
+            left: 23%;
             border-radius: 10px;
             padding: 2px;
             background-image: radial-gradient(circle at center, rgba(26, 177, 63, 0) 5%, #1AB13F 50%);
@@ -211,7 +211,7 @@
 </head>
 <body>
 {{--<section id="matchs">--}}
-{{--    <input id="scoreLiveUrl" type="hidden" value="{{ route('adt-score.liveScore',$adtScore->id) }}">--}}
+    <input id="scoreLiveUrl" type="hidden" value="{{ route('adt-score.liveScore',$matchScores->id) }}">
 {{--    <div class="container mt-5">--}}
 {{--        <div class="col-lg-12 d-flex">--}}
 {{--            <div class="col-lg-6" style="text-align: center;">--}}
@@ -233,16 +233,21 @@
         <div class="left">
             <div class="first scores">
                 <img src="{{asset('assets/Images/left_score.svg')}}" alt="" />
-                <div class="score">00</div>
+                <div class="score team-a-score">00</div>
             </div>
             <div class="second">
                 <div class="teams">
-                    <div class="team-name">Team 1</div>
+                    <div class="team-name team-a-name">Team 1</div>
                     <div class="progress">{/* <Progress percent={100} status="active" showInfo={false} /> */}</div>
                 </div>
                 <div class="team-players">
-                    <img src="{{asset('assets/Images/active_player.svg')}}" />
-                    <img src="{{asset('assets/Images/non_active_player.svg')}}" />
+{{--                    <img class="active-player" src="{{asset('assets/Images/active_player.svg')}}" />--}}
+{{--                    <img class="active-player" src="{{asset('assets/Images/active_player.svg')}}" />--}}
+{{--                    <img class="active-player" src="{{asset('assets/Images/active_player.svg')}}" />--}}
+{{--                    <img class="active-player" src="{{asset('assets/Images/active_player.svg')}}" />--}}
+{{--                    <img class="active-player" src="{{asset('assets/Images/active_player.svg')}}" />--}}
+{{--                    <img class="active-player" src="{{asset('assets/Images/active_player.svg')}}" />--}}
+{{--                    <img class="non-active-player" src="{{asset('assets/Images/non_active_player.svg')}}" />--}}
                 </div>
             </div>
         </div>
@@ -258,7 +263,7 @@
         <div class="right">
             <div class="fourth">
                 <div class="teams">
-                    <div class="team-name">Team 2</div>
+                    <div class="team-name team-b-name">Team 2</div>
                     <div class="progress">{/* <Progress percent={100} status="active" showInfo={false} /> */}</div>
                 </div>
                 <div class="team-players">
@@ -268,7 +273,7 @@
             </div>
             <div class="fifth scores">
                 <img src="{{asset('assets/Images/right_score.svg')}}" alt="" />
-                <div class="score">00</div>
+                <div class="score team-b-score">00</div>
             </div>
         </div>
     </div>
@@ -276,23 +281,53 @@
 
 <script>
     $(document).ready(function (){
-        var liveScoreUrl = $('#scoreLiveUrl').val();
-        // setInterval(function(){
-        //     $.ajax({
-        //         type: 'GET',
-        //         url: liveScoreUrl,
-        //         success: function(response) {
-        //             let teamAName = (response.round == 1) ? response.team_a : response.team_b;
-        //             let teamBName = (response.round == 2) ? response.team_a : response.team_b;
-        //             let teamAScore = (response.round == 1) ? response.team_a_score : response.team_b_score;
-        //             let teamBScore = (response.round == 2) ? response.team_a_score : response.team_b_score;
-        //             $('.team-a-name').html(teamAName);
-        //             $('.team-b-name').html(teamBName);
-        //             $('.teamAPoint').html(teamAScore);
-        //             $('.teamBPoint').html(teamBScore);
-        //         }
-        //     });
-        // }, 200);
+        let liveScoreUrl = $('#scoreLiveUrl').val();
+        let numItems = 7;
+        let i = 1;
+        let j = 1;
+        setInterval(function(){
+            $.ajax({
+                type: 'GET',
+                url: liveScoreUrl,
+                success: function(response) {
+                    $('.team-a-score').text(response.score_a);
+                    $('.team-b-score').text(response.score_b);
+                    $('.team-a-name').text(response.match_between_teams.team_a);
+                    $('.team-b-name').text(response.match_between_teams.team_b);
+                    $('.halfs').text(response.match_part == 'first_half' ? 'FIRST HALF' : 'SECOND HALF');
+
+                    let activePlayerImg = "{{asset('assets/Images/active_player.svg')}}";
+                    let nonActivePlayerImg = "{{asset('assets/Images/non_active_player.svg')}}";
+
+                    let activePlayer = $("<img>").attr("src", activePlayerImg);
+                    let nonActivePlayer = $("<img>").attr("src", nonActivePlayerImg);
+                    // Appending the image to the divsss
+                    // $(".team-players").append(activePlayer);
+
+                    // Loop to append list items
+                    let nonplayer = 7 - response.player_left_a;
+                    for(i; i <= response.player_left_a; i++) {
+                        if (i == 7) {
+                            break;
+                        }
+                        $(".team-players").append(activePlayer);
+                        console.log(i)
+                        if (i == 7) {
+                            break;
+                        }
+                    }
+                    for(j; j <= nonplayer; j++) {
+                        if (j == 7) {
+                            break;
+                        }
+                        $(".team-players").append(nonActivePlayer);
+                        if (j == 7) {
+                            break;
+                        }
+                    }
+                }
+            });
+        }, 5000);
     });
 </script>
 
