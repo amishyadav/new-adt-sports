@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdtScoreController;
+use App\Http\Controllers\HandBallController;
 use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FrontController;
@@ -28,14 +29,22 @@ Route::post('/add-player',[TeamController::class,'addPlayer'])->name('front.team
 });
 
 // Scoreboard
-Route::view('scoreboard','scoreboard.scoreboard')->name('scoreboard');
+//Route::view('scoreboard','scoreboard.scoreboard')->name('scoreboard');
 Route::get('score-form',[AdtScoreController::class,'index'])->name('adt-score.index');
 Route::post('score-form',[AdtScoreController::class,'store'])->name('adt-score.store');
-Route::put('score-form/{matchBetweenTeams}',[AdtScoreController::class,'update'])->name('adt-score.update');
-Route::get('score-form/{matchBetweenTeams}',[AdtScoreController::class,'show'])->name('adt-score.show');
+//Route::put('score-form/{matchBetweenTeams}',[AdtScoreController::class,'update'])->name('adt-score.update');
+//Route::get('score-form/{matchBetweenTeams}',[AdtScoreController::class,'show'])->name('adt-score.show');
 Route::get('score-form/{matchScores}/live',[AdtScoreController::class,'live'])->name('adt-score.live');
 Route::get('score-form/{matchScores}/liveScore',[AdtScoreController::class,'liveScore'])->name('adt-score.liveScore');
 Route::get('score-form/{matchBetweenTeams}/delete',[AdtScoreController::class,'destroy'])->name('adt-score.destroy');
 
 Route::get('adt-scoreboard/{matchScores}/{teamA}-VS-{teamB}',[AdtScoreController::class,'scoreBoard'])->name('adt.score-board');
 Route::post('adt-scoreboard/{matchScores}',[AdtScoreController::class,'scoreBoardStore'])->name('adt.score-board.store');
+
+// Hand Ball
+Route::get('handball-score-form',[HandBallController::class,'index'])->name('adt-score.index');
+Route::post('handball-score-form',[HandBallController::class,'store'])->name('adt-score.store');
+Route::get('handball-score-form/{matchScores}/live',[HandBallController::class,'live'])->name('adt-score.live');
+Route::get('handball-score-form/{matchBetweenTeams}/delete',[HandBallController::class,'destroy'])->name('adt-score.destroy');
+Route::get('score-form/{matchScores}/liveScore',[HandBallController::class,'liveScore'])->name('adt-score.liveScore');
+Route::get('handball-scoreboard/{matchScores}/{teamA}-VS-{teamB}',[HandBallController::class,'scoreBoard'])->name('adt.score-board');
