@@ -1,1 +1,0 @@
-{{ $row->main_title }}
