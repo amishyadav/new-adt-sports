@@ -14,7 +14,7 @@
 </head>
 <body>
 <section class="container">
-        <form class="mt-5" method="post" action="{{ route('adt-score.store') }}">
+        <form class="mt-5" method="post" action="{{ route('handball-adt-score.store') }}">
             @csrf
             <div class="form-row">
                 <div class="col">
@@ -47,9 +47,9 @@
             <td>{{ $score->team_a }}</td>
             <td>{{ $score->team_b }}</td>
             <td>
-                <a class="btn btn-primary" href="{{ route('adt.score-board',[$score->id,$score->team_a,$score->team_b]) }}">Controller</a>
-                <a class="btn btn-warning" href="{{ route('adt-score.live',$score->id) }}">Live</a>
-                <a class="btn btn-danger" href="{{ route('adt-score.destroy',$score->id) }}">Delete</a>
+                <a class="btn btn-primary" href="{{ route('handball-adt.score-board',[$score->id,$score->team_a,$score->team_b]) }}">Controller</a>
+                <a class="btn btn-warning" href="{{ route('handball-adt-score.live',$score->id) }}">Live</a>
+                <a class="btn btn-danger" href="{{ route('handball-adt-score.destroy',$score->id) }}">Delete</a>
             </td>
         </tr>
         @endforeach

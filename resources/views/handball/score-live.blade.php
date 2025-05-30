@@ -130,7 +130,7 @@
     </style>
 </head>
 <body>
-    <input id="scoreLiveUrl" type="hidden" value="{{ route('adt-score.liveScore',$matchScores->id) }}">
+    <input id="scoreLiveUrl" type="hidden" value="{{ route('handball-adt-score.liveScore',$matchScores->id) }}">
 <div class="main-container">
     <div class="container">
         <br>
