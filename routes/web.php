@@ -72,17 +72,6 @@ Route::group([
     Route::get('impersonate/{id}', [UserController::class, 'impersonate'])->name('impersonate');
     Route::get('impersonate-leave',[UserController::class, 'impersonateLeave'])->name('impersonate.leave');
 
-
-    Route::resource('blog', BlogController::class)->withoutMiddleware('xss');
-    Route::resource('home-slider', HomeSliderController::class);
-
-    Route::resource('faqs', FaqsController::class);
-    Route::put('faqs/{faq}/status', [FaqsController::class, 'changeStatus'])->name('faqs.change-status');
-
-    Route::resource('partner', PartnerController::class);
-
-    Route::resource('social-icon', SocialIconController::class);
-
     // Logs Route
     Route::get('logs', [LogViewerController::class, 'index']);
 
