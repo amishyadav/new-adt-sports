@@ -8,16 +8,18 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-
-class Team extends Model implements HasMedia
+class Teams extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia;
+    use InteractsWithMedia;
 
     protected $fillable = [
         'user_id',
         'name',
+        'status'
     ];
 
+    protected $with = ['media'];
+    protected $appends = ['team_logo'];
     const TEAM_LOGO = 'team_logo';
 
     public function getTeamLogoAttribute(): string

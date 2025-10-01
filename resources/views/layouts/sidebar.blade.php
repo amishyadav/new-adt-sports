@@ -42,10 +42,17 @@
                     <span class="aside-menu-title">Registered Players</span>
                 </a>
             </li>
-            @can('manage_categories')
-            <li class="nav-item {{ Request::is('admin/categories') ? 'active' : '' }}">
+            <li class="nav-item {{ Request::is('admin/teams') ? 'active' : '' }}">
                 <a class="nav-link d-flex align-items-center py-3" aria-current="page"
-                   href="{{route('categories.index')}}">
+                   href="{{route('teams.index')}}">
+                    <span class="aside-menu-icon pe-3"><i class="fas fa-user"></i></span>
+                    <span class="aside-menu-title">Teams</span>
+                </a>
+            </li>
+            @can('manage_categories')
+            <li class="nav-item {{ Request::is('admin/teams') ? 'active' : '' }}">
+                <a class="nav-link d-flex align-items-center py-3" aria-current="page"
+                   href="{{route('teams.index')}}">
                     <span class="aside-menu-icon pe-3"><i class="fa-solid fa-bars"></i></span>
                     <span class="aside-menu-title">Categories</span>
                 </a>

@@ -12,10 +12,10 @@
                         <a class="nav-link p-0 {{ Request::is('admin/dashboard*') ? 'active' : '' }}"
                            href="{{ route('admin.dashboard') }}">{{ __('messages.common.dashboard') }}</a>
                     </li>
-                    @elseif(Request::is('admin/categories*'))
+                    @elseif(Request::is('admin/teams*'))
                         <li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0">
-                            <a class="nav-link p-0 {{ Request::is('admin/categories*') ? 'active' : '' }}"
-                               href="{{ route('categories.index') }}">{{ __('messages.common.categories') }}</a>
+                            <a class="nav-link p-0 {{ Request::is('admin/teams*') ? 'active' : '' }}"
+                               href="{{ route('teams.index') }}">Teams</a>
                         </li>
                     @elseif(Request::is('admin/leagues*'))
                         <li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0">

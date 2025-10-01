@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\AdtScoreController;
 use App\Http\Controllers\HandBallController;
-use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FrontController;
 use Illuminate\Support\Facades\Auth;
@@ -24,8 +23,6 @@ Route::group([
     'prefix' => 'player', 'middleware' => ['auth', 'xss','role:player'],
 ], function () {
 Route::get('/profile',[FrontController::class,'playerProfile'])->name('front.player.profile');
-Route::post('/team',[TeamController::class,'store'])->name('front.team.store');
-Route::post('/add-player',[TeamController::class,'addPlayer'])->name('front.team.player');
 });
 
 // Scoreboard

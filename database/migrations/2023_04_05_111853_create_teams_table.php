@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('teams', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
             $table->string('name');
+            $table->boolean('status')->default(1);
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')

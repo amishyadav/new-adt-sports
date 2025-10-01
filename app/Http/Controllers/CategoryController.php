@@ -28,7 +28,7 @@ class CategoryController extends AppBaseController
 
     public function index(): View|Factory|Application
     {
-        return view('categories.index');
+        return view('teams.index');
     }
 
 
@@ -44,24 +44,24 @@ class CategoryController extends AppBaseController
     {
         return $this->sendResponse($category, 'Category successfully retrieved.');
     }
-    
+
 
     public function update(UpdateCategoryRequest $request, Category $category): JsonResponse
     {
         $input = $request->all();
         $service = $this->categoryRepository->update($input, $category->id);
-        
+
         return $this->sendResponse($service, 'Category Update successfully.');
 
     }
-    
+
     public function destroy(Category $category): JsonResponse
     {
         if ($category->league_count > 0){
-            return $this->sendError('Category cannot be deleted.'); 
-            
+            return $this->sendError('Category cannot be deleted.');
+
         }
-        
+
         $category->delete();
 
         return $this->sendSuccess('Category deleted successfully.');

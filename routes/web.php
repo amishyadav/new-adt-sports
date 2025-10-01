@@ -13,6 +13,7 @@ use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\RegisteredPlayerController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SocialIconController;
+use App\Http\Controllers\TeamsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Auth;
@@ -32,12 +33,14 @@ use Rap2hpoutre\LaravelLogViewer\LogViewerController;
 */
 
 Route::group([
-    'prefix' => 'admin', 'middleware' => ['auth', 'xss','setLanguage','role:admin'],
+    'prefix' => 'admin', 'middleware' => ['auth', 'xss','role:admin'],
 ], function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-    Route::resource('categories', CategoryController::class);
-    Route::put('categories/{category}/status',
-        [CategoryController::class, 'changeStatus'])->name('categories.change.status');
+
+    Route::resource('teams', TeamsController::class);
+    Route::put('teams/{team}/status',
+        [TeamsController::class, 'changeStatus'])->name('teams.change.status');
+
     Route::resource('registered-players', RegisteredPlayerController::class);
     Route::put('registered-players/{registeredPlayer}/status',
         [RegisteredPlayerController::class, 'changeStatus'])->name('registered-players.change.status');

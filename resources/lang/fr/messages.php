@@ -6,7 +6,7 @@ return [
     |--------------------------------------------------------------------------
     | All Titles and static string in blade files
     |--------------------------------------------------------------------------
-    | 
+    |
     */
 
     'login'                   => 'Connexion',
@@ -167,7 +167,7 @@ return [
         'remember_me'                      => 'Souviens-toi de moi',
         'discard'                          => 'Jeter',
         'category'                         => 'Catégorie',
-        'categories'                       => 'Catégories',
+        'teams'                       => 'Catégories',
         'leagues'                          => 'Ligues',
         'league'                           => 'Ligue',
         'add_new'                          => 'Ajouter nouveau',

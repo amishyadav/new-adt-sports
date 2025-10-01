@@ -312,7 +312,7 @@
 {{--                        <!-- Aside Widget -->--}}
 {{--                        <div class="aside-widget">--}}
 {{--                            <h3><span>Top Categories</span></h3>--}}
-{{--                            <div class="top-categories">--}}
+{{--                            <div class="top-teams">--}}
 {{--                                <ul>--}}
 {{--                                    <li><a href="#">Cricket</a></li>--}}
 {{--                                    <li><a href="#">Football</a></li>--}}
