@@ -40,8 +40,8 @@ class TeamsTable extends LivewireTableComponent
         ];
     }
 
-//    public function builder(): Builder
-//    {
-//        return Teams::where('user_id','=',getLogInUserId())->orderByDesc('id');
-//    }
+    public function builder(): Builder
+    {
+        return Teams::where('user_id','=',getLogInUserId())->orderByDesc('id');
+    }
 }
