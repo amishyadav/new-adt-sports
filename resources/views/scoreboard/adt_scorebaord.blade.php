@@ -186,8 +186,8 @@
             </div>
             <div class="score-buttons align-items-center">
                 <button class="plus-score" onclick="sub1ScoreLeft()">-</button>
-                @for($i = 1; $i<=7;$i++)
-                    <button class="remain-player" onclick="player{{$i}}RemainLeft()">{{$i}}</button>
+                @for($i = 0; $i<=7;$i++)
+                    <button class="remain-player" style="@if($i == $matchScores->player_left_a) background-color: red; @endif" onclick="player{{$i}}RemainLeft()">{{$i}}</button>
                 @endfor
             </div>
         </div>
@@ -258,8 +258,8 @@
             </div>
             <div class="score-buttons align-items-center">
                 <button class="plus-score" onclick="sub1ScoreRight()">-</button>
-                @for($i = 1; $i<=7;$i++)
-                    <button class="remain-player" onclick="player{{$i}}RemainRight()">{{$i}}</button>
+                @for($i = 0; $i<=7;$i++)
+                    <button class="remain-player" style="@if($i == $matchScores->player_left_b) background-color: red; @endif" onclick="player{{$i}}RemainRight()">{{$i}}</button>
                 @endfor
             </div>
         </div>
@@ -337,60 +337,84 @@
         submitData(score,'right');
     }
 
+    function player0RemainLeft() {
+        submitData(0,'playerRemainLeft',true);
+        // location.reload();
+    }
+
     function player1RemainLeft() {
-        submitData(1,'playerRemainLeft');
+        submitData(1,'playerRemainLeft',true);
+        // location.reload();
     }
 
     function player2RemainLeft() {
-        submitData(2,'playerRemainLeft');
+        submitData(2,'playerRemainLeft',true);
+        // location.reload();
     }
 
     function player3RemainLeft() {
-        submitData(3,'playerRemainLeft');
+        submitData(3,'playerRemainLeft',true);
+        // location.reload();
     }
 
     function player4RemainLeft() {
-        submitData(4,'playerRemainLeft');
+        submitData(4,'playerRemainLeft',true);
+        // location.reload();
     }
 
     function player5RemainLeft() {
-        submitData(5,'playerRemainLeft');
+        submitData(5,'playerRemainLeft',true);
+        // location.reload();
     }
 
     function player6RemainLeft() {
-        submitData(6,'playerRemainLeft');
+        submitData(6,'playerRemainLeft',true);
+        // location.reload();
     }
 
     function player7RemainLeft() {
-        submitData(7,'playerRemainLeft');
+        submitData(7,'playerRemainLeft',true);
+        // location.reload();
+    }
+
+    function player0RemainRight() {
+        submitData(0,'playerRemainRight',true);
+        // location.reload();
     }
 
     function player1RemainRight() {
-        submitData(1,'playerRemainRight');
+        submitData(1,'playerRemainRight',true);
+        // location.reload();
     }
 
     function player2RemainRight() {
-        submitData(2,'playerRemainRight');
+        submitData(2,'playerRemainRight',true);
+        // location.reload();
     }
 
     function player3RemainRight() {
-        submitData(3,'playerRemainRight');
+        submitData(3,'playerRemainRight',true);
+        // location.reload();
     }
 
     function player4RemainRight() {
-        submitData(4,'playerRemainRight');
+        submitData(4,'playerRemainRight',true);
+        // location.reload();
     }
 
     function player5RemainRight() {
-        submitData(5,'playerRemainRight');
+        submitData(5,'playerRemainRight',true);
+        // location.reload();
     }
 
     function player6RemainRight() {
-        submitData(6,'playerRemainRight');
+        submitData(6,'playerRemainRight',true);
+        // location.reload();
     }
 
     function player7RemainRight() {
-        submitData(7,'playerRemainRight');
+        submitData(7,'playerRemainRight',true);
+        // location.reload();
     }
 
     function sub1ScoreLeft() {
@@ -557,7 +581,7 @@
     }
 
 
-    function submitData(data,type) {
+    function submitData(data,type,reload = false) {
         let csrfToken = $('meta[name="csrf-token"]').attr('content');
         let formData;
         if(type == 'left') {
@@ -597,7 +621,9 @@
                 'X-CSRF-TOKEN': csrfToken
             },
             success: function(response){
-                console.log(response);
+                if(reload){
+                    location.reload();
+                }
             },
             error: function(xhr, status, error){
 

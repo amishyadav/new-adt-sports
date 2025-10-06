@@ -72,6 +72,6 @@ class TeamsController extends AppBaseController
     {
         $team->update(['status' => $team->status == 0 ? 1 : 0]);
 
-        return $this->sendResponse($team, 'Team Status Update Successfully');
+        return $this->sendResponse($team, 'Team Status Updated Successfully');
     }
 }

@@ -79,4 +79,14 @@ class AdtScoreController extends Controller
 
         return response()->json($data);
     }
+
+    public function sideScoreBoardLive(MatchScores $matchScores)
+    {
+        return view('scoreboard.side-score-live',compact('matchScores'));
+    }
+
+    public function sideScoreBoard(MatchScores $matchScores)
+    {
+        return response()->json($matchScores);
+    }
 }

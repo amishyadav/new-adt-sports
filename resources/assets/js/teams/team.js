@@ -9,6 +9,7 @@ function loadTeam () {
 
 listenHiddenBsModal('#addTeamsModal', function (e) {
     $('#addTeamsForm')[0].reset()
+    $('#exampleInputImage').css('background-image', 'url("' + defaultImage + '")')
     livewire.emit('refresh')
 })
 

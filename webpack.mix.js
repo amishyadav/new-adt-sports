@@ -103,6 +103,7 @@ mix.js([
     'resources/assets/js/custom/custom.js',
     'resources/assets/js/custom/delete.js',
     'resources/assets/js/teams/team.js',
+    'resources/assets/js/team_match/team_match.js',
     'resources/assets/js/registered_player/registered_player.js',
     'resources/assets/js/all_matches/all_matches.js',
     'resources/assets/js/questions/questions.js',

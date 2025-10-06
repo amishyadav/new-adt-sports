@@ -2,18 +2,20 @@
 
 namespace App\Repositories;
 
-use App\Models\Teams;
+use App\Models\TeamMatch;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 /**
- * Class TeamsRepository
+ * Class TeamMatchRepository
  */
-class TeamsRepository extends BaseRepository
+class TeamMatchRepository extends BaseRepository
 {
     public $fieldSearchable = [
-        'name',
+        'team1_id',
+        'team2_id',
+        'status',
     ];
 
     /**
@@ -29,7 +31,7 @@ class TeamsRepository extends BaseRepository
      */
     public function model()
     {
-        return Teams::class;
+        return TeamMatch::class;
     }
 
     /**
@@ -42,17 +44,12 @@ class TeamsRepository extends BaseRepository
         try {
             DB::beginTransaction();
 
-            $input['status'] = isset($input['status']) ? 1 : 0;
             $input['user_id'] = getLogInUserId();
-            $team = Teams::create($input);
-
-            if (isset($input['profile']) && !empty('profile')) {
-                $team->addMedia($input['profile'])->toMediaCollection(Teams::TEAM_LOGO, config('app.media_disc'));
-            }
+            $teamMatch = TeamMatch::create($input);
 
             DB::commit();
 
-            return $team;
+            return $teamMatch;
         } catch (Exception $e) {
             DB::rollBack();
 
@@ -64,21 +61,13 @@ class TeamsRepository extends BaseRepository
     {
         try {
             DB::beginTransaction();
-            $input['status'] = isset($input['status']) ? 1 : 0;
             $input['user_id'] = getLogInUserId();
-            $team = Teams::findOrFail($id);
-            $team->update($input);
-
-            if (isset($input['profile']) && ! empty('profile')) {
-                $team->clearMediaCollection(Teams::TEAM_LOGO);
-                $team->media()->delete();
-                $team->addMedia($input['profile'])->toMediaCollection(Teams::TEAM_LOGO, config('app.media_disc'));
-            }
-
+            $teamMatch = TeamMatch::findOrFail($id);
+            $teamMatch->update($input);
 
             DB::commit();
 
-            return $team;
+            return $teamMatch;
         } catch (Exception $e) {
             DB::rollBack();
 

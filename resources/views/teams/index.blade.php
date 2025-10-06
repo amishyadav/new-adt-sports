@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-    {{ 'Teams' }}
+    Teams
 @endsection
 @section('content')
     <div class="container-fluid">

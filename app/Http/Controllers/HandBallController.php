@@ -23,7 +23,7 @@ class HandBallController extends Controller
 
         MatchScores::create(['match_between_team_id' => $score->id]);
 
-        return redirect(route('adt-score.index'));
+        return redirect(route('handball-adt-score.index'));
     }
 
     public function live(MatchScores $matchScores)
@@ -41,7 +41,7 @@ class HandBallController extends Controller
     {
         $matchBetweenTeams->delete();
 
-        return redirect(route('adt-score.index'));
+        return redirect(route('handball-adt-score.index'));
     }
 
     public function scoreBoard(MatchScores $matchScores)

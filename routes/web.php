@@ -13,6 +13,7 @@ use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\RegisteredPlayerController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SocialIconController;
+use App\Http\Controllers\TeamMatchController;
 use App\Http\Controllers\TeamsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SettingController;
@@ -40,6 +41,8 @@ Route::group([
     Route::resource('teams', TeamsController::class);
     Route::put('teams/{team}/status',
         [TeamsController::class, 'changeStatus'])->name('teams.change.status');
+
+    Route::resource('team-matches', TeamMatchController::class);
 
     Route::resource('registered-players', RegisteredPlayerController::class);
     Route::put('registered-players/{registeredPlayer}/status',

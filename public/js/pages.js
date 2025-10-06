@@ -8098,6 +8098,7 @@ function loadTeam() {
 
 listenHiddenBsModal('#addTeamsModal', function (e) {
   $('#addTeamsForm')[0].reset();
+  $('#exampleInputImage').css('background-image', 'url("' + defaultImage + '")');
   livewire.emit('refresh');
 });
 listenClick('#addTeamsModalBtn', function () {
@@ -8190,6 +8191,97 @@ listenClick('.teams-change-status', function (event) {
 listenClick('.teams-delete-btn', function (event) {
   var recordId = $(event.currentTarget).attr('data-id');
   deleteItem(route('teams.destroy', recordId), 'Team');
+});
+})();
+
+// This entry need to be wrapped in an IIFE because it need to be isolated against other entry modules.
+(() => {
+/*!******************************************************!*\
+  !*** ./resources/assets/js/team_match/team_match.js ***!
+  \******************************************************/
+document.addEventListener('turbo:load', loadTeamMatch);
+
+function loadTeamMatch() {
+  if (!$('#addTeamMatchModalBtn').length && !$('#editTeamMatchForm').length) {
+    return;
+  }
+}
+
+listenHiddenBsModal('#addTeamMatchModal', function (e) {
+  $('#addTeamMatchForm')[0].reset();
+  livewire.emit('refresh');
+});
+listenClick('#addTeamMatchModalBtn', function () {
+  $('#addTeamMatchModal').modal('show').appendTo('body');
+});
+listenSubmit('#addTeamMatchForm', function (e) {
+  e.preventDefault();
+  $('#teamsAddBtn').prop('disabled', true);
+  $.ajax({
+    url: route('team-matches.store'),
+    type: 'POST',
+    data: new FormData(this),
+    processData: false,
+    contentType: false,
+    success: function success(result) {
+      if (result.success) {
+        displaySuccessMessage(result.message);
+        livewire.emit('refresh');
+        $('#addTeamMatchModal').modal('hide');
+        $('#teamMatchAddBtn').prop('disabled', false);
+      }
+    },
+    error: function error(result) {
+      displayErrorMessage(result.responseJSON.message);
+      $('#teamMatchAddBtn').prop('disabled', false);
+    }
+  });
+});
+listenClick('.teams-edit-btn', function (event) {
+  var editTeamMatchId = $(event.currentTarget).data('id');
+  renderData(editTeamMatchId);
+});
+
+function renderData(id) {
+  $.ajax({
+    url: route('team-matches.edit', id),
+    type: 'GET',
+    success: function success(result) {
+      var teams = result.data;
+      $('#teamMatchId').val(teams.id);
+      $('#editTeamMatchName').val(teams.name);
+      $('#editTeamMatchModal').modal('show');
+    }
+  });
+}
+
+listenSubmit('#editTeamMatchForm', function (event) {
+  event.preventDefault();
+  $('#editTeamMatchFormBtn').prop('disabled', true);
+  var teamMatchId = $('#teamMatchId').val();
+  $.ajax({
+    url: route('team-matches.update', teamMatchId),
+    type: 'POST',
+    data: new FormData(this),
+    contentType: false,
+    processData: false,
+    success: function success(result) {
+      if (result.success) {
+        displaySuccessMessage(result.message);
+        $('#editTeamMatchModal').modal('hide');
+        Livewire.emit('refresh');
+        $('#editTeamMatchFormBtn').prop('disabled', false);
+      }
+    },
+    error: function error(result) {
+      displayErrorMessage(result.responseJSON.message);
+      $('#editTeamMatchFormBtn').prop('disabled', false);
+    }
+  });
+});
+listenClick('.team-match-delete-btn', function (event) {
+  var recordId = $(event.currentTarget).attr('data-id');
+  deleteItem(route('team-matches.destroy', recordId), 'Team');
 });
 })();
 
