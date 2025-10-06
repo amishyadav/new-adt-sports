@@ -4,7 +4,6 @@
 @endsection
 @section('content')
     <div class="container-fluid">
-{{--        @dd($teamMatch)--}}
         <livewire:team-match-table/>
         @include('team_match.create_modal')
         @include('team_match.edit_modal')

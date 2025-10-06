@@ -12,6 +12,7 @@ class TeamMatch extends Model
         'team1_id',
         'team2_id',
         'status',
+        'user_id'
     ];
 
     public function team1()
@@ -22,5 +23,10 @@ class TeamMatch extends Model
     public function team2()
     {
         return $this->belongsTo(Teams::class, 'team2_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id' ,  'user_id');
     }
 }

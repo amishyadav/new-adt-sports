@@ -30,7 +30,7 @@ class TeamMatchController extends AppBaseController
 
     public function index(TeamMatch $teamMatch): View|Factory|Application
     {
-        $teams = Teams::pluck('name')->toArray();
+        $teams = Teams::where('status', '=', 1)->pluck('name','id')->toArray();
 
         return view('team_match.index')->with('teams', $teams);
     }

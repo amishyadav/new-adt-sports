@@ -45,6 +45,7 @@ class TeamMatchRepository extends BaseRepository
             DB::beginTransaction();
 
             $input['user_id'] = getLogInUserId();
+            $input['status'] = 'Pending';
             $teamMatch = TeamMatch::create($input);
 
             DB::commit();
@@ -62,6 +63,7 @@ class TeamMatchRepository extends BaseRepository
         try {
             DB::beginTransaction();
             $input['user_id'] = getLogInUserId();
+            $input['status'] = 'Pending';
             $teamMatch = TeamMatch::findOrFail($id);
             $teamMatch->update($input);
 

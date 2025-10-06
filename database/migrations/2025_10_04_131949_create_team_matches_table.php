@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('team_matches', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('team1_id')->constrained('teams')->onDelete('cascade');
-            $table->foreignId('team2_id')->constrained('teams')->onDelete('cascade');
-            $table->string('status');
+            $table->unsignedBigInteger('team1_id');
+            $table->unsignedBigInteger('team2_id');
+            $table->string('status')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onUpdate('cascade');
+
+            $table->foreign('team1_id')->references('id')->on('teams')->onUpdate('cascade');
+            $table->foreign('team2_id')->references('id')->on('teams')->onUpdate('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade');
             $table->timestamps();
         });
     }

@@ -40,7 +40,7 @@ listenSubmit('#addTeamMatchForm', function (e) {
     })
 })
 
-listenClick('.teams-edit-btn', function (event) {
+listenClick('.team-match-edit-btn', function (event) {
     let editTeamMatchId = $(event.currentTarget).data('id')
     renderData(editTeamMatchId)
 })

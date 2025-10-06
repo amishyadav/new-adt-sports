@@ -16,7 +16,7 @@ class TeamMatchTable extends LivewireTableComponent
     public function configure(): void
     {
         $this->setPrimaryKey('id')
-            ->setDefaultSort('team_match.created_at', 'desc')
+            ->setDefaultSort('team_matches.created_at', 'desc')
             ->setQueryStringStatus(false);
     }
 
@@ -42,6 +42,6 @@ class TeamMatchTable extends LivewireTableComponent
 
     public function builder(): Builder
     {
-        return TeamMatch::where('user_id','=',getLogInUserId())->orderByDesc('id');
+        return TeamMatch::with('team1','team2')->where('user_id','=',getLogInUserId())->orderByDesc('id');
     }
 }

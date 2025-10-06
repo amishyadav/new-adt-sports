@@ -236,7 +236,12 @@ class User extends Authenticatable implements HasMedia
 
     public function team()
     {
-        return $this->hasOne(Team::class, 'user_id' );
+        return $this->hasOne(Teams::class, 'user_id' );
+    }
+
+    public function teamMatch()
+    {
+        return $this->hasOne(TeamMatch::class, 'user_id' );
     }
 
     public function teamPlayer()
