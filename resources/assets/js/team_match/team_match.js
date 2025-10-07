@@ -50,9 +50,10 @@ function renderData (id) {
         url: route('team-matches.edit', id),
         type: 'GET',
         success: function (result) {
-            let teams = result.data
-            $('#teamMatchId').val(teams.id)
-            $('#editTeamMatchName').val(teams.name)
+            let teamMatch = result.data
+            $('#teamMatchId').val(teamMatch.id)
+            $('#editTeamMatchTeam1Name').val(teamMatch.team1_id)
+            $('#editTeamMatchTeam2Name').val(teamMatch.team2_id)
             $('#editTeamMatchModal').modal('show')
         },
     })
@@ -61,7 +62,8 @@ function renderData (id) {
 listenSubmit('#editTeamMatchForm', function (event) {
     event.preventDefault()
     $('#editTeamMatchFormBtn').prop('disabled', true)
-    let teamMatchId = $('#teamMatchId').val()
+    let teamMatchId = $('#teamMatchId').val();
+    console.log(teamMatchId,'teamMatchId')
     $.ajax({
         url: route('team-matches.update', teamMatchId),
         type: 'POST',

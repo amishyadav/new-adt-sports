@@ -35,7 +35,6 @@ class TeamMatchController extends AppBaseController
         return view('team_match.index')->with('teams', $teams);
     }
 
-
     public function store(CreateTeamMatchRequest $request): JsonResponse
     {
         $this->teamMatchRepository->store($request->all());
@@ -43,12 +42,10 @@ class TeamMatchController extends AppBaseController
         return $this->sendSuccess('Team Match created successfully.');
     }
 
-
     public function edit(TeamMatch $teamMatch): JsonResponse
     {
         return $this->sendResponse($teamMatch, 'Team Match successfully retrieved.');
     }
-
 
     public function update(UpdateTeamMatchRequest $request, TeamMatch $teamMatch): JsonResponse
     {

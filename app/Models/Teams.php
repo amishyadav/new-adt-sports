@@ -12,6 +12,8 @@ class Teams extends Model implements HasMedia
 {
     use InteractsWithMedia;
 
+    protected $table = 'teams';
+
     protected $fillable = [
         'user_id',
         'name',

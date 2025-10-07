@@ -15,9 +15,7 @@ class TeamMatchTable extends LivewireTableComponent
 
     public function configure(): void
     {
-        $this->setPrimaryKey('id')
-            ->setDefaultSort('team_matches.created_at', 'desc')
-            ->setQueryStringStatus(false);
+        $this->setPrimaryKey('id');
     }
 
     public function columns(): array
@@ -33,7 +31,7 @@ class TeamMatchTable extends LivewireTableComponent
             Column::make( 'Status', "status")
                 ->view('team_match.columns.status')
                 ->sortable(),
-            Column::make( 'Action', "created_at")
+            Column::make( 'Action', "id")
                 ->view('team_match.columns.action')
                 ->sortable(),
 

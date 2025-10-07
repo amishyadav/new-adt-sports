@@ -5,14 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TeamMatch extends Model
+class TeamMatchScore extends Model
 {
-    protected $table = 'team_matches';
+    protected $table = 'team_match_scores';
 
     protected $fillable = [
         'team1_id',
         'team2_id',
-        'status',
+        'team1_score',
+        'team2_score',
         'user_id'
     ];
 

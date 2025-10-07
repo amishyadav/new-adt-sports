@@ -12,8 +12,10 @@ use App\Http\Controllers\LeagueController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\RegisteredPlayerController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\ScoreboardController;
 use App\Http\Controllers\SocialIconController;
 use App\Http\Controllers\TeamMatchController;
+use App\Http\Controllers\TeamMatchScoreController;
 use App\Http\Controllers\TeamsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SettingController;
@@ -43,6 +45,8 @@ Route::group([
         [TeamsController::class, 'changeStatus'])->name('teams.change.status');
 
     Route::resource('team-matches', TeamMatchController::class);
+
+    Route::get('match/{id}/{slug}/scoreboard', [TeamMatchScoreController::class, 'index'])->name('team-match-score.index');
 
     Route::resource('registered-players', RegisteredPlayerController::class);
     Route::put('registered-players/{registeredPlayer}/status',
