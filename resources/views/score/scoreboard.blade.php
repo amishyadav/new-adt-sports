@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Kabaddi Scoreboard</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -157,8 +158,57 @@
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
-    let historyStack = []; // track score changes
+    const matchId = "{{ $teamMatch->id }}";
+    const scoreUpdateUrl = "{{ route('match.update-score', $teamMatch->id) }}";
+    let historyStack = [];
+
+    function saveScoreToDB() {
+        const team1Score = parseInt(document.querySelector('#teamLeftCol .score').textContent);
+        const team2Score = parseInt(document.querySelector('#teamRightCol .score').textContent);
+
+        let formData = JSON.stringify({
+                team1_score: team1Score,
+                team2_score: team2Score,
+                team1_id: "{{ $teamMatch->team1_id }}",
+                team2_id: "{{ $teamMatch->team2_id }}"
+            });
+
+        $.ajax({
+            url: "{{ route('match.update-score',$teamMatch->id) }}",
+            method: "POST",
+            data: formData,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            success: function(response){
+                if(reload){
+                    location.reload();
+                }
+            },
+            error: function(xhr, status, error){
+
+                console.error(xhr.responseText);
+            }
+        });
+
+        // fetch(scoreUpdateUrl, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        //     },
+        //     body: JSON.stringify({
+        //         team1_score: team1Score,
+        //         team2_score: team2Score
+        //     })
+        // }).then(res => res.json())
+        //     .then(data => {
+        //         if (data.success) console.log('Scores saved ✅');
+        //     });
+    }
 
     document.querySelectorAll('.team-card').forEach(team => {
         const scoreEl = team.querySelector('.score');
@@ -166,9 +216,9 @@
         function updateScore(newScore) {
             historyStack.push({ el: scoreEl, prev: parseInt(scoreEl.textContent) });
             scoreEl.textContent = newScore;
+            saveScoreToDB();
         }
 
-        // Direct - and + buttons
         team.querySelector('.score-minus').addEventListener('click', () => {
             let score = parseInt(scoreEl.textContent);
             if (score > 0) updateScore(score - 1);
@@ -179,7 +229,6 @@
             updateScore(score + 1);
         });
 
-        // Input minus button
         team.querySelector('.score-input-minus').addEventListener('click', () => {
             const input = team.querySelectorAll('.score-input')[0];
             let score = parseInt(scoreEl.textContent);
@@ -187,7 +236,6 @@
             if (score - val >= 0) updateScore(score - val);
         });
 
-        // Input plus button
         team.querySelector('.score-input-plus').addEventListener('click', () => {
             const input = team.querySelectorAll('.score-input')[1];
             let score = parseInt(scoreEl.textContent);
@@ -196,32 +244,27 @@
         });
     });
 
-    // Undo button
     document.querySelector('.btn-undo').addEventListener('click', () => {
         if (historyStack.length > 0) {
             const last = historyStack.pop();
             last.el.textContent = last.prev;
+            saveScoreToDB();
         }
     });
 
-    // Reset & Refresh buttons (reload page)
     document.querySelector('.btn-reset').addEventListener('click', () => location.reload());
     document.querySelector('.btn-refresh').addEventListener('click', () => location.reload());
 
-    // Swap Courts
     document.getElementById('swapBtn').addEventListener('click', () => {
         const teamsRow = document.getElementById('teamsRow');
         const leftCol = document.getElementById('teamLeftCol');
         const rightCol = document.getElementById('teamRightCol');
-
-        // Swap positions in the DOM
         if (leftCol.nextElementSibling === rightCol) {
             teamsRow.insertBefore(rightCol, leftCol);
         } else {
             teamsRow.insertBefore(leftCol, rightCol);
         }
     });
-
 </script>
 </body>
 </html>

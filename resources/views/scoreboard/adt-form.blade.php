@@ -49,7 +49,7 @@
             <td>
                 <a class="btn btn-primary" href="{{ route('adt.score-board',[$score->id,$score->team_a,$score->team_b]) }}">Controller</a>
                 <a class="btn btn-warning" href="{{ route('adt-score.live',$score->id) }}">Live</a>
-                <a class="btn btn-secondary" href="{{ route('adt-score.sideboard',$score->id) }}">Other Board</a>
+{{--                <a class="btn btn-secondary" href="{{ route('adt-score.sideboard',$score->id) }}">Other Board</a>--}}
                 <a class="btn btn-danger" href="{{ route('adt-score.destroy',$score->id) }}">Delete</a>
             </td>
         </tr>

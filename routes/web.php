@@ -47,6 +47,8 @@ Route::group([
     Route::resource('team-matches', TeamMatchController::class);
 
     Route::get('match/{id}/{slug}/scoreboard', [TeamMatchScoreController::class, 'index'])->name('team-match-score.index');
+    Route::post('match/{id}/update-score', [TeamMatchScoreController::class, 'updateScore'])
+        ->name('match.update-score');
 
     Route::resource('registered-players', RegisteredPlayerController::class);
     Route::put('registered-players/{registeredPlayer}/status',
