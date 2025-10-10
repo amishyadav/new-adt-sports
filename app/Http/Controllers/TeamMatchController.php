@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateTeamMatchRequest;
 use App\Http\Requests\UpdateTeamMatchRequest;
 use App\Models\TeamMatch;
+use App\Models\TeamMatchScore;
 use App\Models\Teams;
 use App\Repositories\TeamMatchRepository;
 use Illuminate\Contracts\Foundation\Application;
@@ -31,6 +32,7 @@ class TeamMatchController extends AppBaseController
     public function index(TeamMatch $teamMatch): View|Factory|Application
     {
         $teams = Teams::where('status', '=', 1)->pluck('name','id')->toArray();
+//        $teamMatchScore = TeamMatchScore::where('team_match_id', '=', null)->get();
 
         return view('team_match.index')->with('teams', $teams);
     }

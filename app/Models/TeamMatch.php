@@ -30,4 +30,9 @@ class TeamMatch extends Model
     {
         return $this->belongsTo(User::class, 'id' ,  'user_id');
     }
+
+    public function teamMatchScore()
+    {
+        return $this->belongsTo(TeamMatchScore::class, 'id' ,  'team_match_id');
+    }
 }

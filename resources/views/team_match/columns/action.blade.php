@@ -1,9 +1,10 @@
 @php
     use Illuminate\Support\Str;
     $slug = Str::slug($row->team1->name . '-vs-' . $row->team2->name);
+    $matchID = \App\Models\TeamMatchScore::where('team_match_id', '=', $row->id)->pluck('id')->toArray();
 @endphp
 
-<a href="{{ route('team-match-score.index',['id' => $row->id, 'slug' => $slug]) }}" target="_blank"
+<a href="{{ route('team-match-score.index',['id' => $matchID[0], 'slug' => $slug]) }}" target="_blank"
    class="btn btn-outline-success me-2">
     Scoreboard
 </a>

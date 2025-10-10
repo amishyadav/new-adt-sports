@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\TeamMatch;
+use App\Models\TeamMatchScore;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
@@ -47,6 +48,15 @@ class TeamMatchRepository extends BaseRepository
             $input['user_id'] = getLogInUserId();
             $input['status'] = 'Pending';
             $teamMatch = TeamMatch::create($input);
+
+            if ($teamMatch) {
+                TeamMatchScore::create([
+                   'team_match_id' => $teamMatch->id,
+                   'team1_score' => 0,
+                   'team2_score' => 0,
+                   'user_id' => getLogInUserId(),
+                ]);
+            }
 
             DB::commit();
 

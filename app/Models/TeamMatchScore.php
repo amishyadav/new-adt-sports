@@ -11,22 +11,10 @@ class TeamMatchScore extends Model
 
     protected $fillable = [
         'team_match_id',
-        'team1_id',
-        'team2_id',
         'team1_score',
         'team2_score',
         'user_id'
     ];
-
-    public function team1()
-    {
-        return $this->belongsTo(Teams::class, 'team1_id');
-    }
-
-    public function team2()
-    {
-        return $this->belongsTo(Teams::class, 'team2_id');
-    }
 
     public function teamMatch()
     {

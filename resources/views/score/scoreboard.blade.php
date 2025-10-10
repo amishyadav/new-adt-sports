@@ -86,9 +86,8 @@
 </head>
 <body>
 <div class="scoreboard-container">
-
     <!-- Match Title -->
-    <div class="topbar">Match: {{$teamMatch->team1->name}} vs {{$teamMatch->team2->name}}</div>
+    <div class="topbar">Match: {{$score->teamMatch->team1->name}} vs {{$score->teamMatch->team2->name}}</div>
 
     <!-- Timer -->
     <div class="timer-box">
@@ -106,10 +105,10 @@
         <!-- Left Team -->
         <div class="col-md-6" id="teamLeftCol">
             <div class="team-card team-left">
-                <div class="team-name">Telugu Titans</div>
+                <div class="team-name">{{$score->teamMatch->team1->name}}</div>
                 <div class="d-flex justify-content-center align-items-center gap-2 flex-wrap">
                     <button class="btn btn-warning btn-custom score-minus">-</button>
-                    <div class="score">0</div>
+                    <div class="score">{{$score->team1_score}}</div>
                     <button class="btn btn-success btn-custom score-plus">+</button>
                 </div>
                 <div class="d-flex justify-content-center gap-2 flex-wrap mt-3">
@@ -127,10 +126,10 @@
         <!-- Right Team -->
         <div class="col-md-6" id="teamRightCol">
             <div class="team-card team-right">
-                <div class="team-name">Tamil Thalaivas</div>
+                <div class="team-name">{{$score->teamMatch->team2->name}}</div>
                 <div class="d-flex justify-content-center align-items-center gap-2 flex-wrap">
                     <button class="btn btn-warning btn-custom score-minus">-</button>
-                    <div class="score">0</div>
+                    <div class="score">{{$score->team2_score}}</div>
                     <button class="btn btn-success btn-custom score-plus">+</button>
                 </div>
                 <div class="d-flex justify-content-center gap-2 flex-wrap mt-3">
@@ -160,8 +159,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
-    const matchId = "{{ $teamMatch->id }}";
-    const scoreUpdateUrl = "{{ route('match.update-score', $teamMatch->id) }}";
     let historyStack = [];
 
     function saveScoreToDB() {
@@ -171,12 +168,10 @@
         let formData = JSON.stringify({
                 team1_score: team1Score,
                 team2_score: team2Score,
-                team1_id: "{{ $teamMatch->team1_id }}",
-                team2_id: "{{ $teamMatch->team2_id }}"
             });
 
         $.ajax({
-            url: "{{ route('match.update-score',$teamMatch->id) }}",
+            url: "{{ route('match.update-score',$score->id) }}",
             method: "POST",
             data: formData,
             headers: {
