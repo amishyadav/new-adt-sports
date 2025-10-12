@@ -82,23 +82,30 @@
             text-align: center;
             margin-top: 20px;
         }
+
+        .player-btn {
+            width: 45px;
+            height: 45px;
+            font-weight: 700;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+        .player-btn:hover {
+            transform: scale(1.1);
+        }
+        .player-btn.active {
+            opacity: 1;
+        }
+        .player-btn:not(.active) {
+            opacity: 0.3;
+        }
+
     </style>
 </head>
 <body>
 <div class="scoreboard-container">
     <!-- Match Title -->
     <div class="topbar">Match: {{$score->teamMatch->team1->name}} vs {{$score->teamMatch->team2->name}}</div>
-
-    <!-- Timer -->
-    <div class="timer-box">
-        <small>Second Half</small>
-        <div class="time">20:00</div>
-    </div>
-
-    <!-- Swap Courts -->
-    <div class="text-center mb-4">
-        <button class="btn btn-danger btn-lg px-5" id="swapBtn">Swap Courts</button>
-    </div>
 
     <!-- Teams -->
     <div class="row g-3" id="teamsRow">
@@ -145,12 +152,54 @@
         </div>
     </div>
 
+    <!-- Players Left Manager -->
+    <div class="timer-box players-manager text-center mb-4 mt-5">
+        <h4 class="mb-3 text-uppercase fw-bold">Players Left</h4>
+        <div class="row g-4 justify-content-center">
+
+            <!-- Left Team -->
+            <div class="col-md-6">
+                <div class="p-3 border rounded-3 team-left-player-box">
+                    <div class="fw-bold mb-3 text-warning fs-5">Telugu Titans</div>
+                    <div class="d-flex justify-content-center flex-wrap gap-2">
+                        <!-- Player buttons 1–7 -->
+                        <button class="btn btn-outline-warning player-btn active">1</button>
+                        <button class="btn btn-outline-warning player-btn active">2</button>
+                        <button class="btn btn-outline-warning player-btn active">3</button>
+                        <button class="btn btn-outline-warning player-btn active">4</button>
+                        <button class="btn btn-outline-warning player-btn active">5</button>
+                        <button class="btn btn-outline-warning player-btn active">6</button>
+                        <button class="btn btn-outline-warning player-btn active">7</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Team -->
+            <div class="col-md-6">
+                <div class="p-3 border rounded-3 team-right-player-box">
+                    <div class="fw-bold mb-3 text-primary fs-5">Tamil Thalaivas</div>
+                    <div class="d-flex justify-content-center flex-wrap gap-2">
+                        <!-- Player buttons 1–7 -->
+                        <button class="btn btn-outline-primary player-btn active">1</button>
+                        <button class="btn btn-outline-primary player-btn active">2</button>
+                        <button class="btn btn-outline-primary player-btn active">3</button>
+                        <button class="btn btn-outline-primary player-btn active">4</button>
+                        <button class="btn btn-outline-primary player-btn active">5</button>
+                        <button class="btn btn-outline-primary player-btn active">6</button>
+                        <button class="btn btn-outline-primary player-btn active">7</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Footer Buttons -->
     <div class="footer d-flex justify-content-center gap-3 flex-wrap mt-4">
         <button class="btn btn-secondary btn-lg btn-undo">Undo</button>
         <button class="btn btn-danger btn-lg btn-reset">Reset Match</button>
         <button class="btn btn-danger btn-lg btn-refresh">Refresh Page</button>
+        <button class="btn btn-danger btn-lg px-5" id="swapBtn">Swap Courts</button>
     </div>
 
 </div>
@@ -260,6 +309,19 @@
             teamsRow.insertBefore(leftCol, rightCol);
         }
     });
+
+    // Players Left Toggle System
+    document.querySelectorAll('.player-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            btn.classList.toggle('active');
+            if (btn.classList.contains('active')) {
+                btn.style.opacity = '1';
+            } else {
+                btn.style.opacity = '0.3';
+            }
+        });
+    });
+
 </script>
 </body>
 </html>
