@@ -16,6 +16,11 @@ return new class extends Migration
             $table->unsignedBigInteger('team_match_id');
             $table->integer('team1_score')->nullable();
             $table->integer('team2_score')->nullable();
+            $table->integer('team1_player_left')->default(7);
+            $table->integer('team2_player_left')->default(7);
+            $table->boolean('court_swap')->default(0);
+            $table->integer('team1_total_raid')->default(0);
+            $table->integer('team2_total_raid')->default(0);
             $table->unsignedBigInteger('user_id')->nullable();
 
             $table->foreign('team_match_id')->references('id')->on('team_matches')->onUpdate('cascade');

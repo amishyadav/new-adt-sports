@@ -160,7 +160,7 @@
             <!-- Left Team -->
             <div class="col-md-6">
                 <div class="p-3 border rounded-3 team-left-player-box">
-                    <div class="fw-bold mb-3 text-warning fs-5">Telugu Titans</div>
+                    <div class="fw-bold mb-3 text-warning fs-5">{{$score->teamMatch->team1->name}}</div>
                     <div class="d-flex justify-content-center flex-wrap gap-2">
                         <!-- Player buttons 1–7 -->
                         <button class="btn btn-outline-warning player-btn active">1</button>
@@ -177,7 +177,7 @@
             <!-- Right Team -->
             <div class="col-md-6">
                 <div class="p-3 border rounded-3 team-right-player-box">
-                    <div class="fw-bold mb-3 text-primary fs-5">Tamil Thalaivas</div>
+                    <div class="fw-bold mb-3 text-primary fs-5">{{$score->teamMatch->team2->name}}</div>
                     <div class="d-flex justify-content-center flex-wrap gap-2">
                         <!-- Player buttons 1–7 -->
                         <button class="btn btn-outline-primary player-btn active">1</button>
@@ -210,50 +210,36 @@
 <script>
     let historyStack = [];
 
-    function saveScoreToDB() {
+    // ------- AJAX SAVE FUNCTION -------
+    function saveScoreToDB(extraData = {}, reload = false) {
         const team1Score = parseInt(document.querySelector('#teamLeftCol .score').textContent);
         const team2Score = parseInt(document.querySelector('#teamRightCol .score').textContent);
 
-        let formData = JSON.stringify({
-                team1_score: team1Score,
-                team2_score: team2Score,
-            });
+        let payload = {
+            team1_score: team1Score,
+            team2_score: team2Score,
+            ...extraData
+        };
 
         $.ajax({
-            url: "{{ route('match.update-score',$score->id) }}",
+            url: "{{ route('match.update-score', $score->id) }}",
             method: "POST",
-            data: formData,
+            data: JSON.stringify(payload),
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             },
-            success: function(response){
-                if(reload){
-                    location.reload();
-                }
+            success: function (response) {
+                console.log("Saved ✅", payload);
+                if (reload) location.reload();
             },
-            error: function(xhr, status, error){
-
-                console.error(xhr.responseText);
+            error: function (xhr) {
+                console.error("Error:", xhr.responseText);
             }
         });
-
-        // fetch(scoreUpdateUrl, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        //     },
-        //     body: JSON.stringify({
-        //         team1_score: team1Score,
-        //         team2_score: team2Score
-        //     })
-        // }).then(res => res.json())
-        //     .then(data => {
-        //         if (data.success) console.log('Scores saved ✅');
-        //     });
     }
 
+    // ------- SCORE CONTROLS -------
     document.querySelectorAll('.team-card').forEach(team => {
         const scoreEl = team.querySelector('.score');
 
@@ -288,6 +274,7 @@
         });
     });
 
+    // ------- UNDO / RESET / REFRESH -------
     document.querySelector('.btn-undo').addEventListener('click', () => {
         if (historyStack.length > 0) {
             const last = historyStack.pop();
@@ -299,6 +286,7 @@
     document.querySelector('.btn-reset').addEventListener('click', () => location.reload());
     document.querySelector('.btn-refresh').addEventListener('click', () => location.reload());
 
+    // ------- SWAP COURTS -------
     document.getElementById('swapBtn').addEventListener('click', () => {
         const teamsRow = document.getElementById('teamsRow');
         const leftCol = document.getElementById('teamLeftCol');
@@ -310,18 +298,73 @@
         }
     });
 
-    // Players Left Toggle System
-    document.querySelectorAll('.player-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            btn.classList.toggle('active');
-            if (btn.classList.contains('active')) {
+    // ------- PLAYER PANEL SELECTION -------
+    function initializePlayerSelection() {
+        const team1Selected = {{ $score->team1_player_left }};
+        const team2Selected = {{ $score->team2_player_left }};
+
+        // Apply saved player selection for Team 1
+        document.querySelectorAll('.team-left-player-box .player-btn').forEach(btn => {
+            const num = parseInt(btn.textContent);
+            if (num === team1Selected) {
+                btn.classList.add('active');
                 btn.style.opacity = '1';
             } else {
+                btn.classList.remove('active');
                 btn.style.opacity = '0.3';
             }
         });
+
+        // Apply saved player selection for Team 2
+        document.querySelectorAll('.team-right-player-box .player-btn').forEach(btn => {
+            const num = parseInt(btn.textContent);
+            if (num === team2Selected) {
+                btn.classList.add('active');
+                btn.style.opacity = '1';
+            } else {
+                btn.classList.remove('active');
+                btn.style.opacity = '0.3';
+            }
+        });
+    }
+
+    function handlePlayerClick(btn) {
+        const teamBoxLeft = btn.closest('.team-left-player-box');
+        const teamBoxRight = btn.closest('.team-right-player-box');
+        const selectedNumber = parseInt(btn.textContent);
+        let payload = {};
+
+        if (teamBoxLeft) {
+            // Deselect others
+            teamBoxLeft.querySelectorAll('.player-btn').forEach(b => {
+                b.classList.remove('active');
+                b.style.opacity = '0.3';
+            });
+            // Activate clicked
+            btn.classList.add('active');
+            btn.style.opacity = '1';
+            payload = { team1_player_left: selectedNumber };
+        } else if (teamBoxRight) {
+            teamBoxRight.querySelectorAll('.player-btn').forEach(b => {
+                b.classList.remove('active');
+                b.style.opacity = '0.3';
+            });
+            btn.classList.add('active');
+            btn.style.opacity = '1';
+            payload = { team2_player_left: selectedNumber };
+        }
+
+        // Save selection
+        saveScoreToDB(payload);
+    }
+
+    // Attach click handlers
+    document.querySelectorAll('.player-btn').forEach(btn => {
+        btn.addEventListener('click', () => handlePlayerClick(btn));
     });
 
+    // Run on page load
+    document.addEventListener('DOMContentLoaded', initializePlayerSelection);
 </script>
 </body>
 </html>

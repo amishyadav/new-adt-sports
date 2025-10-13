@@ -13,6 +13,11 @@ class TeamMatchScore extends Model
         'team_match_id',
         'team1_score',
         'team2_score',
+        'team1_player_left',
+        'team2_player_left',
+        'court_swap',
+        'team1_total_raid',
+        'team2_total_raid',
         'user_id'
     ];
 

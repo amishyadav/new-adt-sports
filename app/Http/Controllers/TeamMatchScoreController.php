@@ -24,11 +24,7 @@ class TeamMatchScoreController extends Controller
 
         $match = TeamMatchScore::whereId($id)->first();
 
-        $match->update([
-            'team1_score' => $request->team1_score,
-            'team2_score' => $request->team2_score,
-            'user_id' => auth()->id() ?? null,
-        ]);
+        $match->update($request->all());
 
         return response()->json(['success' => true]);
     }
