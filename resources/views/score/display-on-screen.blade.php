@@ -101,7 +101,7 @@
     <!-- Team A -->
     <div class="team-panel">
         <div class="team-name">TEAM A</div>
-        <div class="team-score">00</div>
+        <div class="team-score" id="teamAScore">00</div>
         <div class="players">
             <img class="player" src="{{asset('assets/Images/active_player.svg')}}" />
             <img class="player" src="{{asset('assets/Images/active_player.svg')}}" />
@@ -123,7 +123,7 @@
     <!-- Team B -->
     <div class="team-panel right">
         <div class="team-name">TEAM B</div>
-        <div class="team-score">00</div>
+        <div class="team-score" id="teamBScore">00</div>
         <div class="players">
             <img class="player" src="{{asset('assets/Images/active_player.svg')}}" />
             <img class="player" src="{{asset('assets/Images/active_player.svg')}}" />
@@ -136,6 +136,31 @@
     </div>
 
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+{{--<script src="{{ mix('js/app.js') }}"></script>--}}
+
+<script>
+    import Echo from "laravel-echo";
+
+    window.Pusher = require("pusher-js");
+
+    window.Echo = new Echo({
+        broadcaster: 'pusher',
+        key: "{{ config('broadcasting.connections.pusher.key') }}",
+        cluster: "{{ config('broadcasting.connections.pusher.options.cluster') }}",
+        forceTLS: true
+    });
+
+    const matchId = "{{ $score->id }}";
+
+    window.Echo.channel('match-' + matchId)
+        .listen('ScoreUpdated', (e) => {
+            document.getElementById('teamAScore').innerText = e.scoreData.team1_score;
+            document.getElementById('teamBScore').innerText = e.scoreData.team2_score;
+        });
+</script>
+
 
 </body>
 </html>

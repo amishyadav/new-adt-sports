@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ScoreUpdated;
 use App\Models\TeamMatch;
 use App\Models\TeamMatchScore;
 use Illuminate\Http\Request;
@@ -25,6 +26,11 @@ class TeamMatchScoreController extends Controller
         $match = TeamMatchScore::whereId($id)->first();
 
         $match->update($request->all());
+
+        broadcast(new ScoreUpdated($id, [
+            'team1_score' => $request->team1_score,
+            'team2_score' => $request->team2_score,
+        ]));
 
         return response()->json(['success' => true]);
     }

@@ -37,6 +37,8 @@
         "datatables": "^1.10.18",
         "intl-tel-input": "^17.0.19",
         "jquery": "^3.2.1",
+        "laravel-echo": "^2.2.4",
+        "pusher-js": "^8.4.0",
         "quill": "^1.3.7"
     }
 }

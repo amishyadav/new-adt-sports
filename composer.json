@@ -19,6 +19,7 @@
         "mariuzzo/laravel-js-localization": "^1.10",
         "pragmarx/google2fa-laravel": "^2.1",
         "pragmarx/google2fa-qrcode": "^3.0",
+        "pusher/pusher-php-server": "^7.2",
         "rap2hpoutre/laravel-log-viewer": "^2.3",
         "rappasoft/laravel-livewire-tables": "^2.11",
         "spatie/laravel-cookie-consent": "^3.2",
