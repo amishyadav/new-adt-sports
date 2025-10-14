@@ -28,4 +28,18 @@ class TeamMatchScoreController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    public function timer($id)
+    {
+        $scores = TeamMatchScore::with('teamMatch.team1', 'teamMatch.team2')->where('id','=', $id)->first();
+
+        return view('score.timer')->with(['score' => $scores]);
+    }
+
+    public function mainScreen($id)
+    {
+        $scores = TeamMatchScore::with('teamMatch.team1', 'teamMatch.team2')->where('id','=', $id)->first();
+
+        return view('score.display-on-screen')->with(['score' => $scores]);
+    }
 }

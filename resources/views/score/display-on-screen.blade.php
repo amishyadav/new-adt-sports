@@ -103,13 +103,13 @@
         <div class="team-name">TEAM A</div>
         <div class="team-score">00</div>
         <div class="players">
-            <div class="player"></div>
-            <div class="player"></div>
-            <div class="player"></div>
-            <div class="player"></div>
-            <div class="player"></div>
-            <div class="player"></div>
-            <div class="player"></div>
+            <img class="player" src="{{asset('assets/Images/active_player.svg')}}" />
+            <img class="player" src="{{asset('assets/Images/active_player.svg')}}" />
+            <img class="player" src="{{asset('assets/Images/active_player.svg')}}" />
+            <img class="player" src="{{asset('assets/Images/active_player.svg')}}" />
+            <img class="player" src="{{asset('assets/Images/active_player.svg')}}" />
+            <img class="player" src="{{asset('assets/Images/non_active_player.svg')}}" />
+            <img class="player" src="{{asset('assets/Images/non_active_player.svg')}}" />
         </div>
     </div>
 
@@ -125,13 +125,13 @@
         <div class="team-name">TEAM B</div>
         <div class="team-score">00</div>
         <div class="players">
-            <div class="player"></div>
-            <div class="player"></div>
-            <div class="player"></div>
-            <div class="player"></div>
-            <div class="player"></div>
-            <div class="player"></div>
-            <div class="player"></div>
+            <img class="player" src="{{asset('assets/Images/active_player.svg')}}" />
+            <img class="player" src="{{asset('assets/Images/active_player.svg')}}" />
+            <img class="player" src="{{asset('assets/Images/active_player.svg')}}" />
+            <img class="player" src="{{asset('assets/Images/active_player.svg')}}" />
+            <img class="player" src="{{asset('assets/Images/active_player.svg')}}" />
+            <img class="player" src="{{asset('assets/Images/active_player.svg')}}" />
+            <img class="player" src="{{asset('assets/Images/active_player.svg')}}" />
         </div>
     </div>
 
