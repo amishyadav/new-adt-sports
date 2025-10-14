@@ -206,7 +206,7 @@
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     let historyStack = [];
 
@@ -229,7 +229,7 @@
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             },
-            success: function (response) {
+            success: function () {
                 console.log("Saved ✅", payload);
                 if (reload) location.reload();
             },
@@ -286,45 +286,67 @@
     document.querySelector('.btn-reset').addEventListener('click', () => location.reload());
     document.querySelector('.btn-refresh').addEventListener('click', () => location.reload());
 
-    // ------- SWAP COURTS -------
+    // ------- SWAP COURTS (with persistence) -------
     document.getElementById('swapBtn').addEventListener('click', () => {
+        toggleCourtSwap();
+    });
+
+    function toggleCourtSwap() {
         const teamsRow = document.getElementById('teamsRow');
         const leftCol = document.getElementById('teamLeftCol');
         const rightCol = document.getElementById('teamRightCol');
-        if (leftCol.nextElementSibling === rightCol) {
+        const leftPlayerBox = document.querySelector('.team-left-player-box');
+        const rightPlayerBox = document.querySelector('.team-right-player-box');
+        const playersManager = document.querySelector('.players-manager .row');
+
+        const courtSwapped = {{ $score->court_swap ? 'true' : 'false' }};
+
+        // Determine next state (toggle)
+        const newCourtSwapped = !courtSwapped;
+
+        // Swap DOM elements visually
+        if (newCourtSwapped) {
             teamsRow.insertBefore(rightCol, leftCol);
+            playersManager.insertBefore(rightPlayerBox.parentElement, leftPlayerBox.parentElement);
         } else {
             teamsRow.insertBefore(leftCol, rightCol);
+            playersManager.insertBefore(leftPlayerBox.parentElement, rightPlayerBox.parentElement);
         }
-    });
+
+        // Save the new state to DB and reload
+        saveScoreToDB({ court_swap: newCourtSwapped ? 1 : 0 }, true);
+    }
 
     // ------- PLAYER PANEL SELECTION -------
     function initializePlayerSelection() {
         const team1Selected = {{ $score->team1_player_left }};
         const team2Selected = {{ $score->team2_player_left }};
+        const courtSwapped = {{ $score->court_swap ? 'true' : 'false' }};
 
-        // Apply saved player selection for Team 1
+        // Apply saved court swap first
+        if (courtSwapped) {
+            const teamsRow = document.getElementById('teamsRow');
+            const leftCol = document.getElementById('teamLeftCol');
+            const rightCol = document.getElementById('teamRightCol');
+            const leftPlayerBox = document.querySelector('.team-left-player-box');
+            const rightPlayerBox = document.querySelector('.team-right-player-box');
+            const playersManager = document.querySelector('.players-manager .row');
+
+            teamsRow.insertBefore(rightCol, leftCol);
+            playersManager.insertBefore(rightPlayerBox.parentElement, leftPlayerBox.parentElement);
+        }
+
+        // Apply player active states
         document.querySelectorAll('.team-left-player-box .player-btn').forEach(btn => {
             const num = parseInt(btn.textContent);
-            if (num === team1Selected) {
-                btn.classList.add('active');
-                btn.style.opacity = '1';
-            } else {
-                btn.classList.remove('active');
-                btn.style.opacity = '0.3';
-            }
+            btn.classList.toggle('active', num === team1Selected);
+            btn.style.opacity = num === team1Selected ? '1' : '0.3';
         });
 
-        // Apply saved player selection for Team 2
         document.querySelectorAll('.team-right-player-box .player-btn').forEach(btn => {
             const num = parseInt(btn.textContent);
-            if (num === team2Selected) {
-                btn.classList.add('active');
-                btn.style.opacity = '1';
-            } else {
-                btn.classList.remove('active');
-                btn.style.opacity = '0.3';
-            }
+            btn.classList.toggle('active', num === team2Selected);
+            btn.style.opacity = num === team2Selected ? '1' : '0.3';
         });
     }
 
@@ -335,12 +357,10 @@
         let payload = {};
 
         if (teamBoxLeft) {
-            // Deselect others
             teamBoxLeft.querySelectorAll('.player-btn').forEach(b => {
                 b.classList.remove('active');
                 b.style.opacity = '0.3';
             });
-            // Activate clicked
             btn.classList.add('active');
             btn.style.opacity = '1';
             payload = { team1_player_left: selectedNumber };
@@ -354,11 +374,10 @@
             payload = { team2_player_left: selectedNumber };
         }
 
-        // Save selection
         saveScoreToDB(payload);
     }
 
-    // Attach click handlers
+    // Attach click handlers for players
     document.querySelectorAll('.player-btn').forEach(btn => {
         btn.addEventListener('click', () => handlePlayerClick(btn));
     });
@@ -366,5 +385,6 @@
     // Run on page load
     document.addEventListener('DOMContentLoaded', initializePlayerSelection);
 </script>
+
 </body>
 </html>
