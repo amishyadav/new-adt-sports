@@ -3,12 +3,12 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Kabaddi Scoreboard</title>
+    <title>Kabaddi Timer Controller</title>
 
-    <!-- Bootstrap 5 CSS -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- Bootstrap & Fonts -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
@@ -75,22 +75,19 @@
 </head>
 <body>
 <main class="container py-4">
-    <header class="topbar">Match: 1 – Telugu vs Tamil</header>
+    <header class="topbar">Match Controller</header>
 
-    <!-- Timer + Controls -->
+    <!-- Main Timer -->
     <section class="p-3 mb-3 shadow bg-color">
         <div class="row align-items-center">
-            <!-- Left: Timer + Start/Stop -->
             <div class="col-md d-flex align-items-center gap-2 mb-3 mb-md-0">
                 <div class="timer me-3">
-                    <small>Second Half</small>
+                    <small id="halfLabel">First Half</small>
                     <div id="main-timer" class="time">20:00</div>
                 </div>
                 <button class="btn btn-success btn-lg" id="startBtn">Start</button>
                 <button class="btn btn-danger btn-lg" id="stopBtn">Stop</button>
             </div>
-
-            <!-- Right: Input / Set / Reset -->
             <div class="col-md d-flex justify-content-md-end gap-2">
                 <input type="number" class="form-control w-auto text-center" id="timeInput" placeholder="Minutes">
                 <button class="btn btn-secondary" id="setBtn">Set</button>
@@ -100,20 +97,9 @@
         </div>
     </section>
 
-    <!-- Swap courts + Half Selector -->
-    <section class="p-3 mb-3 text-center bg-color">
-        <div class="d-flex justify-content-center gap-2">
-            <button class="btn btn-outline-light" id="swapBtn">Swap Courts</button>
-            <select class="form-select w-auto">
-                <option>First Half</option>
-                <option selected>Second Half</option>
-                <option>Extra Time</option>
-            </select>
-        </div>
-    </section>
-
     <!-- Teams -->
     <section class="row g-3" id="teamsRow">
+        <!-- LEFT TEAM -->
         <div class="col-md-6" id="teamLeftCol">
             <article class="team team--left">
                 <div class="team__header">Telugu Titans</div>
@@ -128,6 +114,7 @@
             </article>
         </div>
 
+        <!-- RIGHT TEAM -->
         <div class="col-md-6" id="teamRightCol">
             <article class="team team--right">
                 <div class="team__header">Tamil Thalaivas</div>
@@ -142,155 +129,120 @@
             </article>
         </div>
     </section>
-
-    <!-- Footer -->
-    <div class="text-center mt-4">
-        <button class="btn btn-outline-light" onclick="location.reload()">Refresh Page</button>
-    </div>
 </main>
 
-<!-- Bootstrap 5 JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
 <script>
-    // Main Timer
-    let mainTimerDisplay = document.getElementById('main-timer');
-    let defaultMainTime = 20 * 60; // 20 minutes
-    let mainTime = defaultMainTime;
+    const csrf = document.querySelector('meta[name="csrf-token"]').content;
+    const matchId = {{ $score->id ?? 1 }};
+
+    // MAIN TIMER -----------------------
+    let mainTime = 1200; // 20min
     let mainInterval = null;
 
-    function formatTime(seconds) {
-        let m = String(Math.floor(seconds / 60)).padStart(2, '0');
-        let s = String(seconds % 60).padStart(2, '0');
+    function formatMain(sec) {
+        let m = String(Math.floor(sec / 60)).padStart(2, '0');
+        let s = String(sec % 60).padStart(2, '0');
         return `${m}:${s}`;
     }
 
-    // Update timer display
-    function updateMainTimer() {
-        mainTimerDisplay.textContent = formatTime(mainTime);
+    function updateMainDisplay() {
+        document.getElementById('main-timer').textContent = formatMain(mainTime);
     }
 
-    // Start main timer countdown
-    function startMainTimer() {
-        if (mainInterval) return; // prevent multiple intervals
+    function startMain() {
+        if (mainInterval) return;
         mainInterval = setInterval(() => {
-            if (mainTime > 0) {
-                mainTime--;
-                updateMainTimer();
-            } else {
-                clearInterval(mainInterval);
-                mainInterval = null;
-            }
+            if (mainTime > 0) mainTime--;
+            else stopMain();
+            updateMainDisplay();
+            sendTimerUpdate();
         }, 1000);
     }
 
-    // Stop main timer countdown
-    function stopMainTimer() {
+    function stopMain() {
         clearInterval(mainInterval);
         mainInterval = null;
+        sendTimerUpdate();
     }
 
-    // Set button functionality
-    document.getElementById('setBtn').addEventListener('click', () => {
-        let minutes = parseInt(document.getElementById('timeInput').value);
-        if (!isNaN(minutes) && minutes > 0) {
-            mainTime = minutes * 60;
-            updateMainTimer();
-        }
-    });
+    function resetMain() {
+        stopMain();
+        mainTime = 1200;
+        updateMainDisplay();
+        sendTimerUpdate();
+    }
 
-    // Set & Start button functionality
-    document.getElementById('setStartBtn').addEventListener('click', () => {
-        let minutes = parseInt(document.getElementById('timeInput').value);
-        if (!isNaN(minutes) && minutes > 0) {
-            mainTime = minutes * 60;
-            updateMainTimer();
-            stopMainTimer(); // ensure no duplicates
-            startMainTimer();
-        }
-    });
+    // RAID TIMERS -----------------------
+    let leftRaid = 30, rightRaid = 30;
+    let leftInterval = null, rightInterval = null;
 
-    // Start / Stop / Reset buttons
-    document.getElementById('startBtn').addEventListener('click', startMainTimer);
-    document.getElementById('stopBtn').addEventListener('click', stopMainTimer);
-    document.getElementById('resetBtn').addEventListener('click', () => {
-        stopMainTimer();
-        mainTime = defaultMainTime;
-        updateMainTimer();
-    });
+    function updateLeft() {
+        document.getElementById('raidTimerLeft').textContent = leftRaid;
+    }
+    function updateRight() {
+        document.getElementById('raidTimerRight').textContent = rightRaid;
+    }
 
-    // Half Selector
-    document.querySelector('select').addEventListener('change', (e) => {
-        document.querySelector('.timer small').textContent = e.target.value;
-    });
-
-    // -------- RAID TIMERS --------
-    // Left
-    let raidTimerDisplayLeft = document.getElementById('raidTimerLeft');
-    let raidIntervalLeft = null;
-    let raidTimeLeft = 30;
-
-    function startRaidCountdownLeft() {
-        clearInterval(raidIntervalLeft);
-        raidTimeLeft = 30;
-        raidTimerDisplayLeft.textContent = raidTimeLeft;
-        raidIntervalLeft = setInterval(() => {
-            if (raidTimeLeft > 0) {
-                raidTimeLeft--;
-                raidTimerDisplayLeft.textContent = raidTimeLeft;
-            } else {
-                clearInterval(raidIntervalLeft);
-            }
+    function startLeft() {
+        clearInterval(leftInterval);
+        leftRaid = 30;
+        updateLeft();
+        leftInterval = setInterval(() => {
+            if (leftRaid > 0) leftRaid--;
+            else clearInterval(leftInterval);
+            updateLeft();
+            sendTimerUpdate();
         }, 1000);
     }
 
-    function stopRaidCountdownLeft() {
-        clearInterval(raidIntervalLeft);
-    }
-
-    document.getElementById('raidInBtnLeft').addEventListener('click', startRaidCountdownLeft);
-    document.getElementById('raidOutBtnLeft').addEventListener('click', stopRaidCountdownLeft);
-
-    // Right
-    let raidTimerDisplayRight = document.getElementById('raidTimerRight');
-    let raidIntervalRight = null;
-    let raidTimeRight = 30;
-
-    function startRaidCountdownRight() {
-        clearInterval(raidIntervalRight);
-        raidTimeRight = 30;
-        raidTimerDisplayRight.textContent = raidTimeRight;
-        raidIntervalRight = setInterval(() => {
-            if (raidTimeRight > 0) {
-                raidTimeRight--;
-                raidTimerDisplayRight.textContent = raidTimeRight;
-            } else {
-                clearInterval(raidIntervalRight);
-            }
+    function stopLeft() { clearInterval(leftInterval); sendTimerUpdate(); }
+    function startRight() {
+        clearInterval(rightInterval);
+        rightRaid = 30;
+        updateRight();
+        rightInterval = setInterval(() => {
+            if (rightRaid > 0) rightRaid--;
+            else clearInterval(rightInterval);
+            updateRight();
+            sendTimerUpdate();
         }, 1000);
     }
+    function stopRight() { clearInterval(rightInterval); sendTimerUpdate(); }
 
-    function stopRaidCountdownRight() {
-        clearInterval(raidIntervalRight);
+    // ------------------ AJAX SYNC ------------------
+    function sendTimerUpdate() {
+        fetch('{{ route("timer.update", $score->id) }}', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrf },
+            body: JSON.stringify({
+                match_id: matchId,
+                main_timer_seconds: mainTime,
+                raid_timer_seconds_left: leftRaid,
+                raid_timer_seconds_right: rightRaid
+            })
+        }).catch(e => console.error(e));
     }
 
-    document.getElementById('raidInBtnRight').addEventListener('click', startRaidCountdownRight);
-    document.getElementById('raidOutBtnRight').addEventListener('click', stopRaidCountdownRight);
+    // BUTTON HOOKS ------------------
+    document.getElementById('startBtn').onclick = startMain;
+    document.getElementById('stopBtn').onclick = stopMain;
+    document.getElementById('resetBtn').onclick = resetMain;
+    document.getElementById('raidInBtnLeft').onclick = startLeft;
+    document.getElementById('raidOutBtnLeft').onclick = stopLeft;
+    document.getElementById('raidInBtnRight').onclick = startRight;
+    document.getElementById('raidOutBtnRight').onclick = stopRight;
+    document.getElementById('setBtn').onclick = () => {
+        let m = parseInt(document.getElementById('timeInput').value);
+        if (!isNaN(m) && m > 0) { mainTime = m * 60; updateMainDisplay(); sendTimerUpdate(); }
+    };
+    document.getElementById('setStartBtn').onclick = () => {
+        let m = parseInt(document.getElementById('timeInput').value);
+        if (!isNaN(m) && m > 0) { mainTime = m * 60; updateMainDisplay(); stopMain(); startMain(); }
+    };
 
-    // Swap Courts
-    document.getElementById('swapBtn').addEventListener('click', () => {
-        const teamsRow = document.getElementById('teamsRow');
-        const leftCol = document.getElementById('teamLeftCol');
-        const rightCol = document.getElementById('teamRightCol');
-
-        // Swap their positions
-        if (leftCol.nextElementSibling === rightCol) {
-            teamsRow.insertBefore(rightCol, leftCol);
-        } else {
-            teamsRow.insertBefore(leftCol, rightCol);
-        }
-    });
+    updateMainDisplay();
+    updateLeft();
+    updateRight();
 </script>
-
 </body>
 </html>

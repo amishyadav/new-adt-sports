@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Kabaddi Scoreboard</title>
+    <title>Kabaddi Display Screen</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -103,13 +103,13 @@
         <div class="team-name">TEAM A</div>
         <div class="team-score">00</div>
         <div class="players">
-            <img class="player" src="{{asset('assets/Images/active_player.svg')}}" />
-            <img class="player" src="{{asset('assets/Images/active_player.svg')}}" />
-            <img class="player" src="{{asset('assets/Images/active_player.svg')}}" />
-            <img class="player" src="{{asset('assets/Images/active_player.svg')}}" />
-            <img class="player" src="{{asset('assets/Images/active_player.svg')}}" />
-            <img class="player" src="{{asset('assets/Images/non_active_player.svg')}}" />
-            <img class="player" src="{{asset('assets/Images/non_active_player.svg')}}" />
+            <img class="player" src="{{ asset('assets/Images/active_player.svg') }}" />
+            <img class="player" src="{{ asset('assets/Images/active_player.svg') }}" />
+            <img class="player" src="{{ asset('assets/Images/active_player.svg') }}" />
+            <img class="player" src="{{ asset('assets/Images/active_player.svg') }}" />
+            <img class="player" src="{{ asset('assets/Images/active_player.svg') }}" />
+            <img class="player" src="{{ asset('assets/Images/non_active_player.svg') }}" />
+            <img class="player" src="{{ asset('assets/Images/non_active_player.svg') }}" />
         </div>
     </div>
 
@@ -125,17 +125,51 @@
         <div class="team-name">TEAM B</div>
         <div class="team-score">00</div>
         <div class="players">
-            <img class="player" src="{{asset('assets/Images/active_player.svg')}}" />
-            <img class="player" src="{{asset('assets/Images/active_player.svg')}}" />
-            <img class="player" src="{{asset('assets/Images/active_player.svg')}}" />
-            <img class="player" src="{{asset('assets/Images/active_player.svg')}}" />
-            <img class="player" src="{{asset('assets/Images/active_player.svg')}}" />
-            <img class="player" src="{{asset('assets/Images/active_player.svg')}}" />
-            <img class="player" src="{{asset('assets/Images/active_player.svg')}}" />
+            <img class="player" src="{{ asset('assets/Images/active_player.svg') }}" />
+            <img class="player" src="{{ asset('assets/Images/active_player.svg') }}" />
+            <img class="player" src="{{ asset('assets/Images/active_player.svg') }}" />
+            <img class="player" src="{{ asset('assets/Images/active_player.svg') }}" />
+            <img class="player" src="{{ asset('assets/Images/active_player.svg') }}" />
+            <img class="player" src="{{ asset('assets/Images/active_player.svg') }}" />
+            <img class="player" src="{{ asset('assets/Images/active_player.svg') }}" />
         </div>
     </div>
-
 </div>
+
+<script>
+    // Match ID passed from Laravel route
+    const matchId = {{ $score->id }};
+    const mainTimerDisplay = document.getElementById('mainTimer');
+    const leftRaidDisplay = document.getElementById('leftRaidTimer');
+    const rightRaidDisplay = document.getElementById('rightRaidTimer');
+
+    // Helper to format time
+    function formatTime(seconds) {
+        let m = String(Math.floor(seconds / 60)).padStart(2, '0');
+        let s = String(seconds % 60).padStart(2, '0');
+        return `${m}:${s}`;
+    }
+
+    // Fetch timer data from backend
+    function fetchTimers() {
+        fetch(`/api/match/${matchId}/timers`)
+            .then(res => res.json())
+            .then(data => {
+                if (data) {
+                    mainTimerDisplay.textContent = formatTime(data.main_seconds);
+                    leftRaidDisplay.textContent = data.raid_left;
+                    rightRaidDisplay.textContent = data.raid_right;
+                }
+            })
+            .catch(err => console.error('Error fetching timers:', err));
+    }
+
+    // Poll every second for updates
+    // setInterval(fetchTimers, 1000);
+
+    // Initial fetch on load
+    fetchTimers();
+</script>
 
 </body>
 </html>

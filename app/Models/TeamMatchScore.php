@@ -18,6 +18,10 @@ class TeamMatchScore extends Model
         'court_swap',
         'team1_total_raid',
         'team2_total_raid',
+        'main_seconds',
+        'raid_seconds',
+        'main_running',
+        'raid_running',
         'user_id'
     ];
 

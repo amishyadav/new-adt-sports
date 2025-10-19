@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\TeamMatch;
 use App\Models\TeamMatchScore;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use SebastianBergmann\Timer\Timer;
 
 class TeamMatchScoreController extends Controller
 {
@@ -42,4 +44,30 @@ class TeamMatchScoreController extends Controller
 
         return view('score.display-on-screen')->with(['score' => $scores]);
     }
+
+    public function getTimers($id)
+    {
+        $match = TeamMatchScore::findOrFail($id);
+        return response()->json([
+            'main_seconds' => $match->main_seconds,
+            'raid_seconds' => $match->raid_seconds,
+            'main_running' => $match->main_running,
+            'raid_running' => $match->raid_running,
+        ]);
+    }
+
+    public function updateTimers(Request $request, $id)
+    {
+        $match = TeamMatchScore::findOrFail($id);
+dd($request->all());
+        if ($request->has('main_seconds')) $match->main_seconds = $request->main_seconds;
+        if ($request->has('raid_seconds')) $match->raid_seconds = $request->raid_seconds;
+        if ($request->has('main_running')) $match->main_running = $request->main_running;
+        if ($request->has('raid_running')) $match->raid_running = $request->raid_running;
+
+        $match->save();
+
+        return response()->json(['success' => true]);
+    }
+
 }
