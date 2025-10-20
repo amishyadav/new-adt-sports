@@ -53,7 +53,7 @@ Route::group([
     Route::get('match/{id}/{slug}/timer-controller', [TeamMatchScoreController::class, 'timer'])->name('team-match-score.timer');
     Route::get('match/{id}/{slug}/main-screen', [TeamMatchScoreController::class, 'mainScreen'])->name('team-match-score.main-screen');
 
-    Route::get('match/{id}/get-timer', [TeamMatchScoreController::class, 'getTimers'])->name('timer.get');
+    Route::get('match/{id}/get-timer-and-score', [TeamMatchScoreController::class, 'getTimerAndScore'])->name('timer-score.get');
     Route::post('match/{id}/update-timer', [TeamMatchScoreController::class, 'updateTimers'])->name('timer.update');
 
     Route::resource('registered-players', RegisteredPlayerController::class);

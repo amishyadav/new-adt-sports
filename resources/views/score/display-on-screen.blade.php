@@ -116,8 +116,8 @@
     <!-- Center -->
     <div class="center-panel">
         <div class="half-label">1ST HALF</div>
-        <div class="timer">20:00</div>
-        <div class="raid-timer">30</div>
+        <div class="timer" id="mainTimer">20:00</div>
+        <div class="raid-timer" id="leftRaidTimer">30</div>
     </div>
 
     <!-- Team B -->
@@ -141,7 +141,7 @@
     const matchId = {{ $score->id }};
     const mainTimerDisplay = document.getElementById('mainTimer');
     const leftRaidDisplay = document.getElementById('leftRaidTimer');
-    const rightRaidDisplay = document.getElementById('rightRaidTimer');
+    // const rightRaidDisplay = document.getElementById('leftRaidTimer');
 
     // Helper to format time
     function formatTime(seconds) {
@@ -152,13 +152,13 @@
 
     // Fetch timer data from backend
     function fetchTimers() {
-        fetch(`/api/match/${matchId}/timers`)
+        fetch('{{ route("timer-score.get", $score->id) }}')
             .then(res => res.json())
             .then(data => {
                 if (data) {
-                    mainTimerDisplay.textContent = formatTime(data.main_seconds);
-                    leftRaidDisplay.textContent = data.raid_left;
-                    rightRaidDisplay.textContent = data.raid_right;
+                    mainTimerDisplay.textContent = formatTime(data.main_timer_seconds);
+                    leftRaidDisplay.textContent = data.raid_timer_seconds_left;
+                    // rightRaidDisplay.textContent = data.raid_timer_seconds_right;
                 }
             })
             .catch(err => console.error('Error fetching timers:', err));

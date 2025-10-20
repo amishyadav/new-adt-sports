@@ -3,7 +3,7 @@
     $slug = Str::slug($row->team1->name . '-vs-' . $row->team2->name);
     $matchID = \App\Models\TeamMatchScore::where('team_match_id', '=', $row->id)->pluck('id')->toArray();
 @endphp
-
+@if($matchID)
 <a href="{{ route('team-match-score.index',['id' => $matchID[0], 'slug' => $slug]) }}" target="_blank"
    class="btn btn-outline-success me-2">
     Scoreboard
@@ -16,6 +16,7 @@
    class="btn btn-outline-danger">
     Main Screen
 </a>
+@endif
 <a href="javascript:void(0)" title="Edit"
    class="btn px-1 text-primary fs-3 team-match-edit-btn" data-bs-toggle="tooltip"
    data-bs-original-title="Edit" data-id="{{$row->id}}" wire:key="{{$row->id}}">
