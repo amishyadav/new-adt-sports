@@ -47,7 +47,7 @@ class TeamMatchScoreController extends Controller
 
     public function getTimerAndScore($id)
     {
-        $match = TeamMatchScore::findOrFail($id);
+        $match = TeamMatchScore::with('teamMatch.team1', 'teamMatch.team2')->findOrFail($id);
         return response()->json($match);
     }
 
@@ -56,8 +56,9 @@ class TeamMatchScoreController extends Controller
         $match = TeamMatchScore::findOrFail($id);
 
         if ($request->has('main_timer_seconds')) $match->main_timer_seconds = $request->main_timer_seconds;
-        if ($request->has('raid_timer_seconds_left')) $match->raid_timer_seconds_left = $request->raid_timer_seconds_left;
-        if ($request->has('raid_timer_seconds_right')) $match->raid_timer_seconds_right = $request->raid_timer_seconds_right;
+//        if ($request->has('raid_timer_seconds_left')) $match->raid_timer_seconds_left = $request->raid_timer_seconds_left;
+//        if ($request->has('raid_timer_seconds_right')) $match->raid_timer_seconds_right = $request->raid_timer_seconds_right;
+        if ($request->has('raid_timer_seconds')) $match->raid_timer_seconds = $request->raid_timer_seconds;
 
         $match->save();
 

@@ -172,42 +172,39 @@
         sendTimerUpdate();
     }
 
-    // RAID TIMERS -----------------------
-    let leftRaid = 30, rightRaid = 30;
-    let leftInterval = null, rightInterval = null;
+    // RAID TIMER -----------------------
+    let raidTime = 30;
+    let raidInterval = null;
+    let activeSide = null; // 'left' or 'right'
 
-    function updateLeft() {
-        document.getElementById('raidTimerLeft').textContent = leftRaid;
-    }
-    function updateRight() {
-        document.getElementById('raidTimerRight').textContent = rightRaid;
+    function updateRaidDisplay() {
+        document.getElementById('raidTimerLeft').textContent = (activeSide === 'left') ? raidTime : 30;
+        document.getElementById('raidTimerRight').textContent = (activeSide === 'right') ? raidTime : 30;
     }
 
-    function startLeft() {
-        clearInterval(leftInterval);
-        leftRaid = 30;
-        updateLeft();
-        leftInterval = setInterval(() => {
-            if (leftRaid > 0) leftRaid--;
-            else clearInterval(leftInterval);
-            updateLeft();
+    function startRaid(side) {
+        // stop any existing raid timer
+        clearInterval(raidInterval);
+
+        activeSide = side;
+        raidTime = 30;
+        updateRaidDisplay();
+
+        raidInterval = setInterval(() => {
+            if (raidTime > 0) raidTime--;
+            else stopRaid();
+
+            updateRaidDisplay();
             sendTimerUpdate();
         }, 1000);
     }
 
-    function stopLeft() { clearInterval(leftInterval); sendTimerUpdate(); }
-    function startRight() {
-        clearInterval(rightInterval);
-        rightRaid = 30;
-        updateRight();
-        rightInterval = setInterval(() => {
-            if (rightRaid > 0) rightRaid--;
-            else clearInterval(rightInterval);
-            updateRight();
-            sendTimerUpdate();
-        }, 1000);
+    function stopRaid() {
+        clearInterval(raidInterval);
+        raidInterval = null;
+        activeSide = null;
+        sendTimerUpdate();
     }
-    function stopRight() { clearInterval(rightInterval); sendTimerUpdate(); }
 
     // ------------------ AJAX SYNC ------------------
     function sendTimerUpdate() {
@@ -217,8 +214,8 @@
             body: JSON.stringify({
                 match_id: matchId,
                 main_timer_seconds: mainTime,
-                raid_timer_seconds_left: leftRaid,
-                raid_timer_seconds_right: rightRaid
+                raid_timer_seconds: raidTime,
+                active_side: activeSide // optional, if you want to know who’s raiding
             })
         }).catch(e => console.error(e));
     }
@@ -227,10 +224,12 @@
     document.getElementById('startBtn').onclick = startMain;
     document.getElementById('stopBtn').onclick = stopMain;
     document.getElementById('resetBtn').onclick = resetMain;
-    document.getElementById('raidInBtnLeft').onclick = startLeft;
-    document.getElementById('raidOutBtnLeft').onclick = stopLeft;
-    document.getElementById('raidInBtnRight').onclick = startRight;
-    document.getElementById('raidOutBtnRight').onclick = stopRight;
+
+    document.getElementById('raidInBtnLeft').onclick = () => startRaid('left');
+    document.getElementById('raidOutBtnLeft').onclick = stopRaid;
+    document.getElementById('raidInBtnRight').onclick = () => startRaid('right');
+    document.getElementById('raidOutBtnRight').onclick = stopRaid;
+
     document.getElementById('setBtn').onclick = () => {
         let m = parseInt(document.getElementById('timeInput').value);
         if (!isNaN(m) && m > 0) { mainTime = m * 60; updateMainDisplay(); sendTimerUpdate(); }
@@ -241,8 +240,8 @@
     };
 
     updateMainDisplay();
-    updateLeft();
-    updateRight();
+    updateRaidDisplay();
 </script>
+
 </body>
 </html>
