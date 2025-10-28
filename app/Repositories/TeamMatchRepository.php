@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\TeamMatch;
 use App\Models\TeamMatchScore;
+use App\Models\Timer;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
@@ -55,6 +56,13 @@ class TeamMatchRepository extends BaseRepository
                    'team1_score' => 0,
                    'team2_score' => 0,
                    'user_id' => getLogInUserId(),
+                ]);
+
+                Timer::create([
+                    'team_match_id' => $teamMatch->id,
+                    'main_timer_seconds' => 1200,
+                    'raid_timer_seconds' => 30,
+                    'user_id' => getLogInUserId(),
                 ]);
             }
 

@@ -3,12 +3,12 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Kabaddi Scoreboard</title>
+    <title>Kabaddi Timer Controller</title>
 
-    <!-- Bootstrap 5 CSS -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- Bootstrap & Fonts -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
@@ -60,11 +60,9 @@
         .team__body { display: grid; place-items: center; gap: 10px; }
         .score { font-family: Rajdhani; font-size: 60px; font-weight: 700 }
         .status { font-family: Rajdhani; font-size: 20px; letter-spacing: .4em; text-transform: uppercase; color: #ffcf66 }
-
         .border {
             border: var(--bs-border-width) var(--bs-border-style) #3f454a !important;
         }
-
         .bg-color {
             background: #111823 !important;
             border: 2px solid #222a36 !important;
@@ -75,22 +73,19 @@
 </head>
 <body>
 <main class="container py-4">
-    <header class="topbar">Match: 1 – Telugu vs Tamil</header>
+    <header class="topbar">Match Controller</header>
 
-    <!-- Timer + Controls -->
+    <!-- Main Timer -->
     <section class="p-3 mb-3 shadow bg-color">
         <div class="row align-items-center">
-            <!-- Left: Timer + Start/Stop -->
             <div class="col-md d-flex align-items-center gap-2 mb-3 mb-md-0">
                 <div class="timer me-3">
-                    <small>Second Half</small>
+                    <small id="halfLabel">First Half</small>
                     <div id="main-timer" class="time">20:00</div>
                 </div>
                 <button class="btn btn-success btn-lg" id="startBtn">Start</button>
                 <button class="btn btn-danger btn-lg" id="stopBtn">Stop</button>
             </div>
-
-            <!-- Right: Input / Set / Reset -->
             <div class="col-md d-flex justify-content-md-end gap-2">
                 <input type="number" class="form-control w-auto text-center" id="timeInput" placeholder="Minutes">
                 <button class="btn btn-secondary" id="setBtn">Set</button>
@@ -100,20 +95,9 @@
         </div>
     </section>
 
-    <!-- Swap courts + Half Selector -->
-    <section class="p-3 mb-3 text-center bg-color">
-        <div class="d-flex justify-content-center gap-2">
-            <button class="btn btn-outline-light" id="swapBtn">Swap Courts</button>
-            <select class="form-select w-auto">
-                <option>First Half</option>
-                <option selected>Second Half</option>
-                <option>Extra Time</option>
-            </select>
-        </div>
-    </section>
-
     <!-- Teams -->
     <section class="row g-3" id="teamsRow">
+        <!-- LEFT TEAM -->
         <div class="col-md-6" id="teamLeftCol">
             <article class="team team--left">
                 <div class="team__header">Telugu Titans</div>
@@ -128,6 +112,7 @@
             </article>
         </div>
 
+        <!-- RIGHT TEAM -->
         <div class="col-md-6" id="teamRightCol">
             <article class="team team--right">
                 <div class="team__header">Tamil Thalaivas</div>
@@ -142,153 +127,248 @@
             </article>
         </div>
     </section>
-
-    <!-- Footer -->
-    <div class="text-center mt-4">
-        <button class="btn btn-outline-light" onclick="location.reload()">Refresh Page</button>
-    </div>
 </main>
 
-<!-- Bootstrap 5 JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
 <script>
-    // Main Timer
-    let mainTimerDisplay = document.getElementById('main-timer');
-    let defaultMainTime = 20 * 60; // 20 minutes
-    let mainTime = defaultMainTime;
+    const csrf = document.querySelector('meta[name="csrf-token"]').content;
+    const matchId = {{ $score->id ?? 1 }};
+
+    // MAIN TIMER -----------------------
+    let mainTime = 1200; // 20min default
     let mainInterval = null;
 
-    function formatTime(seconds) {
-        let m = String(Math.floor(seconds / 60)).padStart(2, '0');
-        let s = String(seconds % 60).padStart(2, '0');
+    // RAID TIMER -----------------------
+    let raidTime = 30;
+    let raidInterval = null;
+    let activeSide = null; // 'left' or 'right'
+
+    // STORAGE KEYS
+    const MAIN_KEY = 'kabaddi_main_timer_state_{{ $score->id ?? 1 }}';
+    const RAID_KEY = 'kabaddi_raid_timer_state_{{ $score->id ?? 1 }}';
+
+    // ----------- FORMATTERS -----------
+    function formatMain(sec) {
+        let m = String(Math.floor(sec / 60)).padStart(2, '0');
+        let s = String(sec % 60).padStart(2, '0');
         return `${m}:${s}`;
     }
-
-    // Update timer display
-    function updateMainTimer() {
-        mainTimerDisplay.textContent = formatTime(mainTime);
+    function updateMainDisplay() {
+        document.getElementById('main-timer').textContent = formatMain(mainTime);
+    }
+    function updateRaidDisplay() {
+        // If a side is active, show remaining raidTime on that side, otherwise default 30
+        document.getElementById('raidTimerLeft').textContent = (activeSide === 'left') ? raidTime : 30;
+        document.getElementById('raidTimerRight').textContent = (activeSide === 'right') ? raidTime : 30;
     }
 
-    // Start main timer countdown
-    function startMainTimer() {
-        if (mainInterval) return; // prevent multiple intervals
+    // ----------- PERSISTENCE HELPERS -----------
+    function safeParse(raw) {
+        try { return JSON.parse(raw); } catch (e) { return null; }
+    }
+
+    function persistMainTimer() {
+        const obj = {
+            mainTime: mainTime,
+            running: !!mainInterval,
+            lastSaved: Date.now()
+        };
+        localStorage.setItem(MAIN_KEY, JSON.stringify(obj));
+    }
+
+    function persistRaidTimer() {
+        const obj = {
+            raidTime: raidTime,
+            activeSide: activeSide,
+            running: !!raidInterval,
+            lastSaved: Date.now()
+        };
+        localStorage.setItem(RAID_KEY, JSON.stringify(obj));
+    }
+
+    // ----------- MAIN TIMER LOGIC -----------
+    function startMain() {
+        if (mainInterval) return;
+        // start ticking
         mainInterval = setInterval(() => {
-            if (mainTime > 0) {
-                mainTime--;
-                updateMainTimer();
-            } else {
-                clearInterval(mainInterval);
-                mainInterval = null;
+            if (mainTime > 0) mainTime--;
+            else {
+                stopMain();
             }
+            updateMainDisplay();
+            persistMainTimer();
+            sendTimerUpdate();
         }, 1000);
+        // persist immediately with running = true
+        persistMainTimer();
     }
-
-    // Stop main timer countdown
-    function stopMainTimer() {
-        clearInterval(mainInterval);
-        mainInterval = null;
-    }
-
-    // Set button functionality
-    document.getElementById('setBtn').addEventListener('click', () => {
-        let minutes = parseInt(document.getElementById('timeInput').value);
-        if (!isNaN(minutes) && minutes > 0) {
-            mainTime = minutes * 60;
-            updateMainTimer();
+    function stopMain() {
+        if (mainInterval) {
+            clearInterval(mainInterval);
+            mainInterval = null;
         }
-    });
+        persistMainTimer();
+        sendTimerUpdate();
+    }
+    function resetMain() {
+        stopMain();
+        mainTime = 1200;
+        updateMainDisplay();
+        persistMainTimer();
+        sendTimerUpdate();
+    }
 
-    // Set & Start button functionality
-    document.getElementById('setStartBtn').addEventListener('click', () => {
-        let minutes = parseInt(document.getElementById('timeInput').value);
-        if (!isNaN(minutes) && minutes > 0) {
-            mainTime = minutes * 60;
-            updateMainTimer();
-            stopMainTimer(); // ensure no duplicates
-            startMainTimer();
+    // ----------- RAID TIMER LOGIC -----------
+    function startRaid(side) {
+        // Don't allow both sides to run
+        if (raidInterval) clearInterval(raidInterval);
+
+        activeSide = side;
+        // If a saved raidTime exists and we are simply resuming, keep it; here we reset to 30 on new start
+        // This follows your original behavior: starting a raid sets it to 30.
+        raidTime = 30;
+        updateRaidDisplay();
+        persistRaidTimer();
+
+        raidInterval = setInterval(() => {
+            if (raidTime > 0) raidTime--;
+            else stopRaid();
+            updateRaidDisplay();
+            persistRaidTimer();
+            sendTimerUpdate();
+        }, 1000);
+
+        // persist start
+        persistRaidTimer();
+    }
+    function stopRaid() {
+        if (raidInterval) {
+            clearInterval(raidInterval);
+            raidInterval = null;
         }
-    });
+        activeSide = null;
+        persistRaidTimer();
+        sendTimerUpdate();
+    }
 
-    // Start / Stop / Reset buttons
-    document.getElementById('startBtn').addEventListener('click', startMainTimer);
-    document.getElementById('stopBtn').addEventListener('click', stopMainTimer);
-    document.getElementById('resetBtn').addEventListener('click', () => {
-        stopMainTimer();
-        mainTime = defaultMainTime;
-        updateMainTimer();
-    });
+    // ----------- AJAX SYNC -----------
+    function sendTimerUpdate() {
+        fetch('{{ route("timer.update", $score->id) }}', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrf },
+            body: JSON.stringify({
+                match_id: matchId,
+                main_timer_seconds: mainTime,
+                raid_timer_seconds: raidTime,
+                active_side: activeSide
+            })
+        }).catch(e => console.error(e));
+    }
 
-    // Half Selector
-    document.querySelector('select').addEventListener('change', (e) => {
-        document.querySelector('.timer small').textContent = e.target.value;
-    });
-
-    // -------- RAID TIMERS --------
-    // Left
-    let raidTimerDisplayLeft = document.getElementById('raidTimerLeft');
-    let raidIntervalLeft = null;
-    let raidTimeLeft = 30;
-
-    function startRaidCountdownLeft() {
-        clearInterval(raidIntervalLeft);
-        raidTimeLeft = 30;
-        raidTimerDisplayLeft.textContent = raidTimeLeft;
-        raidIntervalLeft = setInterval(() => {
-            if (raidTimeLeft > 0) {
-                raidTimeLeft--;
-                raidTimerDisplayLeft.textContent = raidTimeLeft;
-            } else {
-                clearInterval(raidIntervalLeft);
+    // ----------- RESTORE LOGIC (accounts for elapsed time) -----------
+    function restoreTimers() {
+        // Restore main timer
+        const mainRaw = localStorage.getItem(MAIN_KEY);
+        const mainSaved = safeParse(mainRaw);
+        if (mainSaved && typeof mainSaved.mainTime === 'number') {
+            // compute elapsed seconds since last save
+            const elapsedMs = Date.now() - (mainSaved.lastSaved || Date.now());
+            const elapsedSec = Math.floor(elapsedMs / 1000);
+            // If it was running, subtract elapsed seconds
+            let restoredMain = mainSaved.mainTime;
+            if (mainSaved.running) {
+                restoredMain = Math.max(0, restoredMain - elapsedSec);
             }
-        }, 1000);
-    }
-
-    function stopRaidCountdownLeft() {
-        clearInterval(raidIntervalLeft);
-    }
-
-    document.getElementById('raidInBtnLeft').addEventListener('click', startRaidCountdownLeft);
-    document.getElementById('raidOutBtnLeft').addEventListener('click', stopRaidCountdownLeft);
-
-    // Right
-    let raidTimerDisplayRight = document.getElementById('raidTimerRight');
-    let raidIntervalRight = null;
-    let raidTimeRight = 30;
-
-    function startRaidCountdownRight() {
-        clearInterval(raidIntervalRight);
-        raidTimeRight = 30;
-        raidTimerDisplayRight.textContent = raidTimeRight;
-        raidIntervalRight = setInterval(() => {
-            if (raidTimeRight > 0) {
-                raidTimeRight--;
-                raidTimerDisplayRight.textContent = raidTimeRight;
+            mainTime = restoredMain;
+            updateMainDisplay();
+            // If it was running and still > 0, resume
+            if (mainSaved.running && mainTime > 0) {
+                // startMain will persist again and start ticking
+                startMain();
             } else {
-                clearInterval(raidIntervalRight);
+                // ensure not running
+                if (mainInterval) { clearInterval(mainInterval); mainInterval = null; }
+                persistMainTimer(); // update stored running=false if needed
             }
-        }, 1000);
-    }
-
-    function stopRaidCountdownRight() {
-        clearInterval(raidIntervalRight);
-    }
-
-    document.getElementById('raidInBtnRight').addEventListener('click', startRaidCountdownRight);
-    document.getElementById('raidOutBtnRight').addEventListener('click', stopRaidCountdownRight);
-
-    // Swap Courts
-    document.getElementById('swapBtn').addEventListener('click', () => {
-        const teamsRow = document.getElementById('teamsRow');
-        const leftCol = document.getElementById('teamLeftCol');
-        const rightCol = document.getElementById('teamRightCol');
-
-        // Swap their positions
-        if (leftCol.nextElementSibling === rightCol) {
-            teamsRow.insertBefore(rightCol, leftCol);
         } else {
-            teamsRow.insertBefore(leftCol, rightCol);
+            // no saved state, ensure UI shows default
+            updateMainDisplay();
         }
+
+        // Restore raid timer
+        const raidRaw = localStorage.getItem(RAID_KEY);
+        const raidSaved = safeParse(raidRaw);
+        if (raidSaved && typeof raidSaved.raidTime === 'number') {
+            const elapsedMs = Date.now() - (raidSaved.lastSaved || Date.now());
+            const elapsedSec = Math.floor(elapsedMs / 1000);
+            let restoredRaid = raidSaved.raidTime;
+            // If raid was running, subtract elapsed seconds and possibly stop it if <=0
+            if (raidSaved.running && raidSaved.activeSide) {
+                restoredRaid = Math.max(0, restoredRaid - elapsedSec);
+            }
+            raidTime = restoredRaid;
+            activeSide = raidSaved.activeSide || null;
+            updateRaidDisplay();
+
+            if (raidSaved.running && activeSide && raidTime > 0) {
+                // resume raid timer with corrected remaining time
+                // we should start the interval but not reset raidTime to 30 (startRaid resets to 30),
+                // so we'll create a resume path for raid
+                if (raidInterval) clearInterval(raidInterval);
+                raidInterval = setInterval(() => {
+                    if (raidTime > 0) raidTime--;
+                    else stopRaid();
+                    updateRaidDisplay();
+                    persistRaidTimer();
+                    sendTimerUpdate();
+                }, 1000);
+                persistRaidTimer();
+            } else {
+                // not running (or expired)
+                if (raidInterval) { clearInterval(raidInterval); raidInterval = null; }
+                if (raidTime <= 0) {
+                    // expired while offline: clear active side
+                    activeSide = null;
+                    raidTime = 30; // optional: keep default display for next raid
+                    updateRaidDisplay();
+                }
+                persistRaidTimer();
+            }
+        } else {
+            // no saved raid, show defaults
+            raidTime = 30;
+            activeSide = null;
+            updateRaidDisplay();
+        }
+    }
+
+    // ----------- BUTTON EVENTS -----------
+    document.getElementById('startBtn').onclick = startMain;
+    document.getElementById('stopBtn').onclick = stopMain;
+    document.getElementById('resetBtn').onclick = resetMain;
+
+    document.getElementById('raidInBtnLeft').onclick = () => startRaid('left');
+    document.getElementById('raidOutBtnLeft').onclick = stopRaid;
+    document.getElementById('raidInBtnRight').onclick = () => startRaid('right');
+    document.getElementById('raidOutBtnRight').onclick = stopRaid;
+
+    document.getElementById('setBtn').onclick = () => {
+        let m = parseInt(document.getElementById('timeInput').value);
+        if (!isNaN(m) && m > 0) { mainTime = m * 60; updateMainDisplay(); persistMainTimer(); sendTimerUpdate(); }
+    };
+    document.getElementById('setStartBtn').onclick = () => {
+        let m = parseInt(document.getElementById('timeInput').value);
+        if (!isNaN(m) && m > 0) { mainTime = m * 60; updateMainDisplay(); stopMain(); startMain(); }
+    };
+
+    // Initialize displays and restore any running timers
+    updateMainDisplay();
+    updateRaidDisplay();
+    restoreTimers();
+
+    // Optional: Before unload persist final state (helps if browser is closed quickly)
+    window.addEventListener('beforeunload', () => {
+        persistMainTimer();
+        persistRaidTimer();
     });
 </script>
 

@@ -17,6 +17,7 @@ use App\Http\Controllers\SocialIconController;
 use App\Http\Controllers\TeamMatchController;
 use App\Http\Controllers\TeamMatchScoreController;
 use App\Http\Controllers\TeamsController;
+use App\Http\Controllers\TimerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Auth;
@@ -53,6 +54,10 @@ Route::group([
     Route::get('match/{id}/{slug}/timer-controller', [TeamMatchScoreController::class, 'timer'])->name('team-match-score.timer');
     Route::get('match/{id}/{slug}/main-screen', [TeamMatchScoreController::class, 'mainScreen'])->name('team-match-score.main-screen');
 
+    Route::get('match/{id}/get-timer-and-score', [TeamMatchScoreController::class, 'getTimerAndScore'])->name('timer-score.get');
+
+    Route::get('match/{id}/get-timer', [TimerController::class, 'get'])->name('timer.get');
+    Route::post('match/{id}/update-timer', [TimerController::class, 'update'])->name('timer.update');
 
     Route::resource('registered-players', RegisteredPlayerController::class);
     Route::put('registered-players/{registeredPlayer}/status',
