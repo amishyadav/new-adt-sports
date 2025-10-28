@@ -5,20 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TeamMatchScore extends Model
+class Timer extends Model
 {
-    protected $table = 'team_match_scores';
+    use HasFactory;
 
     protected $fillable = [
         'team_match_id',
-        'team1_score',
-        'team2_score',
-        'team1_player_left',
-        'team2_player_left',
-        'court_swap',
-        'team1_total_raid',
-        'team2_total_raid',
-        'user_id'
+        'main_timer_seconds',
+        'raid_timer_seconds',
+        'active_side',
+        'user_id',
     ];
 
     public function teamMatch()
