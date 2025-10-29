@@ -73,7 +73,7 @@
 </head>
 <body>
 <main class="container py-4">
-    <header class="topbar">Match Controller</header>
+    <header class="topbar">Timer Controller</header>
 
     <!-- Main Timer -->
     <section class="p-3 mb-3 shadow bg-color">
@@ -100,7 +100,7 @@
         <!-- LEFT TEAM -->
         <div class="col-md-6" id="teamLeftCol">
             <article class="team team--left">
-                <div class="team__header">Telugu Titans</div>
+                <div class="team__header">{{ $score->teamMatch->team1->name }}</div>
                 <div class="raid-tabs d-flex gap-2 mb-3">
                     <button class="btn btn-warning" id="raidInBtnLeft">Raid In</button>
                     <button class="btn btn-outline-light" id="raidOutBtnLeft">Raid Out</button>
@@ -115,7 +115,7 @@
         <!-- RIGHT TEAM -->
         <div class="col-md-6" id="teamRightCol">
             <article class="team team--right">
-                <div class="team__header">Tamil Thalaivas</div>
+                <div class="team__header">{{ $score->teamMatch->team2->name }}</div>
                 <div class="raid-tabs d-flex gap-2 mb-3">
                     <button class="btn btn-primary" id="raidInBtnRight">Raid In</button>
                     <button class="btn btn-outline-light" id="raidOutBtnRight">Raid Out</button>
@@ -159,6 +159,14 @@
         // If a side is active, show remaining raidTime on that side, otherwise default 30
         document.getElementById('raidTimerLeft').textContent = (activeSide === 'left') ? raidTime : 30;
         document.getElementById('raidTimerRight').textContent = (activeSide === 'right') ? raidTime : 30;
+    }
+
+    // ----------- SOUND LOGIC -----------
+    function playNumberSound(num) {
+        if (num >= 1 && num <= 10) {
+            const audio = new Audio(`/sounds/${num}.mp3`);
+            audio.play().catch(e => console.warn('Audio play failed:', e));
+        }
     }
 
     // ----------- PERSISTENCE HELPERS -----------
@@ -230,8 +238,17 @@
         persistRaidTimer();
 
         raidInterval = setInterval(() => {
-            if (raidTime > 0) raidTime--;
-            else stopRaid();
+            if (raidTime > 0) {
+                raidTime--;
+
+                // Play sound when 10 to 1
+                if (raidTime <= 10 && raidTime >= 1) {
+                    playNumberSound(raidTime);
+                }
+            } else {
+                stopRaid();
+            }
+
             updateRaidDisplay();
             persistRaidTimer();
             sendTimerUpdate();
@@ -315,8 +332,17 @@
                 // so we'll create a resume path for raid
                 if (raidInterval) clearInterval(raidInterval);
                 raidInterval = setInterval(() => {
-                    if (raidTime > 0) raidTime--;
-                    else stopRaid();
+                    if (raidTime > 0) {
+                        raidTime--;
+
+                        // Play sound when 10 to 1
+                        if (raidTime <= 10 && raidTime >= 1) {
+                            playNumberSound(raidTime);
+                        }
+                    } else {
+                        stopRaid();
+                    }
+
                     updateRaidDisplay();
                     persistRaidTimer();
                     sendTimerUpdate();
@@ -370,6 +396,12 @@
         persistMainTimer();
         persistRaidTimer();
     });
+
+    // Preload sounds to reduce delay
+    for (let i = 1; i <= 10; i++) {
+        const a = new Audio(`/sounds/${i}.mp3`);
+        a.load();
+    }
 </script>
 
 </body>
