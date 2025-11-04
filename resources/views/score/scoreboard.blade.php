@@ -456,18 +456,25 @@
             localStorage.removeItem('raidState');
         }
 
-        // Initialize buttons according to saved state
+        // When a raid button is clicked
         document.querySelectorAll('.raid-btn').forEach(btn => {
-            const team = btn.getAttribute('data-team');
-            const pos = btn.getAttribute('data-pos');
-            const key = `${team}_${pos}`;
-            if (raidState[key]) {
-                btn.classList.add('active');
-                btn.style.opacity = '1';
-            } else {
-                btn.classList.remove('active');
-                btn.style.opacity = btn.classList.contains('safe-raid') ? '0.9' : '0.9';
-            }
+            btn.addEventListener('click', () => {
+                const team = btn.getAttribute('data-team');
+                const pos = btn.getAttribute('data-pos');
+                const key = `${team}_${pos}`;
+
+                // Toggle the state in raidState
+                raidState[key] = !raidState[key];
+
+                // Apply styles and classes based on state
+                if (raidState[key]) {
+                    btn.classList.add('active');
+                    btn.style.opacity = '1';
+                } else {
+                    btn.classList.remove('active');
+                    btn.style.opacity = btn.classList.contains('safe-raid') ? '0.9' : '0.9';
+                }
+            });
         });
 
         // Attach click listeners
