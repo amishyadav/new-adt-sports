@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TeamMatchScore;
+use App\Models\Timer;
 use Illuminate\Http\Request;
 
 class TeamMatchScoreController extends Controller
@@ -44,6 +45,9 @@ class TeamMatchScoreController extends Controller
     public function getTimerAndScore($id)
     {
         $match = TeamMatchScore::with('teamMatch.team1', 'teamMatch.team2')->findOrFail($id);
-        return response()->json($match);
+        $timer = Timer::where('team_match_id', $match->team_match_id)->first();
+        $score = array_merge($match->toArray(), $timer->toArray());
+
+        return response()->json($score);
     }
 }
