@@ -456,6 +456,34 @@
             localStorage.removeItem('raidState');
         }
 
+        /* ========= ⭐ ADDED HELPERS (do not remove) ========= */
+        function persistRaidState() {
+            try { localStorage.setItem('raidState', JSON.stringify(raidState)); }
+            catch (e) { console.warn('Could not save raidState to localStorage', e); }
+        }
+
+        function applyRaidStateToUI() {
+            // Apply only to Safe Raid buttons (persisted)
+            document.querySelectorAll('.raid-btn.safe-raid').forEach(btn => {
+                const team = btn.getAttribute('data-team');
+                const pos = btn.getAttribute('data-pos');
+                const key = `${team}_${pos}`;
+                const active = !!raidState[key];
+                btn.classList.toggle('active', active);
+                btn.style.opacity = active ? '1' : '0.9';
+            });
+            // Do-or-Die should never persist
+            document.querySelectorAll('.raid-btn.do-or-die').forEach(btn => {
+                btn.classList.remove('active');
+                btn.style.opacity = '0.9';
+            });
+        }
+        /* ========= ⭐ END HELPERS ========= */
+
+        // ⭐ Apply saved state once on load (so refresh keeps selections)
+        applyRaidStateToUI();
+
+        // ------- Existing listeners (kept exactly as-is) -------
         // When a raid button is clicked
         document.querySelectorAll('.raid-btn').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -463,10 +491,9 @@
                 const pos = btn.getAttribute('data-pos');
                 const key = `${team}_${pos}`;
 
-                // Toggle the state in raidState
+                // Original: toggles raidState and UI
                 raidState[key] = !raidState[key];
 
-                // Apply styles and classes based on state
                 if (raidState[key]) {
                     btn.classList.add('active');
                     btn.style.opacity = '1';
@@ -491,25 +518,19 @@
                     if (audio) {
                         audio.currentTime = 0;
                         audio.play().catch(err => {
-                            // Auto-play may be blocked on some browsers; that's ok.
                             console.warn('Audio play failed:', err);
                         });
                     }
-                    // Optionally give visual feedback: briefly flash the button
                     btn.classList.add('active');
                     btn.style.opacity = '1';
                     setTimeout(() => {
-                        // return to previous state after 1.5s (do not persist)
-                        const saved = raidState[key];
-                        if (!saved) {
-                            btn.classList.remove('active');
-                            btn.style.opacity = btn.classList.contains('safe-raid') ? '0.9' : '0.9';
-                        }
+                        btn.classList.remove('active');
+                        btn.style.opacity = btn.classList.contains('safe-raid') ? '0.9' : '0.9';
                     }, 1500);
                     return;
                 }
 
-                // Toggle Safe Raid
+                // Toggle Safe Raid (original)
                 const currentlyActive = btn.classList.contains('active');
                 if (currentlyActive) {
                     btn.classList.remove('active');
@@ -529,6 +550,79 @@
                 }
             });
         });
+
+        /* ========= ⭐ ADDED: SINGLE CONTROLLER (CAPTURING) =========
+           This runs BEFORE the two original listeners and stops them from double-firing.
+           - Safe Raid: toggles + persists, then stops propagation.
+           - Do-or-Die: clears Safe Raids for that team, plays audio/flash, then stops propagation.
+        ============================================================ */
+        document.addEventListener('click', function (e) {
+            const btn = e.target.closest('.raid-btn');
+            if (!btn) return;
+
+            const team = btn.getAttribute('data-team');
+            const pos = btn.getAttribute('data-pos');
+            const key = `${team}_${pos}`;
+            const isDoOrDie = btn.classList.contains('do-or-die');
+            const isSafeRaid = btn.classList.contains('safe-raid');
+
+            if (isDoOrDie) {
+                // 1) Clear any selected Safe Raid for this team (positions 1 & 2)
+                ['1', '2'].forEach(p => {
+                    const k = `${team}_${p}`;
+                    if (raidState[k]) {
+                        raidState[k] = false;
+                    }
+                });
+                persistRaidState();
+
+                // Update UI for team's safe-raid buttons
+                document.querySelectorAll(`.raid-btn.safe-raid[data-team="${team}"]`).forEach(srBtn => {
+                    srBtn.classList.remove('active');
+                    srBtn.style.opacity = '0.9';
+                });
+
+                // 2) Do-or-Die feedback (non-persistent)
+                const audio = document.getElementById('doOrDieAudio');
+                if (audio) {
+                    try {
+                        audio.currentTime = 0;
+                        audio.play();
+                    } catch (_) {}
+                }
+                btn.classList.add('active');
+                btn.style.opacity = '1';
+                setTimeout(() => {
+                    btn.classList.remove('active');
+                    btn.style.opacity = '0.9';
+                }, 1500);
+
+                // Prevent original two listeners from toggling/persisting incorrectly
+                e.stopImmediatePropagation();
+                e.preventDefault();
+                return;
+            }
+
+            if (isSafeRaid) {
+                // Toggle this Safe Raid
+                const newVal = !raidState[key];
+                raidState[key] = newVal;
+                persistRaidState();
+
+                // Update UI
+                btn.classList.toggle('active', newVal);
+                btn.style.opacity = newVal ? '1' : '0.9';
+
+                // Prevent original listeners (which would double-toggle)
+                e.stopImmediatePropagation();
+                e.preventDefault();
+                return;
+            }
+        }, /* useCapture */ true); // ⭐ capturing so we run first
+        /* ========= ⭐ END CONTROLLER ========= */
+
+        // Re-apply UI once after any initial mutations
+        applyRaidStateToUI();
 
     }); // end DOMContentLoaded
 </script>
