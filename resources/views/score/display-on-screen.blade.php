@@ -59,6 +59,9 @@
             height: 25px;
             background-color: #ffcc80;
             border-radius: 50%;
+        }
+
+        .player.active {
             border: 2px solid green;
         }
 
@@ -169,6 +172,7 @@
 
             if (i < playersLeft) {
                 img.src = `{{ asset('assets/Images/active_player.svg') }}`;
+                img.classList.add('active');
             } else {
                 img.src = `{{ asset('assets/Images/non_active_player.svg') }}`;
             }
@@ -188,17 +192,17 @@
                     raidDisplay.textContent = data.raid_timer_seconds;
 
                     // Team Names & Scores
-                    teamNameLeft.textContent = data.court_swap == 0 ? data.team_match.team1.name : data.team_match.team2.name;
-                    teamScoreLeft.textContent = data.court_swap == 0 ? data.team1_score : data.team2_score;
+                    teamNameLeft.textContent = data.game_part == 1 ? data.team_match.team1.name : data.team_match.team2.name;
+                    teamScoreLeft.textContent = data.game_part == 1 ? data.team1_score : data.team2_score;
 
-                    teamNameRight.textContent = data.court_swap == 0 ? data.team_match.team2.name : data.team_match.team1.name;
-                    teamScoreRight.textContent = data.court_swap == 0 ? data.team2_score : data.team1_score;
+                    teamNameRight.textContent = data.game_part == 1 ? data.team_match.team2.name : data.team_match.team1.name;
+                    teamScoreRight.textContent = data.game_part == 1 ? data.team2_score : data.team1_score;
 
                     // Court Swap Label
-                    courtSwap.textContent = data.court_swap == 0 ? '1ST HALF' : '2ND HALF';
+                    courtSwap.textContent = data.game_part == 1 ? '1ST HALF' : '2ND HALF';
 
                     // Player Icons (based on number of players left)
-                    if (data.court_swap == 0) {
+                    if (data.game_part == 1) {
                         renderPlayers(leftPlayersContainer, data.team1_player_left);
                         renderPlayers(rightPlayersContainer, data.team2_player_left);
                     } else {

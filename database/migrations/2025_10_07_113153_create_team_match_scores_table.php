@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('team1_player_left')->default(7);
             $table->integer('team2_player_left')->default(7);
             $table->boolean('court_swap')->default(0);
+            $table->integer('game_part')->default(1);
             $table->integer('team1_total_raid')->default(0);
             $table->integer('team2_total_raid')->default(0);
             $table->unsignedBigInteger('user_id')->nullable();

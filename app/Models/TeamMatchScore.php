@@ -16,6 +16,7 @@ class TeamMatchScore extends Model
         'team1_player_left',
         'team2_player_left',
         'court_swap',
+        'game_part',
         'team1_total_raid',
         'team2_total_raid',
         'user_id'

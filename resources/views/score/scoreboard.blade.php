@@ -123,6 +123,15 @@
             color: #121212 !important;
             border: none !important;
         }
+
+        /* Game Part select */
+        #gamePartBar .form-select-lg {
+            padding: .5rem 1rem;
+            border-radius: 10px;
+            background:#0f1520;
+            color:#e7eefb;
+            border:1px solid #222a36;
+        }
     </style>
 </head>
 <body>
@@ -230,6 +239,17 @@
         </div>
     </div>
 
+    <!-- Game Part selector -->
+    <div id="gamePartBar" class="players-manager timer-box mb-3 mt-5">
+        <div class="d-flex align-items-center justify-content-center gap-3 flex-wrap">
+            <span class="fw-bold text-uppercase" style="letter-spacing:.5px;">Game Part:</span>
+            <select id="gamePartSelect" class="form-select form-select-lg" style="max-width: 240px;">
+                <option value="1">1st Inning</option>
+                <option value="2">2nd Inning</option>
+            </select>
+        </div>
+    </div>
+
     <!-- Footer Buttons -->
     <div class="footer d-flex justify-content-center gap-3 flex-wrap mt-4">
         <button class="btn btn-secondary btn-lg btn-undo">Undo</button>
@@ -269,7 +289,6 @@
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             },
             success: function () {
-                console.log("Saved ✅", payload);
                 if (reload) location.reload();
             },
             error: function (xhr) {
@@ -278,8 +297,37 @@
         });
     }
 
-    // ------- SCORE CONTROLS -------
     document.addEventListener('DOMContentLoaded', () => {
+
+        // ------- GAME PART (Innings) -------
+        (function initGamePart() {
+            const select = document.getElementById('gamePartSelect');
+            if (!select) return;
+
+            // Initial value from server (Blade). Defaults to 1 if null.
+            const initialGamePart = parseInt({{ $score->game_part ?? 1 }}) || 1;
+            select.value = String(initialGamePart);
+
+            // Mirror to localStorage for instant UI on super-fast reloads
+            try { localStorage.setItem('game_part', String(initialGamePart)); } catch (_) {}
+
+            // If server value absent, fall back to any saved local value
+            if (!{{ isset($score->game_part) ? 'true' : 'false' }}) {
+                const saved = localStorage.getItem('game_part');
+                if (saved === '1' || saved === '2') {
+                    select.value = saved;
+                }
+            }
+
+            // Persist to DB on change (also keep localStorage in sync)
+            select.addEventListener('change', () => {
+                const val = parseInt(select.value) || 1;
+                try { localStorage.setItem('game_part', String(val)); } catch (_) {}
+                saveScoreToDB({ game_part: val });
+            });
+        })();
+
+        // ------- SCORE CONTROLS -------
         document.querySelectorAll('.team-card').forEach(team => {
             const scoreEl = team.querySelector('.score');
 
@@ -336,7 +384,7 @@
             resetBtn.addEventListener('click', () => {
                 // Remove saved Safe Raid state
                 localStorage.removeItem('raidState');
-                // optionally remove other saved states if any
+                // Optionally remove other saved states if any
                 location.reload();
             });
         }
@@ -445,7 +493,6 @@
         initializePlayerSelection();
 
         // ------- RAID BUTTONS (Safe Raid & Do or Die) -------
-        // Use stable keys: `${data-team}_${data-pos}`
         const raidStateRaw = localStorage.getItem('raidState');
         let raidState = {};
         try {
@@ -456,7 +503,6 @@
             localStorage.removeItem('raidState');
         }
 
-        /* ========= ⭐ ADDED HELPERS (do not remove) ========= */
         function persistRaidState() {
             try { localStorage.setItem('raidState', JSON.stringify(raidState)); }
             catch (e) { console.warn('Could not save raidState to localStorage', e); }
@@ -478,20 +524,16 @@
                 btn.style.opacity = '0.9';
             });
         }
-        /* ========= ⭐ END HELPERS ========= */
 
-        // ⭐ Apply saved state once on load (so refresh keeps selections)
+        // Apply saved state once on load
         applyRaidStateToUI();
 
-        // ------- Existing listeners (kept exactly as-is) -------
-        // When a raid button is clicked
+        // Original listeners (kept)
         document.querySelectorAll('.raid-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const team = btn.getAttribute('data-team');
                 const pos = btn.getAttribute('data-pos');
                 const key = `${team}_${pos}`;
-
-                // Original: toggles raidState and UI
                 raidState[key] = !raidState[key];
 
                 if (raidState[key]) {
@@ -504,7 +546,6 @@
             });
         });
 
-        // Attach click listeners
         document.querySelectorAll('.raid-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const team = btn.getAttribute('data-team');
@@ -513,7 +554,6 @@
                 const key = `${team}_${pos}`;
 
                 if (isDoOrDie) {
-                    // Play audio (Do or Die)
                     const audio = document.getElementById('doOrDieAudio');
                     if (audio) {
                         audio.currentTime = 0;
@@ -530,7 +570,6 @@
                     return;
                 }
 
-                // Toggle Safe Raid (original)
                 const currentlyActive = btn.classList.contains('active');
                 if (currentlyActive) {
                     btn.classList.remove('active');
@@ -542,7 +581,6 @@
                     raidState[key] = true;
                 }
 
-                // Persist
                 try {
                     localStorage.setItem('raidState', JSON.stringify(raidState));
                 } catch (e) {
@@ -551,11 +589,7 @@
             });
         });
 
-        /* ========= ⭐ ADDED: SINGLE CONTROLLER (CAPTURING) =========
-           This runs BEFORE the two original listeners and stops them from double-firing.
-           - Safe Raid: toggles + persists, then stops propagation.
-           - Do-or-Die: clears Safe Raids for that team, plays audio/flash, then stops propagation.
-        ============================================================ */
+        // Controller to avoid double-firing; also clears safe raids on Do-or-Die
         document.addEventListener('click', function (e) {
             const btn = e.target.closest('.raid-btn');
             if (!btn) return;
@@ -567,7 +601,6 @@
             const isSafeRaid = btn.classList.contains('safe-raid');
 
             if (isDoOrDie) {
-                // 1) Clear any selected Safe Raid for this team (positions 1 & 2)
                 ['1', '2'].forEach(p => {
                     const k = `${team}_${p}`;
                     if (raidState[k]) {
@@ -576,13 +609,11 @@
                 });
                 persistRaidState();
 
-                // Update UI for team's safe-raid buttons
                 document.querySelectorAll(`.raid-btn.safe-raid[data-team="${team}"]`).forEach(srBtn => {
                     srBtn.classList.remove('active');
                     srBtn.style.opacity = '0.9';
                 });
 
-                // 2) Do-or-Die feedback (non-persistent)
                 const audio = document.getElementById('doOrDieAudio');
                 if (audio) {
                     try {
@@ -597,31 +628,26 @@
                     btn.style.opacity = '0.9';
                 }, 1500);
 
-                // Prevent original two listeners from toggling/persisting incorrectly
                 e.stopImmediatePropagation();
                 e.preventDefault();
                 return;
             }
 
             if (isSafeRaid) {
-                // Toggle this Safe Raid
                 const newVal = !raidState[key];
                 raidState[key] = newVal;
                 persistRaidState();
 
-                // Update UI
                 btn.classList.toggle('active', newVal);
                 btn.style.opacity = newVal ? '1' : '0.9';
 
-                // Prevent original listeners (which would double-toggle)
                 e.stopImmediatePropagation();
                 e.preventDefault();
                 return;
             }
-        }, /* useCapture */ true); // ⭐ capturing so we run first
-        /* ========= ⭐ END CONTROLLER ========= */
+        }, true);
 
-        // Re-apply UI once after any initial mutations
+        // Re-apply after any initial mutations
         applyRaidStateToUI();
 
     }); // end DOMContentLoaded
