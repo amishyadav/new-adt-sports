@@ -50,4 +50,11 @@ class TeamMatchScoreController extends Controller
 
         return response()->json($score);
     }
+
+    public function live($id)
+    {
+        $scores = TeamMatchScore::with('teamMatch.team1', 'teamMatch.team2')->where('id','=', $id)->first();
+
+        return view('scoreboard.score-live',compact('scores'));
+    }
 }

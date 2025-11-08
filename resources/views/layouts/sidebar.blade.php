@@ -49,35 +49,6 @@
                     <span class="aside-menu-title">Matches</span>
                 </a>
             </li>
-            @can('manage_leagues')
-            <li class="nav-item {{ Request::is('admin/leagues') ? 'active' : '' }}">
-                <a class="nav-link d-flex align-items-center py-3" aria-current="page"
-                   href="{{route('leagues.index')}}">
-                    <span class="aside-menu-icon pe-3"><i class="fa-solid fa-baseball"></i></span>
-                    <span class="aside-menu-title">Leagues</span>
-                </a>
-            </li>
-            @endcan
-            @can('manage_matches')
-            <li class="nav-item {{ Request::is('admin/all-matches') ? 'show' : '' }}">
-                <a class="nav-link aside-collapse-btn d-flex align-items-center py-3">
-                    <span class="aside-menu-icon pe-3"><i class="fa-solid fa-gamepad"></i></span>
-                    <span class="aside-menu-title">Manage Matches</span>
-                    <span class="aside-menu-collapse-icon ms-auto fs-4">
-                        <i class="fa-solid fa-angle-right"></i>
-                    </span>
-                </a>
-                <ul class="aside-submenu">
-                    <li class="nav-item ">
-                        <a class="nav-link d-flex align-items-center py-3"
-                           href="{{ route('all-matches.index') }}">
-                            <span class="aside-menu-icon pe-3"><i class="fa-sharp fa-solid fa-gears"></i></span>
-                            <span class="aside-menu-title">All Matches</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            @endcan
             @can('manage_settings')
             <li class="nav-item {{ Request::is('admin/setting') ? 'active' : '' }}">
                 <a class="nav-link d-flex align-items-center py-3" aria-current="page"
