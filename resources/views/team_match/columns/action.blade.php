@@ -16,6 +16,10 @@
    class="btn btn-outline-danger">
     Main Screen
 </a>
+<a href="{{ route('team-match-score.live',['id' => $matchID[0], 'slug' => $slug]) }}" target="_blank"
+   class="btn btn-outline-dark">
+    Live Score
+</a>
 @endif
 <a href="javascript:void(0)" title="Edit"
    class="btn px-1 text-primary fs-3 team-match-edit-btn" data-bs-toggle="tooltip"

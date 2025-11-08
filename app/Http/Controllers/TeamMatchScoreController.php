@@ -53,8 +53,17 @@ class TeamMatchScoreController extends Controller
 
     public function live($id)
     {
-        $scores = TeamMatchScore::with('teamMatch.team1', 'teamMatch.team2')->where('id','=', $id)->first();
+        $score = TeamMatchScore::with('teamMatch.team1', 'teamMatch.team2')->where('id','=', $id)->first();
 
-        return view('scoreboard.score-live',compact('scores'));
+        return view('score.score-live',compact('score'));
+    }
+
+    public function liveScore($id)
+    {
+        $match = TeamMatchScore::with('teamMatch.team1', 'teamMatch.team2')->findOrFail($id);
+        $timer = Timer::where('team_match_id', $match->team_match_id)->first();
+        $score = array_merge($match->toArray(), $timer->toArray());
+
+        return response()->json($score);
     }
 }
