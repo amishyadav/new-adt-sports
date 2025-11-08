@@ -196,7 +196,6 @@
     // ----------- MAIN TIMER LOGIC -----------
     function startMain() {
         if (mainInterval) return;
-        // start ticking
         mainInterval = setInterval(() => {
             if (mainTime > 0) mainTime--;
             else {
@@ -206,7 +205,6 @@
             persistMainTimer();
             sendTimerUpdate();
         }, 1000);
-        // persist immediately with running = true
         persistMainTimer();
     }
     function stopMain() {
@@ -227,12 +225,16 @@
 
     // ----------- RAID TIMER LOGIC -----------
     function startRaid(side) {
+        // NEW: If main timer is stopped, auto-start it (only if time remains)
+        if (!mainInterval && mainTime > 0) {
+            startMain();
+        }
+
         // Don't allow both sides to run
         if (raidInterval) clearInterval(raidInterval);
 
         activeSide = side;
-        // If a saved raidTime exists and we are simply resuming, keep it; here we reset to 30 on new start
-        // This follows your original behavior: starting a raid sets it to 30.
+        // Starting a raid sets it to 30
         raidTime = 30;
         updateRaidDisplay();
         persistRaidTimer();
@@ -254,7 +256,6 @@
             sendTimerUpdate();
         }, 1000);
 
-        // persist start
         persistRaidTimer();
     }
     function stopRaid() {
@@ -287,27 +288,21 @@
         const mainRaw = localStorage.getItem(MAIN_KEY);
         const mainSaved = safeParse(mainRaw);
         if (mainSaved && typeof mainSaved.mainTime === 'number') {
-            // compute elapsed seconds since last save
             const elapsedMs = Date.now() - (mainSaved.lastSaved || Date.now());
             const elapsedSec = Math.floor(elapsedMs / 1000);
-            // If it was running, subtract elapsed seconds
             let restoredMain = mainSaved.mainTime;
             if (mainSaved.running) {
                 restoredMain = Math.max(0, restoredMain - elapsedSec);
             }
             mainTime = restoredMain;
             updateMainDisplay();
-            // If it was running and still > 0, resume
             if (mainSaved.running && mainTime > 0) {
-                // startMain will persist again and start ticking
                 startMain();
             } else {
-                // ensure not running
                 if (mainInterval) { clearInterval(mainInterval); mainInterval = null; }
-                persistMainTimer(); // update stored running=false if needed
+                persistMainTimer();
             }
         } else {
-            // no saved state, ensure UI shows default
             updateMainDisplay();
         }
 
@@ -318,7 +313,6 @@
             const elapsedMs = Date.now() - (raidSaved.lastSaved || Date.now());
             const elapsedSec = Math.floor(elapsedMs / 1000);
             let restoredRaid = raidSaved.raidTime;
-            // If raid was running, subtract elapsed seconds and possibly stop it if <=0
             if (raidSaved.running && raidSaved.activeSide) {
                 restoredRaid = Math.max(0, restoredRaid - elapsedSec);
             }
@@ -327,40 +321,31 @@
             updateRaidDisplay();
 
             if (raidSaved.running && activeSide && raidTime > 0) {
-                // resume raid timer with corrected remaining time
-                // we should start the interval but not reset raidTime to 30 (startRaid resets to 30),
-                // so we'll create a resume path for raid
                 if (raidInterval) clearInterval(raidInterval);
                 raidInterval = setInterval(() => {
                     if (raidTime > 0) {
                         raidTime--;
-
-                        // Play sound when 10 to 1
                         if (raidTime <= 10 && raidTime >= 1) {
                             playNumberSound(raidTime);
                         }
                     } else {
                         stopRaid();
                     }
-
                     updateRaidDisplay();
                     persistRaidTimer();
                     sendTimerUpdate();
                 }, 1000);
                 persistRaidTimer();
             } else {
-                // not running (or expired)
                 if (raidInterval) { clearInterval(raidInterval); raidInterval = null; }
                 if (raidTime <= 0) {
-                    // expired while offline: clear active side
                     activeSide = null;
-                    raidTime = 30; // optional: keep default display for next raid
+                    raidTime = 30;
                     updateRaidDisplay();
                 }
                 persistRaidTimer();
             }
         } else {
-            // no saved raid, show defaults
             raidTime = 30;
             activeSide = null;
             updateRaidDisplay();
@@ -391,7 +376,7 @@
     updateRaidDisplay();
     restoreTimers();
 
-    // Optional: Before unload persist final state (helps if browser is closed quickly)
+    // Optional: Before unload persist final state
     window.addEventListener('beforeunload', () => {
         persistMainTimer();
         persistRaidTimer();
