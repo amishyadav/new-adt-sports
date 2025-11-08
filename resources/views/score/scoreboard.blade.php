@@ -261,7 +261,7 @@
 </div>
 
 <!-- Audio -->
-<audio id="doOrDieAudio" src="/sounds/do-or-die.mp3" preload="auto"></audio>
+<audio id="doOrDieAudio" src="{{ asset('sounds/do-or-die.mp3') }}" preload="auto"></audio>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

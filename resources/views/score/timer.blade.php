@@ -130,14 +130,50 @@
 </main>
 
 <script>
+    // ---------- SOUND SETUP (preload + unlock) ----------
+    const SOUND_BASE = "{{ asset('sounds') }}"; // => /sounds mapped from public/sounds
+    const sounds = {};
+    let audioUnlocked = false;
+
+    function preloadSounds() {
+        for (let i = 1; i <= 10; i++) {
+            const a = new Audio(`${SOUND_BASE}/${i}.mp3`);
+            a.preload = 'auto';
+            sounds[i] = a;
+        }
+    }
+
+    // Unlock audio on first user gesture (needed for iOS/Safari/Chrome policies)
+    function unlockAudioOnce() {
+        if (audioUnlocked) return;
+        const a = sounds[10] || new Audio(`${SOUND_BASE}/10.mp3`);
+        a.muted = true;
+        a.play().then(() => {
+            a.pause();
+            a.muted = false;
+            audioUnlocked = true;
+        }).catch(() => {
+            // If this fails, we'll try again on next gesture
+        });
+    }
+
+    function playNumberSound(num) {
+        if (num < 1 || num > 10) return;
+        const a = sounds[num];
+        if (!a) return;
+        try { a.currentTime = 0; } catch(e) {}
+        a.play().catch(err => console.warn('Audio play failed:', err));
+    }
+
+    // ---------- EXISTING APP STATE ----------
     const csrf = document.querySelector('meta[name="csrf-token"]').content;
     const matchId = {{ $score->id ?? 1 }};
 
-    // MAIN TIMER -----------------------
+    // MAIN TIMER
     let mainTime = 1200; // 20min default
     let mainInterval = null;
 
-    // RAID TIMER -----------------------
+    // RAID TIMER
     let raidTime = 30;
     let raidInterval = null;
     let activeSide = null; // 'left' or 'right'
@@ -156,17 +192,8 @@
         document.getElementById('main-timer').textContent = formatMain(mainTime);
     }
     function updateRaidDisplay() {
-        // If a side is active, show remaining raidTime on that side, otherwise default 30
         document.getElementById('raidTimerLeft').textContent = (activeSide === 'left') ? raidTime : 30;
         document.getElementById('raidTimerRight').textContent = (activeSide === 'right') ? raidTime : 30;
-    }
-
-    // ----------- SOUND LOGIC -----------
-    function playNumberSound(num) {
-        if (num >= 1 && num <= 10) {
-            const audio = new Audio(`/sounds/${num}.mp3`);
-            audio.play().catch(e => console.warn('Audio play failed:', e));
-        }
     }
 
     // ----------- PERSISTENCE HELPERS -----------
@@ -225,16 +252,15 @@
 
     // ----------- RAID TIMER LOGIC -----------
     function startRaid(side) {
-        // NEW: If main timer is stopped, auto-start it (only if time remains)
+        // Auto-start main timer if stopped and time remains
         if (!mainInterval && mainTime > 0) {
             startMain();
         }
 
-        // Don't allow both sides to run
+        // Stop any running raid
         if (raidInterval) clearInterval(raidInterval);
 
         activeSide = side;
-        // Starting a raid sets it to 30
         raidTime = 30;
         updateRaidDisplay();
         persistRaidTimer();
@@ -243,7 +269,7 @@
             if (raidTime > 0) {
                 raidTime--;
 
-                // Play sound when 10 to 1
+                // Play sound when 10..1
                 if (raidTime <= 10 && raidTime >= 1) {
                     playNumberSound(raidTime);
                 }
@@ -284,7 +310,7 @@
 
     // ----------- RESTORE LOGIC (accounts for elapsed time) -----------
     function restoreTimers() {
-        // Restore main timer
+        // Restore main
         const mainRaw = localStorage.getItem(MAIN_KEY);
         const mainSaved = safeParse(mainRaw);
         if (mainSaved && typeof mainSaved.mainTime === 'number') {
@@ -306,7 +332,7 @@
             updateMainDisplay();
         }
 
-        // Restore raid timer
+        // Restore raid
         const raidRaw = localStorage.getItem(RAID_KEY);
         const raidSaved = safeParse(raidRaw);
         if (raidSaved && typeof raidSaved.raidTime === 'number') {
@@ -352,7 +378,20 @@
         }
     }
 
-    // ----------- BUTTON EVENTS -----------
+    // ----------- INIT + EVENT HOOKS -----------
+    // Preload sounds immediately
+    preloadSounds();
+
+    // Add unlock handler to any user-gesture buttons (fires once)
+    [
+        'startBtn','stopBtn','resetBtn','raidInBtnLeft','raidOutBtnLeft',
+        'raidInBtnRight','raidOutBtnRight','setBtn','setStartBtn'
+    ].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('click', unlockAudioOnce, { once: true });
+    });
+
+    // Buttons
     document.getElementById('startBtn').onclick = startMain;
     document.getElementById('stopBtn').onclick = stopMain;
     document.getElementById('resetBtn').onclick = resetMain;
@@ -371,22 +410,16 @@
         if (!isNaN(m) && m > 0) { mainTime = m * 60; updateMainDisplay(); stopMain(); startMain(); }
     };
 
-    // Initialize displays and restore any running timers
+    // Initialize displays and restore timers
     updateMainDisplay();
     updateRaidDisplay();
     restoreTimers();
 
-    // Optional: Before unload persist final state
+    // Persist on unload
     window.addEventListener('beforeunload', () => {
         persistMainTimer();
         persistRaidTimer();
     });
-
-    // Preload sounds to reduce delay
-    for (let i = 1; i <= 10; i++) {
-        const a = new Audio(`/sounds/${i}.mp3`);
-        a.load();
-    }
 </script>
 
 </body>
