@@ -1,1 +1,0 @@
-{{$row->league_count}}

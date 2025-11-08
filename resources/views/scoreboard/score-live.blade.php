@@ -240,14 +240,15 @@
                     <div class="team-name team-a-name">Team 1</div>
                     <div class="progress">{/* <Progress percent={100} status="active" showInfo={false} /> */}</div>
                 </div>
-                <div class="team-players">
-{{--                    <img class="active-player" src="{{asset('assets/Images/active_player.svg')}}" />--}}
-{{--                    <img class="active-player" src="{{asset('assets/Images/active_player.svg')}}" />--}}
-{{--                    <img class="active-player" src="{{asset('assets/Images/active_player.svg')}}" />--}}
-{{--                    <img class="active-player" src="{{asset('assets/Images/active_player.svg')}}" />--}}
-{{--                    <img class="active-player" src="{{asset('assets/Images/active_player.svg')}}" />--}}
-{{--                    <img class="active-player" src="{{asset('assets/Images/active_player.svg')}}" />--}}
-{{--                    <img class="non-active-player" src="{{asset('assets/Images/non_active_player.svg')}}" />--}}
+                <div class="team-players player-team-a">
+                    <img class="active-player" src="{{asset('assets/Images/active_player.svg')}}" />
+                    <img class="active-player" src="{{asset('assets/Images/active_player.svg')}}" />
+                    <img class="active-player" src="{{asset('assets/Images/active_player.svg')}}" />
+                    <img class="active-player" src="{{asset('assets/Images/active_player.svg')}}" />
+                    <img class="active-player" src="{{asset('assets/Images/active_player.svg')}}" />
+                    <img class="active-player" src="{{asset('assets/Images/active_player.svg')}}" />
+                    <img class="active-player" src="{{asset('assets/Images/active_player.svg')}}" />
+                    <!-- <img class="non-active-player" src="{{asset('assets/Images/non_active_player.svg')}}" /> -->
                 </div>
             </div>
         </div>
@@ -266,9 +267,14 @@
                     <div class="team-name team-b-name">Team 2</div>
                     <div class="progress">{/* <Progress percent={100} status="active" showInfo={false} /> */}</div>
                 </div>
-                <div class="team-players">
-                    <img src="{{asset('assets/Images/active_player.svg')}}" />
-                    <img src="{{asset('assets/Images/non_active_player.svg')}}" />
+                <div class="team-players player-team-b">
+                    <img class="active-player" src="{{asset('assets/Images/active_player.svg')}}" />
+                    <img class="active-player" src="{{asset('assets/Images/active_player.svg')}}" />
+                    <img class="active-player" src="{{asset('assets/Images/active_player.svg')}}" />
+                    <img class="active-player" src="{{asset('assets/Images/active_player.svg')}}" />
+                    <img class="active-player" src="{{asset('assets/Images/active_player.svg')}}" />
+                    <img class="active-player" src="{{asset('assets/Images/active_player.svg')}}" />
+                    <img class="active-player" src="{{asset('assets/Images/active_player.svg')}}" />
                 </div>
             </div>
             <div class="fifth scores">
@@ -280,56 +286,51 @@
 </div>
 
 <script>
-    $(document).ready(function (){
-        let liveScoreUrl = $('#scoreLiveUrl').val();
-        let numItems = 7;
-        let i = 1;
-        let j = 1;
-        setInterval(function(){
-            $.ajax({
-                type: 'GET',
-                url: liveScoreUrl,
-                success: function(response) {
-                    $('.team-a-score').text(response.score_a);
-                    $('.team-b-score').text(response.score_b);
-                    $('.team-a-name').text(response.match_between_teams.team_a);
-                    $('.team-b-name').text(response.match_between_teams.team_b);
-                    $('.halfs').text(response.match_part == 'first_half' ? 'FIRST HALF' : 'SECOND HALF');
+    $(document).ready(function () {
+    let liveScoreUrl = $('#scoreLiveUrl').val();
+    let numItems = 7;
 
-                    let activePlayerImg = "{{asset('assets/Images/active_player.svg')}}";
-                    let nonActivePlayerImg = "{{asset('assets/Images/non_active_player.svg')}}";
+    setInterval(function () {
+        $.ajax({
+            type: 'GET',
+            url: liveScoreUrl,
+            success: function (response) {
+                $('.team-a-score').text(response.score_a);
+                $('.team-b-score').text(response.score_b);
+                $('.team-a-name').text(response.match_between_teams.team_a);
+                $('.team-b-name').text(response.match_between_teams.team_b);
+                $('.halfs').text(response.match_part === 'first_half' ? 'FIRST HALF' : 'SECOND HALF');
 
-                    let activePlayer = $("<img>").attr("src", activePlayerImg);
-                    let nonActivePlayer = $("<img>").attr("src", nonActivePlayerImg);
-                    // Appending the image to the divsss
-                    // $(".team-players").append(activePlayer);
+                let activePlayerImg = "{{asset('assets/Images/active_player.svg')}}";
+                let nonActivePlayerImg = "{{asset('assets/Images/non_active_player.svg')}}";
 
-                    // Loop to append list items
-                    let nonplayer = 7 - response.player_left_a;
-                    for(i; i <= response.player_left_a; i++) {
-                        if (i == 7) {
-                            break;
-                        }
-                        $(".team-players").append(activePlayer);
-                        console.log(i)
-                        if (i == 7) {
-                            break;
-                        }
-                    }
-                    for(j; j <= nonplayer; j++) {
-                        if (j == 7) {
-                            break;
-                        }
-                        $(".team-players").append(nonActivePlayer);
-                        if (j == 7) {
-                            break;
-                        }
+                let activePlayer = $("<img>").attr("src", activePlayerImg);
+                let nonActivePlayer = $("<img>").attr("src", nonActivePlayerImg);
+
+                // Clear previous players to avoid duplication
+                $(".player-team-a").empty();
+                $(".player-team-b").empty();
+
+                // Loop to append players based on response.player_left_a
+                for (let i = 0; i < numItems; i++) {
+                    if (i < response.player_left_a) {
+                        $(".player-team-a").append(activePlayer.clone());
+                    } else {
+                        $(".player-team-a").append(nonActivePlayer.clone());
                     }
                 }
-            });
-        }, 5000);
-    });
-</script>
 
+                for (let i = 0; i < numItems; i++) {
+                    if (i < response.player_left_b) {
+                        $(".player-team-b").append(activePlayer.clone());
+                    } else {
+                        $(".player-team-b").append(nonActivePlayer.clone());
+                    }
+                }
+            }
+        });
+    }, 1000);
+});
+</script>
 </body>
 </html>

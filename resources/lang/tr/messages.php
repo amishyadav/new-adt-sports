@@ -6,7 +6,7 @@ return [
     |--------------------------------------------------------------------------
     | All Titles and static string in blade files
     |--------------------------------------------------------------------------
-    | 
+    |
     */
 
     'login'                   => 'Giriş yapmak',
@@ -168,7 +168,7 @@ return [
         'discard'                          => 'Atmak',
         'manage_matches'                   => 'Maçları Yönet',
         'leagues'                          => 'Ligler',
-        'categories'                       => 'Kategoriler',
+        'teams'                       => 'Kategoriler',
         'dashboard'                        => 'Gösterge Paneli',
         'category'                         => 'Kategori',
         'add_new'                          => 'Yeni ekle',

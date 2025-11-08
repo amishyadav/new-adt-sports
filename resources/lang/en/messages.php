@@ -6,7 +6,7 @@ return [
     |--------------------------------------------------------------------------
     | All Titles and static string in blade files
     |--------------------------------------------------------------------------
-    | 
+    |
     */
 
     'login'                     => 'Login',
@@ -189,7 +189,7 @@ return [
         'manage_matches'                   => 'Manage Matches',
         'all_matches'                      => 'All Matches',
         'leagues'                          => 'Leagues',
-        'categories'                       => 'Categories',
+        'teams'                       => 'Categories',
         'dashboard'                        => 'Dashboard',
         'match_title'                      => 'Match Title',
         'category'                         => 'Category',
@@ -412,13 +412,13 @@ return [
         'name'   => 'Name',
         'action' => 'Action',
     ],
-    
+
     'social_icon' => [
-      'title' => 'Title',  
-      'icon' => 'Icon',  
-      'url' => 'URL',  
+      'title' => 'Title',
+      'icon' => 'Icon',
+      'url' => 'URL',
     ],
-    
+
     'referral' => [
         'referrals' => 'Referrals',
         'level' => 'Level',

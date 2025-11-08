@@ -123,7 +123,7 @@
 {{--                        <!-- Aside Widget -->--}}
 {{--                        <div class="aside-widget">--}}
 {{--                            <h3><span>Top Categories</span></h3>--}}
-{{--                            <div class="top-categories">--}}
+{{--                            <div class="top-teams">--}}
 {{--                                <ul>--}}
 {{--                                    <li><a href="#">Cricket<span>18 Videos</span></a></li>--}}
 {{--                                    <li><a href="#">Football<span>18 Videos</span></a></li>--}}

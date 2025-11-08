@@ -64,9 +64,9 @@ class UserRepository extends BaseRepository
                 $user->addMedia($input['profile'])->toMediaCollection(User::PROFILE, config('app.media_disc'));
             }
 
-            if (isset($input['profile']) && !empty('profile')) {
-                $user->addMedia($input['profile'])->toMediaCollection(User::PROFILE, config('app.media_disc'));
-            }
+//            if (isset($input['profile']) && !empty('profile')) {
+//                $user->addMedia($input['profile'])->toMediaCollection(User::PROFILE, config('app.media_disc'));
+//            }
 
             DB::commit();
 

@@ -12,7 +12,12 @@ use App\Http\Controllers\LeagueController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\RegisteredPlayerController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\ScoreboardController;
 use App\Http\Controllers\SocialIconController;
+use App\Http\Controllers\TeamMatchController;
+use App\Http\Controllers\TeamMatchScoreController;
+use App\Http\Controllers\TeamsController;
+use App\Http\Controllers\TimerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Auth;
@@ -32,12 +37,28 @@ use Rap2hpoutre\LaravelLogViewer\LogViewerController;
 */
 
 Route::group([
-    'prefix' => 'admin', 'middleware' => ['auth', 'xss','setLanguage','role:admin'],
+    'prefix' => 'admin', 'middleware' => ['auth', 'xss','role:admin'],
 ], function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-    Route::resource('categories', CategoryController::class);
-    Route::put('categories/{category}/status',
-        [CategoryController::class, 'changeStatus'])->name('categories.change.status');
+
+    Route::resource('teams', TeamsController::class);
+    Route::put('teams/{team}/status',
+        [TeamsController::class, 'changeStatus'])->name('teams.change.status');
+
+    Route::resource('team-matches', TeamMatchController::class);
+
+    Route::get('match/{id}/{slug}/scoreboard', [TeamMatchScoreController::class, 'index'])->name('team-match-score.index');
+    Route::post('match/{id}/update-score', [TeamMatchScoreController::class, 'updateScore'])
+        ->name('match.update-score');
+
+    Route::get('match/{id}/{slug}/timer-controller', [TeamMatchScoreController::class, 'timer'])->name('team-match-score.timer');
+    Route::get('match/{id}/{slug}/main-screen', [TeamMatchScoreController::class, 'mainScreen'])->name('team-match-score.main-screen');
+
+    Route::get('match/{id}/get-timer-and-score', [TeamMatchScoreController::class, 'getTimerAndScore'])->name('timer-score.get');
+
+    Route::get('match/{id}/get-timer', [TimerController::class, 'get'])->name('timer.get');
+    Route::post('match/{id}/update-timer', [TimerController::class, 'update'])->name('timer.update');
+
     Route::resource('registered-players', RegisteredPlayerController::class);
     Route::put('registered-players/{registeredPlayer}/status',
         [RegisteredPlayerController::class, 'changeStatus'])->name('registered-players.change.status');
@@ -71,17 +92,6 @@ Route::group([
     //Impersonate
     Route::get('impersonate/{id}', [UserController::class, 'impersonate'])->name('impersonate');
     Route::get('impersonate-leave',[UserController::class, 'impersonateLeave'])->name('impersonate.leave');
-
-
-    Route::resource('blog', BlogController::class)->withoutMiddleware('xss');
-    Route::resource('home-slider', HomeSliderController::class);
-
-    Route::resource('faqs', FaqsController::class);
-    Route::put('faqs/{faq}/status', [FaqsController::class, 'changeStatus'])->name('faqs.change-status');
-
-    Route::resource('partner', PartnerController::class);
-
-    Route::resource('social-icon', SocialIconController::class);
 
     // Logs Route
     Route::get('logs', [LogViewerController::class, 'index']);

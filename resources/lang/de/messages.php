@@ -6,7 +6,7 @@ return [
     |--------------------------------------------------------------------------
     | All Titles and static string in blade files
     |--------------------------------------------------------------------------
-    | 
+    |
     */
 
     'login'                   => 'Anmeldung',
@@ -168,7 +168,7 @@ return [
         'discard'                          => 'Verwerfen',
         'manage_matches'                   => 'Spiele verwalten',
         'leagues'                          => 'Ligen',
-        'categories'                       => 'Kategorien',
+        'teams'                       => 'Kategorien',
         'dashboard'                        => 'Armaturenbrett',
         'category'                         => 'Kategorie',
         'add_new'                          => 'Neue hinzufügen',

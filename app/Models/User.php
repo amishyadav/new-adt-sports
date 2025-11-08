@@ -80,6 +80,7 @@ class User extends Authenticatable implements HasMedia
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles, InteractsWithMedia ,Impersonate;
 
+    protected $table = 'users';
     /**
      * The attributes that are mass assignable.
      *
@@ -236,17 +237,17 @@ class User extends Authenticatable implements HasMedia
 
     public function team()
     {
-        return $this->hasOne(Team::class, 'user_id' );
+        return $this->hasOne(Teams::class, 'user_id' );
     }
 
-    public function teamPlayer()
+    public function teamMatch()
     {
-        return $this->hasOne(TeamPlayer::class, 'user_id' );
+        return $this->hasOne(TeamMatch::class, 'user_id' );
     }
 
-    public function registeredPlayer()
+    public function teamMatchScore()
     {
-        return $this->hasMany(RegisteredPlayer::class, 'user_id' );
+        return $this->hasOne(TeamMatchScore::class, 'user_id' );
     }
 
     /**
