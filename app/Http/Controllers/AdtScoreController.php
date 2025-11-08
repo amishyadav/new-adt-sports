@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 
 class AdtScoreController extends Controller
 {
+    // make this main branch old.
     public function index()
     {
         $scores = MatchBetweenTeams::orderBy('id','desc')->get();
