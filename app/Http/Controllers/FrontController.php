@@ -22,16 +22,16 @@ class FrontController extends Controller
 {
     public function home()
     {
-        $blogs = '';
+//        $blogs = '';
+//
+//        $latestBlog = Blog::latest()->first();
+//        if (!empty($latestBlog)){
+//            $blogs = Blog::all()->except($latestBlog->id);
+//        }
+//
+//        $homeSliders = HomeSlider::all();
 
-        $latestBlog = Blog::latest()->first();
-        if (!empty($latestBlog)){
-            $blogs = Blog::all()->except($latestBlog->id);
-        }
-
-        $homeSliders = HomeSlider::all();
-
-        return view('front.pages.home',compact('latestBlog','blogs','homeSliders'));
+        return view('front.pages.home');
     }
 
     public function register()

@@ -8237,7 +8237,7 @@ listenSubmit('#addTeamMatchForm', function (e) {
     }
   });
 });
-listenClick('.teams-edit-btn', function (event) {
+listenClick('.team-match-edit-btn', function (event) {
   var editTeamMatchId = $(event.currentTarget).data('id');
   renderData(editTeamMatchId);
 });
@@ -8247,9 +8247,10 @@ function renderData(id) {
     url: route('team-matches.edit', id),
     type: 'GET',
     success: function success(result) {
-      var teams = result.data;
-      $('#teamMatchId').val(teams.id);
-      $('#editTeamMatchName').val(teams.name);
+      var teamMatch = result.data;
+      $('#teamMatchId').val(teamMatch.id);
+      $('#editTeamMatchTeam1Name').val(teamMatch.team1_id);
+      $('#editTeamMatchTeam2Name').val(teamMatch.team2_id);
       $('#editTeamMatchModal').modal('show');
     }
   });
@@ -8259,6 +8260,7 @@ listenSubmit('#editTeamMatchForm', function (event) {
   event.preventDefault();
   $('#editTeamMatchFormBtn').prop('disabled', true);
   var teamMatchId = $('#teamMatchId').val();
+  console.log(teamMatchId, 'teamMatchId');
   $.ajax({
     url: route('team-matches.update', teamMatchId),
     type: 'POST',
