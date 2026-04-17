@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Kabaddi Display Screen</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
     <style>
         body {
             background-color: #000;
@@ -100,45 +101,38 @@
 
     <!-- Team A -->
     <div class="team-panel">
-        <div class="team-name" id="teamNameLeft">TEAM A</div>
-        <div class="team-score" id="teamScoreLeft">00</div>
+        <div class="team-name" id="teamNameLeft">{{ $matchState['court_swap'] == 0 ? $matchState['team_match']['team1']['name'] : $matchState['team_match']['team2']['name'] }}</div>
+        <div class="team-score" id="teamScoreLeft">{{ str_pad((string) ($matchState['court_swap'] == 0 ? $matchState['team1_score'] : $matchState['team2_score']), 2, '0', STR_PAD_LEFT) }}</div>
         <div class="players">
-            <img class="player" src="{{ asset('assets/Images/active_player.svg') }}" />
-            <img class="player" src="{{ asset('assets/Images/active_player.svg') }}" />
-            <img class="player" src="{{ asset('assets/Images/active_player.svg') }}" />
-            <img class="player" src="{{ asset('assets/Images/active_player.svg') }}" />
-            <img class="player" src="{{ asset('assets/Images/active_player.svg') }}" />
-            <img class="player" src="{{ asset('assets/Images/non_active_player.svg') }}" />
-            <img class="player" src="{{ asset('assets/Images/non_active_player.svg') }}" />
         </div>
     </div>
 
     <!-- Center -->
     <div class="center-panel">
-        <div class="half-label" id="courtSwap">1ST HALF</div>
-        <div class="timer" id="mainTimer">20:00</div>
-        <div class="raid-timer" id="raidTimer">30</div>
+        <div class="half-label" id="courtSwap">{{ $matchState['court_swap'] == 0 ? '1ST HALF' : '2ND HALF' }}</div>
+        <div class="timer" id="mainTimer">{{ sprintf('%02d:%02d', intdiv($matchState['main_timer_seconds'], 60), $matchState['main_timer_seconds'] % 60) }}</div>
+        <div class="raid-timer" id="raidTimer">{{ $matchState['raid_timer_seconds'] }}</div>
     </div>
 
     <!-- Team B -->
     <div class="team-panel right">
-        <div class="team-name" id="teamNameRight">TEAM B</div>
-        <div class="team-score" id="teamScoreRight">00</div>
+        <div class="team-name" id="teamNameRight">{{ $matchState['court_swap'] == 0 ? $matchState['team_match']['team2']['name'] : $matchState['team_match']['team1']['name'] }}</div>
+        <div class="team-score" id="teamScoreRight">{{ str_pad((string) ($matchState['court_swap'] == 0 ? $matchState['team2_score'] : $matchState['team1_score']), 2, '0', STR_PAD_LEFT) }}</div>
         <div class="players">
-            <img class="player" src="{{ asset('assets/Images/active_player.svg') }}" />
-            <img class="player" src="{{ asset('assets/Images/active_player.svg') }}" />
-            <img class="player" src="{{ asset('assets/Images/active_player.svg') }}" />
-            <img class="player" src="{{ asset('assets/Images/active_player.svg') }}" />
-            <img class="player" src="{{ asset('assets/Images/active_player.svg') }}" />
-            <img class="player" src="{{ asset('assets/Images/active_player.svg') }}" />
-            <img class="player" src="{{ asset('assets/Images/active_player.svg') }}" />
         </div>
     </div>
 </div>
 
 <script>
-    // Match ID passed from Laravel route
     const matchId = {{ $score->id }};
+    const initialMatchState = @json($matchState);
+    const websocketConfig = {
+        key: @json(config('broadcasting.connections.pusher.key')),
+        cluster: @json(env('PUSHER_APP_CLUSTER')) || 'mt1',
+        wsHost: @json(config('broadcasting.connections.pusher.options.host')) || window.location.hostname,
+        wsPort: {{ (int) env('PUSHER_PORT', 6001) }},
+        forceTLS: @json(env('PUSHER_SCHEME', 'https') === 'https')
+    };
 
     const mainTimerDisplay = document.getElementById('mainTimer');
     const raidDisplay = document.getElementById('raidTimer');
@@ -150,6 +144,10 @@
 
     const leftPlayersContainer = document.querySelector('.team-panel .players');
     const rightPlayersContainer = document.querySelector('.team-panel.right .players');
+    let mainTimerInterval = null;
+    let raidTimerInterval = null;
+    let currentMainTime = initialMatchState.main_timer_seconds ?? 1200;
+    let currentRaidTime = initialMatchState.raid_timer_seconds ?? 30;
 
     // Helper to format time
     function formatTime(seconds) {
@@ -158,7 +156,48 @@
         return `${m}:${s}`;
     }
 
-    // Helper to render players dynamically
+    function formatScore(score) {
+        return String(score ?? 0).padStart(2, '0');
+    }
+
+    function stopDisplayTimers() {
+        if (mainTimerInterval) {
+            clearInterval(mainTimerInterval);
+            mainTimerInterval = null;
+        }
+
+        if (raidTimerInterval) {
+            clearInterval(raidTimerInterval);
+            raidTimerInterval = null;
+        }
+    }
+
+    function startDisplayMainTimer() {
+        if (mainTimerInterval) {
+            clearInterval(mainTimerInterval);
+        }
+
+        mainTimerInterval = setInterval(() => {
+            if (currentMainTime > 0) {
+                currentMainTime--;
+                mainTimerDisplay.textContent = formatTime(currentMainTime);
+            }
+        }, 1000);
+    }
+
+    function startDisplayRaidTimer() {
+        if (raidTimerInterval) {
+            clearInterval(raidTimerInterval);
+        }
+
+        raidTimerInterval = setInterval(() => {
+            if (currentRaidTime > 0) {
+                currentRaidTime--;
+                raidDisplay.textContent = currentRaidTime;
+            }
+        }, 1000);
+    }
+
     function renderPlayers(container, playersLeft) {
         const totalPlayers = 7;
         container.innerHTML = '';
@@ -177,43 +216,73 @@
         }
     }
 
-    // Fetch timer and player data from backend
-    function fetchTimers() {
-        fetch('{{ route("timer-score.get", $score->id) }}')
-            .then(res => res.json())
-            .then(data => {
-                if (data) {
-                    // Timers
-                    mainTimerDisplay.textContent = formatTime(data.main_timer_seconds);
-                    raidDisplay.textContent = data.raid_timer_seconds;
+    function applyMatchState(data) {
+        if (!data) {
+            return;
+        }
 
-                    // Team Names & Scores
-                    teamNameLeft.textContent = data.court_swap == 0 ? data.team_match.team1.name : data.team_match.team2.name;
-                    teamScoreLeft.textContent = data.court_swap == 0 ? data.team1_score : data.team2_score;
+        stopDisplayTimers();
 
-                    teamNameRight.textContent = data.court_swap == 0 ? data.team_match.team2.name : data.team_match.team1.name;
-                    teamScoreRight.textContent = data.court_swap == 0 ? data.team2_score : data.team1_score;
+        const syncedAtMs = Number(data.synced_at_ms || Date.now());
+        const elapsedSeconds = Math.max(0, Math.floor((Date.now() - syncedAtMs) / 1000));
+        currentMainTime = Math.max(0, Number(data.main_timer_seconds ?? 1200) - (data.main_running ? elapsedSeconds : 0));
+        currentRaidTime = Math.max(0, Number(data.raid_timer_seconds ?? 30) - (data.raid_running ? elapsedSeconds : 0));
 
-                    // Court Swap Label
-                    courtSwap.textContent = data.court_swap == 0 ? '1ST HALF' : '2ND HALF';
+        mainTimerDisplay.textContent = formatTime(currentMainTime);
+        raidDisplay.textContent = currentRaidTime;
 
-                    // Player Icons (based on number of players left)
-                    if (data.court_swap == 0) {
-                        renderPlayers(leftPlayersContainer, data.team1_player_left);
-                        renderPlayers(rightPlayersContainer, data.team2_player_left);
-                    } else {
-                        // Swap teams visually after half-time
-                        renderPlayers(leftPlayersContainer, data.team2_player_left);
-                        renderPlayers(rightPlayersContainer, data.team1_player_left);
-                    }
-                }
-            })
-            .catch(err => console.error('Error fetching timers:', err));
+        teamNameLeft.textContent = data.court_swap == 0 ? data.team_match.team1.name : data.team_match.team2.name;
+        teamScoreLeft.textContent = formatScore(data.court_swap == 0 ? data.team1_score : data.team2_score);
+
+        teamNameRight.textContent = data.court_swap == 0 ? data.team_match.team2.name : data.team_match.team1.name;
+        teamScoreRight.textContent = formatScore(data.court_swap == 0 ? data.team2_score : data.team1_score);
+
+        courtSwap.textContent = data.court_swap == 0 ? '1ST HALF' : '2ND HALF';
+
+        if (data.court_swap == 0) {
+            renderPlayers(leftPlayersContainer, data.team1_player_left);
+            renderPlayers(rightPlayersContainer, data.team2_player_left);
+        } else {
+            renderPlayers(leftPlayersContainer, data.team2_player_left);
+            renderPlayers(rightPlayersContainer, data.team1_player_left);
+        }
+
+        if (data.main_running && currentMainTime > 0) {
+            startDisplayMainTimer();
+        }
+
+        if (data.raid_running && currentRaidTime > 0 && data.active_side && data.active_side !== 'none') {
+            startDisplayRaidTimer();
+        }
     }
 
-    // Fetch initially and refresh every second
-    fetchTimers();
-    // setInterval(fetchTimers, 1000);
+    function subscribeToMatchUpdates() {
+        if (!websocketConfig.key) {
+            console.error('Missing websocket key. Check PUSHER_APP_KEY.');
+            return;
+        }
+
+        const pusherOptions = {
+            cluster: websocketConfig.cluster,
+            wsHost: websocketConfig.wsHost,
+            wsPort: websocketConfig.wsPort,
+            wssPort: websocketConfig.wsPort,
+            forceTLS: websocketConfig.forceTLS,
+            enabledTransports: ['ws', 'wss'],
+            disableStats: true
+        };
+
+        const pusher = new Pusher(websocketConfig.key, pusherOptions);
+
+        const channel = pusher.subscribe(`match-state.${matchId}`);
+
+        channel.bind('match.state.updated', applyMatchState);
+        pusher.connection.bind('connected', () => console.log('Websocket connected'));
+        pusher.connection.bind('error', err => console.error('Websocket error:', err));
+    }
+
+    applyMatchState(initialMatchState);
+    subscribeToMatchUpdates();
 </script>
 
 

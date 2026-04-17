@@ -12,6 +12,7 @@ use App\Models\Team;
 use App\Models\TeamPlayer;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
@@ -20,18 +21,11 @@ use Laracasts\Flash\Flash;
 
 class FrontController extends Controller
 {
-    public function home()
+    public function home(): View
     {
-//        $blogs = '';
-//
-//        $latestBlog = Blog::latest()->first();
-//        if (!empty($latestBlog)){
-//            $blogs = Blog::all()->except($latestBlog->id);
-//        }
-//
-//        $homeSliders = HomeSlider::all();
+        $blogs = Blog::latest()->take(5)->get();
 
-        return view('front.pages.home');
+        return view('front.pages.home', compact('blogs'));
     }
 
     public function register()
@@ -89,9 +83,15 @@ class FrontController extends Controller
         return view('front.pages.blog',compact('blogs'));
     }
 
-    public function blogDetail($slug,Blog $blog)
+    public function blogDetail($slug, Blog $blog)
     {
-        return view('front.pages.blog_detail',compact('blog'));
+        if ($slug !== $blog->slug) {
+            return redirect()->route('front.blog.detail', [$blog->slug, $blog->id]);
+        }
+
+        $relatedBlogs = Blog::whereKeyNot($blog->id)->latest()->take(3)->get();
+
+        return view('front.pages.blog_detail', compact('blog', 'relatedBlogs'));
     }
 
     public function contactUs()

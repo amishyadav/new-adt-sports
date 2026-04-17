@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MatchStateUpdated;
 use App\Models\TeamMatchScore;
-use App\Models\Timer;
+use App\Support\MatchStateStore;
 use Illuminate\Http\Request;
 
 class TeamMatchScoreController extends Controller
@@ -24,6 +25,7 @@ class TeamMatchScoreController extends Controller
 
         $match = TeamMatchScore::whereId($id)->first();
         $match->update($request->all());
+        event(new MatchStateUpdated($match->id));
 
         return response()->json(['success' => true]);
     }
@@ -38,17 +40,14 @@ class TeamMatchScoreController extends Controller
     public function mainScreen($id)
     {
         $scores = TeamMatchScore::with('teamMatch.team1', 'teamMatch.team2')->where('id','=', $id)->first();
+        $matchState = $this->buildMatchStatePayload($id);
 
-        return view('score.display-on-screen')->with(['score' => $scores]);
+        return view('score.display-on-screen')->with(['score' => $scores, 'matchState' => $matchState]);
     }
 
     public function getTimerAndScore($id)
     {
-        $match = TeamMatchScore::with('teamMatch.team1', 'teamMatch.team2')->findOrFail($id);
-        $timer = Timer::where('team_match_id', $match->team_match_id)->first();
-        $score = array_merge($match->toArray(), $timer->toArray());
-
-        return response()->json($score);
+        return response()->json($this->buildMatchStatePayload($id));
     }
 
     public function live($id)
@@ -56,5 +55,12 @@ class TeamMatchScoreController extends Controller
         $scores = TeamMatchScore::with('teamMatch.team1', 'teamMatch.team2')->where('id','=', $id)->first();
 
         return view('scoreboard.score-live',compact('scores'));
+    }
+
+    private function buildMatchStatePayload($id): array
+    {
+        $match = TeamMatchScore::with('teamMatch.team1', 'teamMatch.team2')->findOrFail($id);
+
+        return MatchStateStore::buildPayload($match);
     }
 }

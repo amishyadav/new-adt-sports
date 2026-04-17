@@ -2,67 +2,49 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateBlogRequest;
+use App\Http\Requests\UpdateBlogRequest;
 use App\Models\Blog;
 use App\Repositories\BlogRepository;
-use Illuminate\Http\Request;
-use Laracasts\Flash\Flash;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 
 class BlogController extends AppBaseController
 {
+    private BlogRepository $blogRepo;
 
-    /**
-     * @param BlogRepository $blogRepository
-     */
     public function __construct(BlogRepository $blogRepository)
     {
         $this->blogRepo = $blogRepository;
     }
 
-    public function index()
+    public function index(): Factory|View|Application
     {
-       return view('cms.blog.index');
+        return view('cms.blog.index');
     }
 
-
-    public function create()
-    {
-        return view('cms.blog.create');
-    }
-
-
-    public function store(Request $request)
+    public function store(CreateBlogRequest $request): JsonResponse
     {
         $this->blogRepo->store($request->all());
 
-        Flash::success(__('Blog create successfully.'));
-
-        return redirect(route('blog.index'));
+        return $this->sendSuccess('Blog created successfully.');
     }
 
-
-    public function show($id)
+    public function edit(Blog $blog): JsonResponse
     {
-        //
+        return $this->sendResponse($blog, 'Blog retrieved successfully.');
     }
 
-
-    public function edit($id)
+    public function update(UpdateBlogRequest $request, Blog $blog): JsonResponse
     {
-        $blog = Blog::findOrFail($id);
-        return view('cms.blog.edit', compact('blog'));
+        $this->blogRepo->update($request->all(), $blog);
+
+        return $this->sendSuccess('Blog updated successfully.');
     }
 
-
-    public function update(Request $request,Blog $blog)
-    {
-       $this->blogRepo->update($request->all(), $blog);
-
-        Flash::success(__('Blog updated successfully.'));
-
-        return redirect(route('blog.index'));
-    }
-
-    public function destroy(Blog $blog)
+    public function destroy(Blog $blog): JsonResponse
     {
         $blog->delete();
 

@@ -204,10 +204,10 @@
             }
             updateMainDisplay();
             persistMainTimer();
-            sendTimerUpdate();
         }, 1000);
         // persist immediately with running = true
         persistMainTimer();
+        sendTimerUpdate();
     }
     function stopMain() {
         if (mainInterval) {
@@ -228,7 +228,10 @@
     // ----------- RAID TIMER LOGIC -----------
     function startRaid(side) {
         // Don't allow both sides to run
-        if (raidInterval) clearInterval(raidInterval);
+        if (raidInterval) {
+            clearInterval(raidInterval);
+            raidInterval = null;
+        }
 
         activeSide = side;
         // If a saved raidTime exists and we are simply resuming, keep it; here we reset to 30 on new start
@@ -251,11 +254,11 @@
 
             updateRaidDisplay();
             persistRaidTimer();
-            sendTimerUpdate();
         }, 1000);
 
         // persist start
         persistRaidTimer();
+        sendTimerUpdate();
     }
     function stopRaid() {
         if (raidInterval) {
@@ -276,7 +279,9 @@
                 match_id: matchId,
                 main_timer_seconds: mainTime,
                 raid_timer_seconds: raidTime,
-                active_side: activeSide
+                active_side: activeSide,
+                main_running: !!mainInterval,
+                raid_running: !!raidInterval
             })
         }).catch(e => console.error(e));
     }

@@ -1,0 +1,1 @@
+<span>{{ $row->title }}</span>

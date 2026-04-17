@@ -1272,13 +1272,33 @@
             <h2 class="section-title">Kabaddi <em>News</em></h2>
         </div>
         <div class="news-filter">
-            <button class="filter-btn active">All</button>
-            <button class="filter-btn">Matches</button>
-            <button class="filter-btn">Players</button>
-            <button class="filter-btn">Leagues</button>
+            <a href="{{ route('front.blogs') }}" class="btn-secondary" style="padding: 12px 24px;">View All Blogs</a>
         </div>
     </div>
     <div class="news-grid reveal">
+        @if($blogs->isNotEmpty())
+            @foreach($blogs as $blog)
+                <a href="{{ route('front.blog.detail', [$blog->slug, $blog->id]) }}" class="news-card {{ $loop->first ? 'featured' : '' }}" style="text-decoration:none;color:inherit;">
+                    <div class="news-thumb" style="background-image: linear-gradient(rgba(8,8,8,0.18), rgba(8,8,8,0.72)), url('{{ $blog->blog_image }}'); background-size: cover; background-position: center;">
+                        @if($loop->first)
+                            <div class="news-thumb-overlay"></div>
+                        @endif
+                        <div class="news-cat" @if(!$loop->first) style="position:static;display:inline-block;margin:16px 0 0 16px;" @endif>{{ $blog->tag }}</div>
+                    </div>
+                    <div class="news-body">
+                        <div class="news-title">{{ $blog->title }}</div>
+                        @if($loop->first)
+                            <div class="news-summary">{{ \Illuminate\Support\Str::limit(strip_tags($blog->description), 180) }}</div>
+                        @endif
+                        <div class="news-meta">
+                            <span>{{ $blog->created_at->format('M Y') }}</span>
+                            <div class="news-meta-dot"></div>
+                            <span>{{ max(1, (int) ceil(max(1, str_word_count(strip_tags($blog->description))) / 200)) }} min read</span>
+                        </div>
+                    </div>
+                </a>
+            @endforeach
+        @else
         <div class="news-card featured">
             <div class="news-thumb" style="background: linear-gradient(135deg, #1a1a1a, #2a1a0a);">
                 <div class="reel-emoji">🏅</div>
@@ -1327,6 +1347,7 @@
                 <div class="news-meta"><span>Feb 2025</span><div class="news-meta-dot"></div><span>4 min read</span></div>
             </div>
         </div>
+        @endif
     </div>
 </section>
 

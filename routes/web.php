@@ -62,6 +62,7 @@ Route::group([
     Route::resource('registered-players', RegisteredPlayerController::class);
     Route::put('registered-players/{registeredPlayer}/status',
         [RegisteredPlayerController::class, 'changeStatus'])->name('registered-players.change.status');
+    Route::resource('blog', BlogController::class)->except(['create', 'show']);
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
     Route::Post('settings', [SettingController::class, 'update'])->name('settings.update');
 

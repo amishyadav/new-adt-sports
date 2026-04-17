@@ -1,133 +1,183 @@
+let blogQuillData
+let editBlogQuillData
+
 document.addEventListener('turbo:load', loadBlogData)
 
-function loadBlogData () {
-
-    listen('keyup',"#blogTitle",function() {
-        var Text = $.trim($(this).val());
-        Text = Text.toLowerCase();
-        Text = Text.replace(/[^a-zA-Z0-9]+/g,'-');
-        $("#blogSlug").val(Text);
-        $("#slugHidden").val(Text);
-    });
-    
-    if (!$('#addBlogForm').length && !$('#editBlogForm').length) {
-        return
-    }
-
-    if ($('#editBlogForm').length) {
-        editBlogQuillData = new Quill(
-            '#editBlogQuillData', {
-                modules: {
-                    toolbar: [
-                        ['bold', 'italic', 'underline', 'strike'],
-                        ['blockquote', 'code-block'],
-
-                        [{ 'header': 1 }, { 'header': 2 }],
-                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                        [{ 'script': 'sub' }, { 'script': 'super' }],
-                        [{ 'indent': '-1' }, { 'indent': '+1' }],
-                        [{ 'direction': 'rtl' }],
-
-                        [{ 'size': ['small', false, 'large', 'huge'] }],
-                        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-
-                        [{ 'color': [] }, { 'background': [] }],
-                        [{ 'font': [] }],
-                        [{ 'align': [] }],
-                        ['link', 'image', 'video'],
-                        ['clean'],
-                    ],
-                    keyboard: {
-                        bindings: {
-                            tab: 'disabled',
-                        },
-                    },
+function buildQuill (selector) {
+    return new Quill(selector, {
+        modules: {
+            toolbar: [
+                ['bold', 'italic', 'underline', 'strike'],
+                ['blockquote', 'code-block'],
+                [{ header: 1 }, { header: 2 }],
+                [{ list: 'ordered' }, { list: 'bullet' }],
+                [{ script: 'sub' }, { script: 'super' }],
+                [{ indent: '-1' }, { indent: '+1' }],
+                [{ direction: 'rtl' }],
+                [{ size: ['small', false, 'large', 'huge'] }],
+                [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                [{ color: [] }, { background: [] }],
+                [{ font: [] }],
+                [{ align: [] }],
+                ['link', 'image', 'video'],
+                ['clean'],
+            ],
+            keyboard: {
+                bindings: {
+                    tab: 'disabled',
                 },
-                placeholder: 'Enter Body',
-                theme: 'snow',
-            })
-    }
-
-    if ($('#addBlogForm').length) {
-        blogQuillData = new Quill(
-            '#blogQuillData', {
-                modules: {
-                    toolbar: [
-                        ['bold', 'italic', 'underline', 'strike'],
-                        ['blockquote', 'code-block'],
-
-                        [{ 'header': 1 }, { 'header': 2 }],
-                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                        [{ 'script': 'sub' }, { 'script': 'super' }],
-                        [{ 'indent': '-1' }, { 'indent': '+1' }],
-                        [{ 'direction': 'rtl' }],
-
-                        [{ 'size': ['small', false, 'large', 'huge'] }],
-                        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-
-                        [{ 'color': [] }, { 'background': [] }],
-                        [{ 'font': [] }],
-                        [{ 'align': [] }],
-                        ['link', 'image', 'video'],
-                        ['clean'],
-                    ],
-                    keyboard: {
-                        bindings: {
-                            tab: 'disabled',
-                        },
-                    },
-                },
-                placeholder: 'Enter Body',
-                theme: 'snow',
-            })
-    }
-
-    if ($('#editBlogForm').length) {
-        editBlogQuillData.on('text-change', function (delta, oldDelta, source) {
-            if (editBlogQuillData.getText().trim().length === 0) {
-                editBlogQuillData.setContents([{ insert: '' }])
-            }
-        })
-    }
-
-    if ($('#addBlogForm').length) {
-        blogQuillData.on('text-change', function (delta, oldDelta, source) {
-            if (blogQuillData.getText().trim().length === 0) {
-                blogQuillData.setContents([{ insert: '' }])
-            }
-        })
-    }
+            },
+        },
+        placeholder: 'Enter Body',
+        theme: 'snow',
+    })
 }
 
-if ($('#editBlogForm').length) {
-    let element = document.createElement('textarea')
-    element.innerHTML = JSON.parse($('#editBlogBody').val())
-    editBlogQuillData.root.innerHTML = element.value
+function syncSlug (sourceSelector, targetSelector) {
+    const text = $.trim($(sourceSelector).val())
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '')
+
+    $(targetSelector).val(text)
 }
 
-listenSubmit('#editBlogForm', (e) => {
-    let blogEditorContent = editBlogQuillData.root.innerHTML
-    if (editBlogQuillData.getText().trim().length === 0) {
-        displayErrorMessage('Message field is required.')
+function validateBlogEditor (editor, hiddenSelector) {
+    if (!editor || editor.getText().trim().length === 0) {
+        displayErrorMessage('Description field is required.')
         return false
     }
 
-    $('#editBlogDescription').val(blogEditorContent)
-})
+    $(hiddenSelector).val(editor.root.innerHTML)
+    return true
+}
 
-listenSubmit('#addBlogForm', (e) => {
+function resetBlogForm (formSelector, editor, hiddenSelector) {
+    $(formSelector)[0].reset()
+    $(hiddenSelector).val('')
 
-    let blogEditorContent = blogQuillData.root.innerHTML;
-    if (blogQuillData.getText().trim().length === 0) {
-        displayErrorMessage('Message field is required.');
-        return false;
+    if (editor) {
+        editor.setContents([{ insert: '' }])
+    }
+}
+
+function loadBlogData () {
+    if (!$('#addBlogForm').length || !$('#editBlogForm').length) {
+        return
     }
 
-    $('#blogDescription').val(blogEditorContent);
-});
+    if (!blogQuillData) {
+        blogQuillData = buildQuill('#blogQuillData')
+    }
 
-listenClick('.blog-delete-btn', function (event) {
-    let blogID = $(event.currentTarget).data('id')
-    deleteItem(route('blog.destroy', blogID), 'Blog')
+    if (!editBlogQuillData) {
+        editBlogQuillData = buildQuill('#editBlogQuillData')
+    }
+}
+
+listenClick('#addBlogModalBtn', function () {
+    $('#addBlogModal').modal('show').appendTo('body')
 })
 
+listenHiddenBsModal('#addBlogModal', function () {
+    resetBlogForm('#addBlogForm', blogQuillData, '#blogDescription')
+})
+
+listenHiddenBsModal('#editBlogModal', function () {
+    resetBlogForm('#editBlogForm', editBlogQuillData, '#editBlogDescription')
+    $('#editBlogId').val('')
+})
+
+listen('keyup', '#blogTitle', function () {
+    syncSlug('#blogTitle', '#blogSlug')
+})
+
+listen('keyup', '#editBlogTitle', function () {
+    syncSlug('#editBlogTitle', '#editBlogSlug')
+})
+
+listenSubmit('#addBlogForm', function (event) {
+    event.preventDefault()
+
+    if (!validateBlogEditor(blogQuillData, '#blogDescription')) {
+        return false
+    }
+
+    $('#blogAddBtn').prop('disabled', true)
+    $.ajax({
+        url: route('blog.store'),
+        type: 'POST',
+        data: new FormData(this),
+        processData: false,
+        contentType: false,
+        success: function (result) {
+            if (result.success) {
+                displaySuccessMessage(result.message)
+                livewire.emit('refresh')
+                $('#addBlogModal').modal('hide')
+            }
+
+            $('#blogAddBtn').prop('disabled', false)
+        },
+        error: function (result) {
+            displayErrorMessage(result.responseJSON.message)
+            $('#blogAddBtn').prop('disabled', false)
+        },
+    })
+})
+
+listenClick('.blog-edit-btn', function (event) {
+    const blogId = $(event.currentTarget).data('id')
+
+    $.ajax({
+        url: route('blog.edit', blogId),
+        type: 'GET',
+        success: function (result) {
+            const blog = result.data
+
+            $('#editBlogId').val(blog.id)
+            $('#editBlogTag').val(blog.tag)
+            $('#editBlogTitle').val(blog.title)
+            $('#editBlogSlug').val(blog.slug)
+            $('#editBlogDescription').val(blog.description)
+            editBlogQuillData.root.innerHTML = blog.description ?? ''
+            $('#editBlogModal').modal('show').appendTo('body')
+        },
+    })
+})
+
+listenSubmit('#editBlogForm', function (event) {
+    event.preventDefault()
+
+    if (!validateBlogEditor(editBlogQuillData, '#editBlogDescription')) {
+        return false
+    }
+
+    const blogId = $('#editBlogId').val()
+    $('#editBlogBtn').prop('disabled', true)
+    $.ajax({
+        url: route('blog.update', blogId),
+        type: 'POST',
+        data: new FormData(this),
+        processData: false,
+        contentType: false,
+        success: function (result) {
+            if (result.success) {
+                displaySuccessMessage(result.message)
+                livewire.emit('refresh')
+                $('#editBlogModal').modal('hide')
+            }
+
+            $('#editBlogBtn').prop('disabled', false)
+        },
+        error: function (result) {
+            displayErrorMessage(result.responseJSON.message)
+            $('#editBlogBtn').prop('disabled', false)
+        },
+    })
+})
+
+listenClick('.blog-delete-btn', function (event) {
+    const blogID = $(event.currentTarget).data('id')
+    deleteItem(route('blog.destroy', blogID), 'Blog')
+})
